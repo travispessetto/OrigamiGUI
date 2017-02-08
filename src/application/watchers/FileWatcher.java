@@ -4,22 +4,24 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.concurrent.TimeUnit;
 
+import application.controllers.EmailController;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-public class FileWatcher extends Task<Void>{
+public class FileWatcher implements Runnable{
 	private WatchService watchService;
-	private ObservableList<String> emailList;
-	public FileWatcher(WatchService service, ObservableList<String> list)
+	private EmailController emailController;
+	public FileWatcher(WatchService service, EmailController controller)
 	{
 		watchService = service;
-		emailList = list;
+		emailController = controller;
 	}
 
 	@Override
-	protected Void call() throws Exception {
+	public void run() {
 		try
 		{
 			WatchKey key = null;
@@ -28,12 +30,7 @@ public class FileWatcher extends Task<Void>{
 				key = watchService.poll(1, TimeUnit.MINUTES);
 				if(key != null)
 				{
-					key.pollEvents().stream().forEach(event -> emailList.add(event.context().toString()));
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("New Message");
-					alert.setHeaderText(null);
-					alert.setContentText("You have a new message");
-					alert.showAndWait();
+					key.pollEvents().stream().forEach(event -> emailController.addEmailToList(event.context().toString()));
 				}
 				else
 				{
@@ -46,7 +43,6 @@ public class FileWatcher extends Task<Void>{
 			//Interrupted
 			System.err.println("Interupted");
 		}
-		return null;
 	}
 
 }

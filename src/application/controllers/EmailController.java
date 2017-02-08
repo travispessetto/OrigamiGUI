@@ -12,10 +12,13 @@ import java.util.Arrays;
 import application.watchers.FileWatcher;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 
 public class EmailController {
@@ -63,14 +66,25 @@ public class EmailController {
 	{
 		Path messagePath = Paths.get("messages");
 		WatchService watchService = messagePath.getFileSystem().newWatchService();
-		messagePath.register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
-		Thread watcher = new Thread(new FileWatcher(watchService,emailList));
-		watcher.setDaemon(true);
+		messagePath.register(watchService, StandardWatchEventKinds.ENTRY_CREATE,StandardWatchEventKinds.ENTRY_MODIFY);
+		Thread watcher = new Thread(new FileWatcher(watchService,this));
+		//watcher.setDaemon(true);
 		watcher.start();
 	}
 	
 	public void addEmailToList(String email)
 	{
-		emailList.add(email);
+		Platform.runLater(new Runnable()
+		{
+			@Override
+			public void run() {
+				emailList.add(email);
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("New Message");
+				alert.setHeaderText(null);
+				alert.setContentText("You have a new message");
+				alert.showAndWait();	
+			}
+		});
 	}
 }
