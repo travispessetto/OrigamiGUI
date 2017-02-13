@@ -27,15 +27,12 @@ public class FileWatcher implements Runnable{
 			WatchKey key = null;
 			while(true)
 			{
-				key = watchService.poll(1, TimeUnit.MINUTES);
+				key = watchService.take();
 				if(key != null)
 				{
 					key.pollEvents().stream().forEach(event -> emailController.addEmailToList(event.context().toString()));
 				}
-				else
-				{
-					key.reset();
-				}
+				key.reset();
 			}
 		}
 		catch(InterruptedException e)
