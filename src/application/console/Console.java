@@ -9,6 +9,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import com.pessetto.main.*;
+
+import application.threads.SMTPThread;
 
 public class Console extends Application {
 
@@ -23,6 +26,12 @@ public class Console extends Application {
 	
 	public static void main(String[] args)
 	{
+		// Start the SMTP Server
+		System.out.println("Starting SMTP Server Thread");
+		SMTPThread smtp = new SMTPThread();
+		Thread smtpThread = new Thread(smtp);
+		smtpThread.start();
+		
 		System.out.println("Origami GUI");
 		launch(args);
 	}
