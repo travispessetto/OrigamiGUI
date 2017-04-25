@@ -24,6 +24,14 @@ public class Console extends Application {
 		stage.show();
 	}
 	
+	@Override
+	public void stop()
+	{
+		System.out.println("Closing threads");
+		// System exit will close all threads
+		System.exit(0);
+	}
+	
 	public static void main(String[] args)
 	{
 		// Start the SMTP Server
