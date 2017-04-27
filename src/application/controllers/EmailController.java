@@ -86,12 +86,20 @@ public class EmailController {
 		}
 		else
 		{
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Fatal Error");;
-			alert.setHeaderText(null);;
-			alert.setContentText("Fatal Error: Messages folder not found.");
-			alert.showAndWait();
-			System.exit(1);
+			try
+			{
+				file.mkdir();
+				loadEmails();
+			}
+			catch(Exception ex)
+			{
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Fatal Error");;
+				alert.setHeaderText(null);;
+				alert.setContentText("Fatal Error: Messages folder not found.");
+				alert.showAndWait();
+				System.exit(1);
+			}
 		}
 	}
 	
