@@ -23,16 +23,22 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
 public class EmailController {
 
 	private ObservableList<String> emailList;
 	@FXML
 	private ListView<String> emails = new ListView<>();
+	@FXML
+	private WebView webview;
+	private WebEngine webengine;
 	
 	@FXML
 	private void initialize() throws Exception
 	{
+		webengine = webview.getEngine();
 		loadEmails();
 		watchFolder();
 		emails.setOnMouseClicked(new EventHandler<MouseEvent>(){
@@ -45,10 +51,12 @@ public class EmailController {
 					String selectedItem = emails.getSelectionModel().getSelectedItem();
 					System.out.println("Mouse clicked on " + selectedItem);
 					try {
-						Runtime.getRuntime().exec("C:\\Program Files\\Internet Explorer\\iexplore.exe " + System.getProperty("user.dir") + "\\messages\\"+selectedItem);
-					} catch (IOException e) {
+						webengine.load("file:///"+System.getProperty("user.dir") + "\\messages\\"+selectedItem);
+						System.out.println("Web engine loaded " + webengine.getLocation());
+					} catch (Exception e) {
 						System.err.println("Could not open file");
 						System.err.println(e.getMessage());
+						e.printStackTrace(System.err);
 					}
 				}
 			}
@@ -88,6 +96,8 @@ public class EmailController {
 		{
 			try
 			{
+				file.setWritable(true,false);
+				file.setReadable(true,false);
 				file.mkdir();
 				loadEmails();
 			}

@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import com.pessetto.main.*;
@@ -17,6 +18,8 @@ public class Console extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		// icons
+		stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("origami.png")));
 		AnchorPane console = FXMLLoader.load(getClass().getClassLoader().getResource("Console.fxml"));
 		Scene scene = new Scene(console,500,300);
 		stage.setTitle("Origami SMTP");
