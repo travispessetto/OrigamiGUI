@@ -12,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import com.pessetto.main.*;
 
+import application.settings.SettingsSingleton;
 import application.threads.SMTPThread;
 
 public class Console extends Application {
@@ -31,18 +32,14 @@ public class Console extends Application {
 	public void stop()
 	{
 		System.out.println("Closing threads");
-		// System exit will close all threads
-		System.exit(0);
+		SettingsSingleton.getInstance().stopSMTPServer();
+		//System.exit(0);
 	}
 	
 	public static void main(String[] args)
 	{
-		// Start the SMTP Server
-		System.out.println("Starting SMTP Server Thread");
-		SMTPThread smtp = new SMTPThread();
-		Thread smtpThread = new Thread(smtp);
-		smtpThread.start();
-		
+		// Start the SMTP Server via settings
+		SettingsSingleton.getInstance().startSMTPServer();
 		System.out.println("Origami GUI");
 		launch(args);
 	}

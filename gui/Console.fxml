@@ -12,14 +12,14 @@
    <children>
       <SplitPane fx:id="menu" dividerPositions="0.10552763819095477" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane minHeight="30.0" minWidth="0.0" maxHeight="30.0" prefWidth="598.0">
+          <AnchorPane maxHeight="30.0" minHeight="30.0" minWidth="0.0" prefWidth="598.0">
                <children>
                   <MenuBar layoutX="-50.0" prefHeight="39.0" prefWidth="598.0" AnchorPane.bottomAnchor="-12.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <menus>
                       <Menu mnemonicParsing="false" text="File">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="Server Settings" />
-                          <MenuItem mnemonicParsing="false" text="Exit" />
+                          <MenuItem mnemonicParsing="false" text="Server Settings" onAction="#handleServerSettingsMenuItemClicked"/>
+                          <MenuItem mnemonicParsing="false" onAction="#handleExitMenuItemClicked" text="Exit" />
                         </items>
                       </Menu>
                     </menus>
@@ -29,7 +29,7 @@
                <children>
                   <SplitPane dividerPositions="0.42474916387959866" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" maxWidth="400.0">
+                      <AnchorPane maxWidth="400.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="100.0">
                            <children>
                               <ListView fx:id="emails" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>

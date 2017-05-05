@@ -1,25 +1,35 @@
 package application.threads;
 
+import java.net.SocketException;
+
 import com.pessetto.main.ConsoleMain;
 
 public class SMTPThread implements Runnable{
 
-	public SMTPThread()
+	private int port;
+	private ConsoleMain smtpServer;
+	public SMTPThread(int port)
 	{
-		// Add port and stuff here later
+		this.port = port;
+		smtpServer = new ConsoleMain(port);
 	}
 	
 	
 	@Override
 	public void run() {
 		try {
-			String smtpArgs[] = {"2525"};
-			ConsoleMain.main(smtpArgs);
 			System.out.println("Starting bundled SMTP Server");
-		} catch (Exception e) {
+			smtpServer.startSMTP();
+		}
+		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void stop()
+	{
+		smtpServer.closeSMTP();
 	}
 
 }

@@ -9,22 +9,29 @@ import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import application.settings.SettingsSingleton;
 import application.watchers.DeleteFileWatcher;
 import application.watchers.FileWatcher;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 
 public class EmailController {
 
@@ -34,6 +41,30 @@ public class EmailController {
 	@FXML
 	private WebView webview;
 	private WebEngine webengine;
+	
+	@FXML
+	protected void handleExitMenuItemClicked(ActionEvent event)
+	{
+		SettingsSingleton.getInstance().stopSMTPServer();
+		System.exit(0);
+	}
+	
+	@FXML
+	protected void handleServerSettingsMenuItemClicked(ActionEvent event)
+	{
+		try {
+			Stage stage = new Stage();
+			stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("origami.png")));
+			AnchorPane settings = FXMLLoader.load(getClass().getClassLoader().getResource("ServerSettings.fxml"));
+			Scene scene = new Scene(settings,500,300);
+			stage.setTitle("Origami SMTP Settings");
+			stage.setScene(scene);
+			stage.show();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	@FXML
 	private void initialize() throws Exception
