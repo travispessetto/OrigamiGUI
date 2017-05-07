@@ -21,6 +21,7 @@ public class SettingsController
 	   alert.setHeaderText(null);
 	   alert.setContentText("Connection settings applied");
 	   alert.showAndWait();
+	   settings.serialize();
    }
    
    @FXML

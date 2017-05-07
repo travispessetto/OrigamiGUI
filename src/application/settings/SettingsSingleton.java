@@ -1,13 +1,22 @@
 package application.settings;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+import application.constants.SettingsVariables;
 import application.threads.SMTPThread;
 
-public class SettingsSingleton 
+public class SettingsSingleton implements Serializable
 {
+	private static final long serialVersionUID = 3840045425215974390L;
 	private int port;
-	private static SettingsSingleton instance;
-	private Thread smtpThread;
-	private SMTPThread smtp;
+	private transient static SettingsSingleton instance;
+	private transient Thread smtpThread;
+	private transient SMTPThread smtp;
 	private SettingsSingleton(int port)
 	{
 		// No direct creation
@@ -17,8 +26,54 @@ public class SettingsSingleton
 	public static SettingsSingleton getInstance()
 	{
 		if(instance == null)
-			instance = new SettingsSingleton(2525);
+		{
+			// Load from the serialized file if there is one
+			File file = new File(SettingsVariables.settingsFile);
+			if(file.exists())
+			{
+				try
+				{
+					FileInputStream fin = new FileInputStream(SettingsVariables.settingsFile);
+					ObjectInputStream oin = new ObjectInputStream(fin);
+					instance = (SettingsSingleton)oin.readObject();
+					oin.close();
+					fin.close();
+				}
+				catch(Exception ex)
+				{
+					ex.printStackTrace(System.err);
+				}
+			}
+			// if not just create a new instance
+			else
+			{
+				instance = new SettingsSingleton(2525);
+			}
+		}
 		return instance;
+	}
+	
+	public void serialize()
+	{
+		try
+		{
+			File settingsFolder = new File("settings");
+			if(settingsFolder.exists())
+			{
+				settingsFolder.setWritable(true,false);
+				settingsFolder.mkdir();
+			}
+			
+			FileOutputStream fout = new FileOutputStream("origami_settings.ser");
+			ObjectOutputStream oout = new ObjectOutputStream(fout);
+			oout.writeObject(this);
+			oout.close();
+			fout.close();
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
 	}
 	
 	public void startSMTPServer()
