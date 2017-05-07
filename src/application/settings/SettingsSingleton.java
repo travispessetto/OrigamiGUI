@@ -64,7 +64,7 @@ public class SettingsSingleton implements Serializable
 				settingsFolder.mkdir();
 			}
 			
-			FileOutputStream fout = new FileOutputStream("origami_settings.ser");
+			FileOutputStream fout = new FileOutputStream(SettingsVariables.settingsFile);
 			ObjectOutputStream oout = new ObjectOutputStream(fout);
 			oout.writeObject(this);
 			oout.close();
