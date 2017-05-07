@@ -100,12 +100,24 @@ public class EmailController {
 			public void handle(KeyEvent event) {
 				event.consume();
 				KeyCode keyCode = event.getCode();
-				if(keyCode == KeyCode.DELETE)
+				if(keyCode == KeyCode.DELETE || keyCode == KeyCode.BACK_SPACE)
 				{
 					String selected = emails.getSelectionModel().getSelectedItem();
 					selected = System.getProperty("user.dir") + "\\messages\\"+selected;
 					File selectedFile = new File(selected);
+					if(!selectedFile.canWrite())
+					{
+						Alert alert = new Alert(AlertType.ERROR);
+					   alert.setTitle("File Error");
+					   alert.setHeaderText(null);
+					   alert.setContentText("Could not delete file as it is not writable");
+					   alert.showAndWait();
+					}
 					selectedFile.delete();
+				}
+				else
+				{
+					System.err.println("Keycode " + keyCode + " not recognized");
 				}
 			}
 			
