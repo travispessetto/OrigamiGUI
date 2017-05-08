@@ -46,7 +46,7 @@ public class EmailController {
 	protected void handleExitMenuItemClicked(ActionEvent event)
 	{
 		SettingsSingleton.getInstance().stopSMTPServer();
-		System.exit(0);
+		Platform.exit();
 	}
 	
 	@FXML
