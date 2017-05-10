@@ -9,9 +9,13 @@ import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.pessetto.FileHandlers.Inbox.DeleteMessageListener;
+import com.pessetto.FileHandlers.Inbox.Inbox;
+import com.pessetto.FileHandlers.Inbox.Message;
+import com.pessetto.FileHandlers.Inbox.NewMessageListener;
+import com.pessetto.Variables.InboxVariables;
+
 import application.settings.SettingsSingleton;
-import application.watchers.DeleteFileWatcher;
-import application.watchers.FileWatcher;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -33,7 +37,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
-public class EmailController {
+public class EmailController implements NewMessageListener, DeleteMessageListener {
 
 	private ObservableList<String> emailList;
 	@FXML
@@ -69,9 +73,12 @@ public class EmailController {
 	@FXML
 	private void initialize() throws Exception
 	{
+		Inbox inbox = Inbox.getInstance();
+		inbox.addNewMessageListener(this);
+		inbox.addDeleteMessageListener(this);
 		webengine = webview.getEngine();
 		loadEmails();
-		watchFolder();
+		//watchFolder();
 		emails.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
 			@Override
@@ -79,11 +86,12 @@ public class EmailController {
 				if(event.getClickCount() == 2 && !(event.isConsumed()))
 				{
 					event.consume();
-					String selectedItem = emails.getSelectionModel().getSelectedItem();
+					Inbox inbox = Inbox.getInstance();
+					int selectedItem = emails.getSelectionModel().getSelectedIndex();
 					System.out.println("Mouse clicked on " + selectedItem);
 					try {
-						webengine.load("file:///"+System.getProperty("user.dir") + "\\messages\\"+selectedItem);
-						System.out.println("Web engine loaded " + webengine.getLocation());
+						Message message = inbox.getMessage(selectedItem);
+						webengine.loadContent(message.getProcessedMessage());
 					} catch (Exception e) {
 						System.err.println("Could not open file");
 						System.err.println(e.getMessage());
@@ -99,21 +107,12 @@ public class EmailController {
 			@Override
 			public void handle(KeyEvent event) {
 				event.consume();
+				Inbox inbox = Inbox.getInstance();
 				KeyCode keyCode = event.getCode();
 				if(keyCode == KeyCode.DELETE || keyCode == KeyCode.BACK_SPACE)
 				{
-					String selected = emails.getSelectionModel().getSelectedItem();
-					selected = System.getProperty("user.dir") + "\\messages\\"+selected;
-					File selectedFile = new File(selected);
-					if(!selectedFile.canWrite())
-					{
-						Alert alert = new Alert(AlertType.ERROR);
-					   alert.setTitle("File Error");
-					   alert.setHeaderText(null);
-					   alert.setContentText("Could not delete file as it is not writable");
-					   alert.showAndWait();
-					}
-					selectedFile.delete();
+					int selected = emails.getSelectionModel().getSelectedIndex();
+					inbox.deleteMessage(selected);
 				}
 				else
 				{
@@ -128,78 +127,52 @@ public class EmailController {
 	public void loadEmails()
 	{
 		System.out.println("Load emails");
-		File file = new File("messages");
-		if(file.exists())
+		ArrayList<String> subjects = new ArrayList();
+		Inbox inbox = Inbox.getInstance();
+		for(int i = 0; i < inbox.getMessageCount(); ++i)
 		{
-			ArrayList<String> names = new ArrayList<String>(Arrays.asList(file.list()));
-			emailList = FXCollections.observableArrayList(names);
-			emails.setItems(emailList);	
+			Message message = inbox.getMessage(i);
+			String subject = message.getSubject();
+			subjects.add(subject);
 		}
-		else
-		{
-			try
-			{
-				file.setWritable(true,false);
-				file.setReadable(true,false);
-				file.mkdir();
-				loadEmails();
-			}
-			catch(Exception ex)
-			{
-				Alert alert = new Alert(AlertType.ERROR);
-				alert.setTitle("Fatal Error");;
-				alert.setHeaderText(null);;
-				alert.setContentText("Fatal Error: Messages folder not found.");
-				alert.showAndWait();
-				System.exit(1);
-			}
-		}
+		emailList = FXCollections.observableArrayList(subjects);
+		emails.setItems(emailList);
 	}
 	
-	private void watchFolder() throws IOException
+	public void addEmailToList()
 	{
-		Path messagePath = Paths.get("messages");
-		WatchService watchService = messagePath.getFileSystem().newWatchService();
-		messagePath.register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
-		Thread watcher = new Thread(new FileWatcher(watchService,this));
-		watcher.setDaemon(true);
-		watcher.start();
+
+		Platform.runLater(new Runnable()
+		{
+			@Override
+			public void run() {
+				Inbox inbox = Inbox.getInstance();
+				Message message = inbox.getNewestMessage();
+				emailList.add(message.getSubject());
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("New Message");
+				alert.setHeaderText(null);
+				alert.setContentText("You have a new message");
+				alert.showAndWait();	
+			}
+		});
 		
-		// Delete Watcher
-		WatchService deleteWatchService = messagePath.getFileSystem().newWatchService();
-		messagePath.register(deleteWatchService, StandardWatchEventKinds.ENTRY_DELETE);
-		Thread deleteWatcher = new Thread(new DeleteFileWatcher(deleteWatchService,this));
-		deleteWatcher.setDaemon(true);
-		deleteWatcher.start();
 	}
 	
-	public void addEmailToList(String email)
-	{
-		if(email != null)
-		{
-			Platform.runLater(new Runnable()
-			{
-				@Override
-				public void run() {
-					emailList.add(email);
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("New Message");
-					alert.setHeaderText(null);
-					alert.setContentText("You have a new message");
-					alert.showAndWait();	
-				}
-			});
-		}
-	}
-	
-	public void removeEmailFromList(String email)
+	public void removeEmail(int index)
 	{
 		Platform.runLater(new Runnable(){
 			@Override
 			public void run()
 			{
-				emailList.removeAll(email);
+				emailList.remove(index);
 			}
 		});
+	}
+
+	@Override
+	public void messageRecieved()
+	{
+		addEmailToList();
 	}
 }
