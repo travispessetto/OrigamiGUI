@@ -22,6 +22,9 @@
                           <MenuItem mnemonicParsing="false" onAction="#handleExitMenuItemClicked" text="Exit" />
                         </items>
                       </Menu>
+                      <Menu mnemonicParsing="false" text="Help">
+                      	  <MenuItem mnemonicParsing="false" text="About" onAction="#showAbout" />
+                      </Menu>
                     </menus>
                   </MenuBar>
                </children></AnchorPane>

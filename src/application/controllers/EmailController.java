@@ -83,7 +83,8 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 
 			@Override
 			public void handle(MouseEvent event) {
-				if(event.getClickCount() == 2 && !(event.isConsumed()))
+				// if want double click ad event.getClickCount() == 2 to condition
+				if(!event.isConsumed())
 				{
 					event.consume();
 					Inbox inbox = Inbox.getInstance();
@@ -113,6 +114,7 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 				{
 					int selected = emails.getSelectionModel().getSelectedIndex();
 					inbox.deleteMessage(selected);
+					webengine.loadContent("");
 				}
 				else
 				{
@@ -168,6 +170,23 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 				emailList.remove(index);
 			}
 		});
+	}
+	
+	public void showAbout()
+	{
+		try 
+		{
+			Stage stage = new Stage();
+			stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("origami.png")));
+			AnchorPane settings = FXMLLoader.load(getClass().getClassLoader().getResource("About.fxml"));
+			Scene scene = new Scene(settings,600,221);
+			stage.setTitle("About Origami SMTP");
+			stage.setScene(scene);
+			stage.show();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
