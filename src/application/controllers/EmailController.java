@@ -1,5 +1,6 @@
 package application.controllers;
 
+import java.awt.TrayIcon.MessageType;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -16,6 +17,7 @@ import com.pessetto.FileHandlers.Inbox.NewMessageListener;
 import com.pessetto.Variables.InboxVariables;
 
 import application.settings.SettingsSingleton;
+import application.tray.SystemTraySingleton;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -148,14 +150,23 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 		{
 			@Override
 			public void run() {
+				SettingsSingleton settings = SettingsSingleton.getInstance();
 				Inbox inbox = Inbox.getInstance();
 				Message message = inbox.getNewestMessage();
 				emailList.add(message.getSubject());
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("New Message");
-				alert.setHeaderText(null);
-				alert.setContentText("You have a new message");
-				alert.showAndWait();	
+				if(settings.getMinimizeToTray())
+				{
+					SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
+					systemTray.displayMessage("New Message", "You have a new message", MessageType.INFO);
+				}
+				else
+				{
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("New Message");
+					alert.setHeaderText(null);
+					alert.setContentText("You have a new message");
+					alert.showAndWait();	
+				}
 			}
 		});
 		

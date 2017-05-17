@@ -18,7 +18,7 @@
                     <menus>
                       <Menu mnemonicParsing="false" text="File">
                         <items>
-                          <MenuItem mnemonicParsing="false" text="Server Settings" onAction="#handleServerSettingsMenuItemClicked"/>
+                          <MenuItem mnemonicParsing="false" text="Settings" onAction="#handleServerSettingsMenuItemClicked"/>
                           <MenuItem mnemonicParsing="false" onAction="#handleExitMenuItemClicked" text="Exit" />
                         </items>
                       </Menu>

@@ -17,10 +17,12 @@ public class SettingsSingleton implements Serializable
 	private transient static SettingsSingleton instance;
 	private transient Thread smtpThread;
 	private transient SMTPThread smtp;
+	private transient boolean minimizeToTray;
 	private SettingsSingleton(int port)
 	{
 		// No direct creation
 		this.port = port; 
+		this.minimizeToTray = true;
 	}
 	
 	public static SettingsSingleton getInstance()
@@ -74,6 +76,16 @@ public class SettingsSingleton implements Serializable
 		{
 			ex.printStackTrace();
 		}
+	}
+	
+	public boolean getMinimizeToTray()
+	{
+		return minimizeToTray;
+	}
+	
+	public void setMinimizeToTray(boolean minimize)
+	{
+		minimizeToTray = minimize;
 	}
 	
 	public void startSMTPServer()
