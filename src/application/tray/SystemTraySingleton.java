@@ -5,6 +5,7 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 
-public class SystemTraySingleton 
+public class SystemTraySingleton
 {
 	private static SystemTraySingleton instance;
 	private SystemTray systemTray;
@@ -63,6 +64,9 @@ public class SystemTraySingleton
 				systemTray = java.awt.SystemTray.getSystemTray();
 				BufferedImage trayImage = SwingFXUtils.fromFXImage(icon, null);
 				trayIcon = new TrayIcon(trayImage);
+				trayIcon.setToolTip("Origami SMTP");
+				this.addAllListenersToTrayIcon();
+				trayIcon.setActionCommand("Open");
 				// add event listener to show stage
 				MenuItem openItem = new MenuItem("Open");
 				addAllListenersToMenuItem(openItem);
@@ -93,6 +97,14 @@ public class SystemTraySingleton
 		}
 	}
 	
+	private void addAllListenersToTrayIcon()
+	{
+		for(ActionListener listener : actionListeners)
+		{
+			trayIcon.addActionListener(listener);
+		}
+	}
+	
 	public void displayMessage(String caption, String message, MessageType messageType)
 	{
 		trayIcon.displayMessage(caption, message, messageType);
@@ -112,5 +124,4 @@ public class SystemTraySingleton
 	{
 		systemTray.remove(trayIcon);
 	}
-
 }

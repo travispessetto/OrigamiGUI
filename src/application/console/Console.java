@@ -33,11 +33,12 @@ import javax.imageio.ImageIO;
 
 import com.pessetto.main.*;
 
+import application.listeners.TrayIconListener;
 import application.settings.SettingsSingleton;
 import application.threads.SMTPThread;
 import application.tray.SystemTraySingleton;
 
-public class Console extends Application implements ActionListener{
+public class Console extends Application implements ActionListener, TrayIconListener{
 	
 	private Image icon;
 	private Stage mainStage;
@@ -113,7 +114,8 @@ public class Console extends Application implements ActionListener{
 	public static void main(String[] args)
 	{
 		// Start the SMTP Server via settings
-		SettingsSingleton.getInstance().startSMTPServer();
+		SettingsSingleton settings = SettingsSingleton.getInstance();
+		settings.startSMTPServer();
 		System.out.println("Origami GUI");
 		launch(args);
 	}
@@ -136,6 +138,15 @@ public class Console extends Application implements ActionListener{
 		{
 			stop();
 		}
+	}
+
+	@Override
+	public void TrayAction(String action) {
+		if(action.equals("open stage"))
+		{
+			mainStage.show();
+		}
+		
 	}
 	
 

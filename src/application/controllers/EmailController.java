@@ -16,6 +16,7 @@ import com.pessetto.FileHandlers.Inbox.Message;
 import com.pessetto.FileHandlers.Inbox.NewMessageListener;
 import com.pessetto.Variables.InboxVariables;
 
+import application.listeners.TrayIconListener;
 import application.settings.SettingsSingleton;
 import application.tray.SystemTraySingleton;
 import javafx.application.Platform;
@@ -39,7 +40,8 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
-public class EmailController implements NewMessageListener, DeleteMessageListener {
+public class EmailController implements NewMessageListener, DeleteMessageListener
+{
 
 	private ObservableList<String> emailList;
 	@FXML

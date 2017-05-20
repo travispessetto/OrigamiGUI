@@ -1,14 +1,19 @@
 package application.settings;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.BindException;
+import java.util.ArrayList;
 
 import application.constants.SettingsVariables;
+import application.listeners.SMTPErrorListener;
+import application.listeners.SMTPThreadErrorListener;
 import application.threads.SMTPThread;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class SettingsSingleton implements Serializable
 {
@@ -18,11 +23,13 @@ public class SettingsSingleton implements Serializable
 	private transient Thread smtpThread;
 	private transient SMTPThread smtp;
 	private transient boolean minimizeToTray;
+	private transient SMTPErrorListener smtpErrorListener;
 	private SettingsSingleton(int port)
 	{
 		// No direct creation
 		this.port = port; 
 		this.minimizeToTray = true;
+		smtpErrorListener = new SMTPThreadErrorListener();
 	}
 	
 	public static SettingsSingleton getInstance()
@@ -54,6 +61,8 @@ public class SettingsSingleton implements Serializable
 		}
 		return instance;
 	}
+	
+	
 	
 	public void serialize()
 	{
@@ -91,7 +100,7 @@ public class SettingsSingleton implements Serializable
 	public void startSMTPServer()
 	{
 		System.out.println("Starting SMTP Server Thread");
-		smtp = new SMTPThread(this.port);
+		smtp = new SMTPThread(this.port,this.smtpErrorListener);
 		smtpThread = new Thread(smtp);
 		smtpThread.start();
 	}
