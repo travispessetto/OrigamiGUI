@@ -31,8 +31,6 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
-import com.pessetto.main.*;
-
 import application.listeners.TrayIconListener;
 import application.settings.SettingsSingleton;
 import application.threads.SMTPThread;

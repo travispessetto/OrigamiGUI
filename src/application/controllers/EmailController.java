@@ -3,12 +3,19 @@ package application.controllers;
 import java.awt.TrayIcon.MessageType;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EventListener;
+import java.util.LinkedList;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.pessetto.FileHandlers.Inbox.DeleteMessageListener;
 import com.pessetto.FileHandlers.Inbox.Inbox;
@@ -19,18 +26,25 @@ import com.pessetto.Variables.InboxVariables;
 import application.listeners.TrayIconListener;
 import application.settings.SettingsSingleton;
 import application.tray.SystemTraySingleton;
+import application.web.BrowserBridge;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Worker;
+import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -39,6 +53,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import netscape.javascript.JSObject;
 
 public class EmailController implements NewMessageListener, DeleteMessageListener
 {
@@ -49,6 +64,8 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 	@FXML
 	private WebView webview;
 	private WebEngine webengine;
+	@FXML
+	private Label smtpStatus;
 	
 	@FXML
 	protected void handleExitMenuItemClicked(ActionEvent event)
@@ -80,8 +97,27 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 		Inbox inbox = Inbox.getInstance();
 		inbox.addNewMessageListener(this);
 		inbox.addDeleteMessageListener(this);
+		BrowserBridge bridge = new BrowserBridge(this);
 		webengine = webview.getEngine();
+		webengine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>(){
+			public void changed(ObservableValue ov, State oldState, State newState)
+			{
+				JSObject win = (JSObject) webengine.executeScript("window");
+				win.setMember("app",bridge);
+			}
+		});
+		URL emailRef = EmailController.class.getClassLoader().getResource("jqueryEmailPage.html");
+		if(emailRef == null)
+		{
+			System.err.println("Bad HTML GUI Ref");
+		}
+		String emailExternalForm = emailRef.toExternalForm();
+		webengine.load(emailExternalForm);
 		loadEmails();
+		if(SettingsSingleton.getInstance().smtpStarted())
+		{
+			smtpStatus.setText("Started");
+		}
 		//watchFolder();
 		emails.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
@@ -96,7 +132,15 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 					System.out.println("Mouse clicked on " + selectedItem);
 					try {
 						Message message = inbox.getMessage(selectedItem);
-						webengine.loadContent(message.getProcessedMessage());
+						if(message.getHTMLMessage() != null)
+						{
+							loadEmailLineByLine(webengine,message.getHTMLMessage());
+						}
+						else
+						{
+							loadEmailLineByLine(webengine,message.getPlainMessage());
+						}
+					
 					} catch (Exception e) {
 						System.err.println("Could not open file");
 						System.err.println(e.getMessage());
@@ -133,15 +177,15 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 	public void loadEmails()
 	{
 		System.out.println("Load emails");
-		ArrayList<String> subjects = new ArrayList();
+		LinkedList subjects = new LinkedList();
 		Inbox inbox = Inbox.getInstance();
 		for(int i = 0; i < inbox.getMessageCount(); ++i)
 		{
 			Message message = inbox.getMessage(i);
 			String subject = message.getSubject();
-			subjects.add(subject);
+			subjects.add(0,subject);
 		}
-		emailList = FXCollections.observableArrayList(subjects);
+		emailList = FXCollections.observableList(subjects);
 		emails.setItems(emailList);
 	}
 	
@@ -155,7 +199,7 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 				SettingsSingleton settings = SettingsSingleton.getInstance();
 				Inbox inbox = Inbox.getInstance();
 				Message message = inbox.getNewestMessage();
-				emailList.add(message.getSubject());
+				emailList.add(0,message.getSubject());
 				if(settings.getMinimizeToTray())
 				{
 					SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
@@ -201,10 +245,27 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 			e.printStackTrace();
 		}
 	}
+	
+	public void updateStatus(boolean status)
+	{
+		
+	}
 
 	@Override
 	public void messageRecieved()
 	{
 		addEmailToList();
+	}
+	
+	private void loadEmailLineByLine(WebEngine engine, String message)
+	{
+		String[] lines = message.split("\\r?\\n");
+		engine.executeScript("clearContent()");
+		for(String line : lines)
+		{
+			line = line.replace("\"", "\\\"");
+			System.out.println("Line: "+line);
+			engine.executeScript("addContentLine(\""+line+ "\");");
+		}
 	}
 }

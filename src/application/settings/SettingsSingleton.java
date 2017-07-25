@@ -2,10 +2,15 @@ package application.settings;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.BindException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import application.constants.SettingsVariables;
@@ -17,13 +22,15 @@ import javafx.scene.control.Alert.AlertType;
 
 public class SettingsSingleton implements Serializable
 {
-	private static final long serialVersionUID = 3840045425215974390L;
+	private static final long serialVersionUID = 3840045425215974391L;
+	private String browserExec;
 	private int port;
 	private transient static SettingsSingleton instance;
 	private transient Thread smtpThread;
 	private transient SMTPThread smtp;
 	private transient boolean minimizeToTray;
 	private transient SMTPErrorListener smtpErrorListener;
+	private boolean smtpStarted;
 	private SettingsSingleton(int port)
 	{
 		// No direct creation
@@ -44,9 +51,22 @@ public class SettingsSingleton implements Serializable
 				{
 					FileInputStream fin = new FileInputStream(SettingsVariables.settingsFile);
 					ObjectInputStream oin = new ObjectInputStream(fin);
-					instance = (SettingsSingleton)oin.readObject();
+					Object obj = oin.readObject();
 					oin.close();
 					fin.close();
+					instance = (SettingsSingleton)obj;
+				}
+				catch(InvalidClassException ex)
+				{
+					System.err.println("Bad settings file");
+					if(file.delete())
+					{
+						return getInstance();
+					}
+					else
+					{
+						System.err.println("Could not delete bad settings file");
+					}
 				}
 				catch(Exception ex)
 				{
@@ -103,6 +123,7 @@ public class SettingsSingleton implements Serializable
 		smtp = new SMTPThread(this.port,this.smtpErrorListener);
 		smtpThread = new Thread(smtp);
 		smtpThread.start();
+		smtpStarted = smtpThread.isAlive();
 	}
 	
 	public void stopSMTPServer()
@@ -126,6 +147,11 @@ public class SettingsSingleton implements Serializable
 		return this.port;
 	}
 	
+	public boolean smtpStarted()
+	{
+		return smtpStarted;
+	}
+	
 	public void setSMTPPort(int port)
 	{
 		this.port = port;
@@ -135,6 +161,16 @@ public class SettingsSingleton implements Serializable
 	{
 		stopSMTPServer();
 		startSMTPServer();
+	}
+	
+	public String getBrowser()
+	{
+		return browserExec;
+	}
+	
+	public void setBrowser(String browser)
+	{
+		browserExec = browser;
 	}
 
 }
