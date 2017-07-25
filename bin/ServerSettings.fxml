@@ -15,11 +15,22 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button layoutX="514.0" layoutY="307.0" mnemonicParsing="false" text="Apply" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="25.0" onAction="#applyConnectionSettings"/>
                         <Label layoutX="14.0" layoutY="14.0" text="Port:" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="15.0" />
                         <TextField fx:id="portNumber" layoutX="25.0" layoutY="46.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="40.0" />
-                     </children></AnchorPane>
+                        <Button layoutX="514.0" layoutY="307.0" mnemonicParsing="false" onAction="#applyConnectionSettings" text="Apply" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="25.0" />
+                     </children>
+              </AnchorPane>
             </content>
+          </Tab>
+          <Tab text="Browser">
+          	<content>
+          		<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+          			<Button layoutX="514.0" layoutY="307.0" mnemonicParsing="false" onAction="#applyBrowserSettings" text="Apply" AnchorPane.bottomAnchor="25.0" AnchorPane.rightAnchor="25.0" />
+                     <Label layoutX="14.0" layoutY="14.0" text="Open external links with:" />
+                     <TextField fx:id="BrowserPath" layoutX="14.0" layoutY="35.0" />
+                     <Button fx:id="BrowserBrowse" layoutX="212.0" layoutY="35.0" mnemonicParsing="false" onMouseClicked="#browseForBrowser" text="Browse" />
+          		</AnchorPane>
+          	</content>
           </Tab>
         </tabs>
       </TabPane>

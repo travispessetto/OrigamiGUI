@@ -12,6 +12,7 @@ public class SMTPThread implements Runnable{
 	private int port;
 	private ConsoleMain smtpServer;
 	private SMTPErrorListener listener;
+	private boolean smtpStarted;
 	public SMTPThread(int port,SMTPErrorListener listener)
 	{
 		this.port = port;
@@ -20,6 +21,11 @@ public class SMTPThread implements Runnable{
 	}
 	
 	
+	public boolean isStarted()
+	{
+		return smtpStarted;
+	}
+	
 	@Override
 	public void run() 
 	{
@@ -27,12 +33,12 @@ public class SMTPThread implements Runnable{
 		{
 			System.out.println("Starting bundled SMTP Server");
 			smtpServer.startSMTP();
+			smtpStarted = true;
 		}
 		catch(BindException ex)
 		{
-			System.out.println(ex.getMessage());
+			listener.notifyWithMessage(ex, "You may be able to fix this by changing the port in File > Settings or exiting a previous instance");
 			ex.printStackTrace(System.err);
-			listener.notifyFatal(ex);
 		}
 		catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -43,6 +49,8 @@ public class SMTPThread implements Runnable{
 	public void stop()
 	{
 		smtpServer.closeSMTP();
+		smtpStarted = false;
 	}
+	
 
 }

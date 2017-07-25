@@ -40,4 +40,21 @@ public class SMTPThreadErrorListener implements SMTPErrorListener{
 		alert.showAndWait();
 	}
 
+	@Override
+	public void notifyWithMessage(Exception ex, String message) 
+	{
+		Platform.runLater(new Runnable()
+				{
+
+					@Override
+					public void run() {
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setTitle("Error");
+						alert.setContentText(ex.getMessage() + "\n" + message);
+						alert.showAndWait();						
+					}
+			
+				});
+	}
+
 }
