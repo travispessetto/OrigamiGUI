@@ -162,7 +162,7 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 				{
 					int selected = emails.getSelectionModel().getSelectedIndex();
 					inbox.deleteMessage(selected);
-					webengine.loadContent("");
+					loadEmailLineByLine(webengine,"");
 				}
 				else
 				{
