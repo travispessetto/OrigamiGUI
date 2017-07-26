@@ -23,6 +23,7 @@ import com.pessetto.FileHandlers.Inbox.Message;
 import com.pessetto.FileHandlers.Inbox.NewMessageListener;
 import com.pessetto.Variables.InboxVariables;
 
+import application.listeners.SMTPStatusListener;
 import application.listeners.TrayIconListener;
 import application.settings.SettingsSingleton;
 import application.tray.SystemTraySingleton;
@@ -55,7 +56,8 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 
-public class EmailController implements NewMessageListener, DeleteMessageListener
+public class EmailController implements NewMessageListener,
+DeleteMessageListener, SMTPStatusListener
 {
 
 	private ObservableList<String> emailList;
@@ -94,6 +96,9 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 	@FXML
 	private void initialize() throws Exception
 	{
+		SettingsSingleton settings = SettingsSingleton.getInstance();
+		settings.addSmtpStatusListener(this);
+		settings.startSMTPServer();
 		Inbox inbox = Inbox.getInstance();
 		inbox.addNewMessageListener(this);
 		inbox.addDeleteMessageListener(this);
@@ -114,10 +119,6 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 		String emailExternalForm = emailRef.toExternalForm();
 		webengine.load(emailExternalForm);
 		loadEmails();
-		if(SettingsSingleton.getInstance().smtpStarted())
-		{
-			smtpStatus.setText("Started");
-		}
 		//watchFolder();
 		emails.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
@@ -246,6 +247,14 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 		}
 	}
 	
+	public void showAlert(AlertType type,String title, String message)
+	{
+		Alert alert = new Alert(type);
+		alert.setTitle(title);
+		alert.setContentText(message);
+		alert.showAndWait();
+	}
+	
 	public void updateStatus(boolean status)
 	{
 		
@@ -267,5 +276,28 @@ public class EmailController implements NewMessageListener, DeleteMessageListene
 			System.out.println("Line: "+line);
 			engine.executeScript("addContentLine(\""+line+ "\");");
 		}
+	}
+
+	@Override
+	public void smtpStatusChanged(boolean started) 
+	{
+		SettingsSingleton settings = SettingsSingleton.getInstance();
+		Platform.runLater(new Runnable()
+				{
+
+					@Override
+					public void run() 
+					{
+						if(started)
+						{
+							smtpStatus.setText("Started on port " + settings.getSMTPPort());
+						}
+						else
+						{
+							smtpStatus.setText("Stopped");
+						}						
+					}
+			
+				});
 	}
 }

@@ -12,9 +12,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import application.constants.SettingsVariables;
 import application.listeners.SMTPErrorListener;
+import application.listeners.SMTPStatusListener;
 import application.listeners.SMTPThreadErrorListener;
 import application.threads.SMTPThread;
 import javafx.scene.control.Alert;
@@ -30,6 +33,7 @@ public class SettingsSingleton implements Serializable
 	private transient SMTPThread smtp;
 	private transient boolean minimizeToTray;
 	private transient SMTPErrorListener smtpErrorListener;
+	private transient List<SMTPStatusListener> smtpStatusListeners;
 	private boolean smtpStarted;
 	private SettingsSingleton(int port)
 	{
@@ -37,6 +41,7 @@ public class SettingsSingleton implements Serializable
 		this.port = port; 
 		this.minimizeToTray = true;
 		smtpErrorListener = new SMTPThreadErrorListener();
+		smtpStatusListeners = new LinkedList<SMTPStatusListener>();
 	}
 	
 	public static SettingsSingleton getInstance()
@@ -120,10 +125,9 @@ public class SettingsSingleton implements Serializable
 	public void startSMTPServer()
 	{
 		System.out.println("Starting SMTP Server Thread");
-		smtp = new SMTPThread(this.port,this.smtpErrorListener);
+		smtp = new SMTPThread(this.port,this.smtpErrorListener,smtpStatusListeners);
 		smtpThread = new Thread(smtp);
 		smtpThread.start();
-		smtpStarted = smtpThread.isAlive();
 	}
 	
 	public void stopSMTPServer()
@@ -171,6 +175,11 @@ public class SettingsSingleton implements Serializable
 	public void setBrowser(String browser)
 	{
 		browserExec = browser;
+	}
+	
+	public void addSmtpStatusListener(SMTPStatusListener listener)
+	{
+		smtpStatusListeners.add(listener);
 	}
 
 }
