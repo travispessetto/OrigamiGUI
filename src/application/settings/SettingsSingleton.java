@@ -179,6 +179,10 @@ public class SettingsSingleton implements Serializable
 	
 	public void addSmtpStatusListener(SMTPStatusListener listener)
 	{
+		if(smtpStatusListeners == null)
+		{
+			smtpStatusListeners = new LinkedList<SMTPStatusListener>();
+		}
 		smtpStatusListeners.add(listener);
 	}
 
