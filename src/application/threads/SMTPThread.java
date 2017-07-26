@@ -2,10 +2,13 @@ package application.threads;
 
 import java.net.BindException;
 import java.net.SocketException;
+import java.util.List;
 
+import com.pessetto.Status.StatusListener;
 import com.pessetto.main.ConsoleMain;
 
 import application.listeners.SMTPErrorListener;
+import application.listeners.SMTPStatusListener;
 
 public class SMTPThread implements Runnable{
 
@@ -13,10 +16,12 @@ public class SMTPThread implements Runnable{
 	private ConsoleMain smtpServer;
 	private SMTPErrorListener listener;
 	private boolean smtpStarted;
-	public SMTPThread(int port,SMTPErrorListener listener)
+	private List<SMTPStatusListener> statusListeners;
+	public SMTPThread(int port,SMTPErrorListener listener,List<SMTPStatusListener> statusListeners)
 	{
 		this.port = port;
 		this.listener = listener;
+		this.statusListeners = statusListeners;
 		smtpServer = new ConsoleMain(this.port);
 	}
 	
@@ -32,24 +37,34 @@ public class SMTPThread implements Runnable{
 		try 
 		{
 			System.out.println("Starting bundled SMTP Server");
+			notifyAllStatusListeners(true);
 			smtpServer.startSMTP();
-			smtpStarted = true;
 		}
 		catch(BindException ex)
 		{
 			listener.notifyWithMessage(ex, "You may be able to fix this by changing the port in File > Settings or exiting a previous instance");
 			ex.printStackTrace(System.err);
+			notifyAllStatusListeners(false);
 		}
 		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			notifyAllStatusListeners(false);
 		}
 	}
 	
 	public void stop()
 	{
 		smtpServer.closeSMTP();
-		smtpStarted = false;
+		notifyAllStatusListeners(false);
+	}
+	
+	public void notifyAllStatusListeners(boolean started)
+	{
+		for(SMTPStatusListener listener : statusListeners)
+		{
+			listener.smtpStatusChanged(started);
+		}
 	}
 	
 

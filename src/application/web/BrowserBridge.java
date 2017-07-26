@@ -1,9 +1,13 @@
 package application.web;
 
+import java.awt.Desktop;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import application.controllers.EmailController;
 import application.settings.SettingsSingleton;
+import javafx.scene.control.Alert.AlertType;
 
 public class BrowserBridge 
 {
@@ -21,7 +25,7 @@ public class BrowserBridge
 		if(browser != null && !browser.isEmpty())
 		{
 			System.out.println("Launching " + browser);
-			String[] params = new String[] {browser,href};
+			String[] params = new String[] {browser,"\""+href+"\""};
 			try {
 				Process p = Runtime.getRuntime().exec(params);
 			} catch (IOException e) {
@@ -31,8 +35,20 @@ public class BrowserBridge
 		}
 		else
 		{
-			//Todo: load in web engine.
-			System.err.println("No browser");
+			try
+			{
+				Desktop.getDesktop().browse(new URI(href));
+			}
+			catch (IOException e) 
+			{
+				controller.showAlert(AlertType.ERROR, "Error", e.getMessage());
+				e.printStackTrace();
+			}
+			catch (URISyntaxException e)
+			{
+				controller.showAlert(AlertType.ERROR, "Error", "Bad Link");
+				e.printStackTrace();
+			}
 		}
 	}
 }
