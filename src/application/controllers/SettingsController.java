@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 
 public class SettingsController 
@@ -20,10 +21,14 @@ public class SettingsController
    protected TextField BrowserPath;
    
    @FXML
+   protected CheckBox UsePrivateBrowsing;
+   
+   @FXML
    protected void applyBrowserSettings(Event event)
    {
 	   SettingsSingleton settings = SettingsSingleton.getInstance();
 	   settings.setBrowser(BrowserPath.getText());
+	   settings.setPrivateBrowsing(UsePrivateBrowsing.isSelected());
 	   Alert alert = new Alert(AlertType.INFORMATION);
 	   alert.setTitle("Browser Settings");
 	   alert.setHeaderText(null);
@@ -63,11 +68,14 @@ public class SettingsController
 	   }
    }
    
+   
    @FXML
    protected void initialize()
    {
 	   SettingsSingleton settings = SettingsSingleton.getInstance();
 	   portNumber.setText(Integer.toString(settings.getSMTPPort()));
+	   UsePrivateBrowsing.setSelected(settings.getPrivateBrowsing());
+	   BrowserPath.setText(settings.getBrowser());
    }
    
 }

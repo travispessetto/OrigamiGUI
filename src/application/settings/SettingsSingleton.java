@@ -25,7 +25,7 @@ import javafx.scene.control.Alert.AlertType;
 
 public class SettingsSingleton implements Serializable
 {
-	private static final long serialVersionUID = 3840045425215974391L;
+	private static final long serialVersionUID = 3840045425215974392L;
 	private String browserExec;
 	private int port;
 	private transient static SettingsSingleton instance;
@@ -35,6 +35,7 @@ public class SettingsSingleton implements Serializable
 	private transient SMTPErrorListener smtpErrorListener;
 	private transient List<SMTPStatusListener> smtpStatusListeners;
 	private boolean smtpStarted;
+	private boolean usePrivateBrowsing;
 	private SettingsSingleton(int port)
 	{
 		// No direct creation
@@ -42,6 +43,7 @@ public class SettingsSingleton implements Serializable
 		this.minimizeToTray = true;
 		smtpErrorListener = new SMTPThreadErrorListener();
 		smtpStatusListeners = new LinkedList<SMTPStatusListener>();
+		usePrivateBrowsing = false;
 	}
 	
 	public static SettingsSingleton getInstance()
@@ -175,6 +177,16 @@ public class SettingsSingleton implements Serializable
 	public void setBrowser(String browser)
 	{
 		browserExec = browser;
+	}
+	
+	public boolean getPrivateBrowsing()
+	{
+		return usePrivateBrowsing;
+	}
+	
+	public void setPrivateBrowsing(boolean privateBrowse)
+	{
+		usePrivateBrowsing = privateBrowse;
 	}
 	
 	public void addSmtpStatusListener(SMTPStatusListener listener)

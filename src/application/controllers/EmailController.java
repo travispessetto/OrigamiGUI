@@ -3,6 +3,7 @@ package application.controllers;
 import java.awt.TrayIcon.MessageType;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +29,7 @@ import application.listeners.TrayIconListener;
 import application.settings.SettingsSingleton;
 import application.tray.SystemTraySingleton;
 import application.web.BrowserBridge;
+import application.web.ResourceLoader;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -37,6 +39,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
@@ -111,13 +114,9 @@ DeleteMessageListener, SMTPStatusListener
 				win.setMember("app",bridge);
 			}
 		});
-		URL emailRef = EmailController.class.getClassLoader().getResource("jqueryEmailPage.html");
-		if(emailRef == null)
-		{
-			System.err.println("Bad HTML GUI Ref");
-		}
-		String emailExternalForm = emailRef.toExternalForm();
-		webengine.load(emailExternalForm);
+		InputStream emailHTMLHandlerStream = EmailController.class.getClassLoader().getResourceAsStream("jqueryEmailPage.html");
+		String emailExternalForm = ResourceLoader.loadFile(emailHTMLHandlerStream);
+		webengine.loadContent(emailExternalForm, "text/html");
 		loadEmails();
 		//watchFolder();
 		emails.setOnMouseClicked(new EventHandler<MouseEvent>(){
