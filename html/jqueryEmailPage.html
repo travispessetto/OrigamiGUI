@@ -20,7 +20,6 @@ $(document).ready(function()
 	{
 		event.preventDefault();
 		var href = $(event.target).attr('href');
-		$("#content").html("Opening link: " + href);
 		app.openLink(href);
 	});
 });
@@ -40,7 +39,7 @@ var clearContent = function()
 </head>
 <body>
 	<div id="content">
-		
+		Required JavaScript libraries were not loaded.
 	</div>
 </body>
 </html>

@@ -26,6 +26,15 @@ public class BrowserBridge
 		{
 			System.out.println("Launching " + browser);
 			String[] params = new String[] {browser,"\""+href+"\""};
+			if(settings.getPrivateBrowsing())
+			{
+				System.out.println("Open browser in private");
+				if(browser.toLowerCase().contains("chrome"))
+				{
+					System.out.println("Chrome detected");
+					params = new String[]{params[0],params[1],"--incognito"};
+				}
+			}
 			try {
 				Process p = Runtime.getRuntime().exec(params);
 			} catch (IOException e) {
