@@ -18,6 +18,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.pessetto.FileHandlers.Inbox.Attachment;
 import com.pessetto.FileHandlers.Inbox.DeleteMessageListener;
 import com.pessetto.FileHandlers.Inbox.Inbox;
 import com.pessetto.FileHandlers.Inbox.Message;
@@ -71,7 +72,12 @@ DeleteMessageListener, SMTPStatusListener
 	private WebEngine webengine;
 	@FXML
 	private Label smtpStatus;
+	private Message selectedMessage;
 	
+	public Message getSelectedMessage() {
+		return selectedMessage;
+	}
+
 	@FXML
 	protected void handleExitMenuItemClicked(ActionEvent event)
 	{
@@ -132,6 +138,7 @@ DeleteMessageListener, SMTPStatusListener
 					System.out.println("Mouse clicked on " + selectedItem);
 					try {
 						Message message = inbox.getMessage(selectedItem);
+						selectedMessage = message;
 						if(message.getHTMLMessage() != null)
 						{
 							loadEmailLineByLine(webengine,message.getHTMLMessage());
@@ -140,6 +147,7 @@ DeleteMessageListener, SMTPStatusListener
 						{
 							loadEmailLineByLine(webengine,message.getPlainMessage());
 						}
+						loadAttachments(webengine,message);
 					
 					} catch (Exception e) {
 						System.err.println("Could not open file");
@@ -163,6 +171,8 @@ DeleteMessageListener, SMTPStatusListener
 					int selected = emails.getSelectionModel().getSelectedIndex();
 					inbox.deleteMessage(selected);
 					loadEmailLineByLine(webengine,"");
+					loadAttachments(webengine,null);
+					selectedMessage = null;
 				}
 				else
 				{
@@ -274,6 +284,25 @@ DeleteMessageListener, SMTPStatusListener
 			line = line.replace("\"", "\\\"");
 			System.out.println("Line: "+line);
 			engine.executeScript("addContentLine(\""+line+ "\");");
+		}
+	}
+	
+	private void loadAttachments(WebEngine engine, Message message)
+	{
+		if(message != null)
+		{
+			LinkedList<Attachment> attachments = message.getAttachments();
+			int index = 0;
+			engine.executeScript("clearAttachments();");
+			for(Attachment attach : attachments)
+			{
+				engine.executeScript("addAttachment('"+attach.getFileName()+"',"+index+");");
+				++index;
+			}
+		}
+		else
+		{
+			engine.executeScript("clearAttachments();");
 		}
 	}
 
