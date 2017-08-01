@@ -10,17 +10,41 @@ html,body,#content
 	margin: 0px;
 	border: none;
 }
+#content
+{
+	margin: 5px;
+}
+.file-block
+{
+	background: #e6ffff;
+	margin: 5px;
+}
+h3, ul
+{
+	margin: 0px;
+}
+.attachment:hover
+{
+	text-decoration: underline;
+	cursor: pointer;
+}
 </style>
 <script src="jquery-3.2.1.min.js"></script>
 <script>
 $(document).ready(function()
 {
-	$("#content").html("Emails load here ...");
+	clearAttachments();
+	$("#content").html("");
 	$(document).on("click","a",function(event)
 	{
 		event.preventDefault();
 		var href = $(event.target).attr('href');
 		app.openLink(href);
+	});
+	$(document).on("click",".attachment",function(event)
+	{
+		var index = $(event.target).attr("data-index");
+		app.saveAttachment(index);
 	});
 });
 
@@ -34,10 +58,29 @@ var clearContent = function()
 	$("#content").html("");
 }
 
+var addAttachment = function(name,index)
+{
+	if(index == 0)
+	{
+		$("#attachments").html("<ul></ul>");
+	}
+	$("#attachments ul").append('<li data-index="'+index+'" class="attachment">'+name+'</li>');
+}
+
+var clearAttachments = function()
+{
+	$("#attachments").html("No attachments ...");
+}
+
 
 </script>
 </head>
 <body>
+	<div class="file-block">
+		<h3>Attachments:</h3>
+		<div id="attachments">
+		</div>
+	</div>
 	<div id="content">
 		Required JavaScript libraries were not loaded.
 	</div>

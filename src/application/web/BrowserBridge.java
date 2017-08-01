@@ -1,13 +1,22 @@
 package application.web;
 
 import java.awt.Desktop;
+import java.awt.FileDialog;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import com.pessetto.FileHandlers.Inbox.Attachment;
 
 import application.controllers.EmailController;
 import application.settings.SettingsSingleton;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.FileChooser;
 
 public class BrowserBridge 
 {
@@ -56,6 +65,32 @@ public class BrowserBridge
 			catch (URISyntaxException e)
 			{
 				controller.showAlert(AlertType.ERROR, "Error", "Bad Link");
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void saveAttachment(int index)
+	{
+		Attachment attach = controller.getSelectedMessage().getAttachments().get(index);
+		FileChooser fd = new FileChooser();
+		fd.setTitle("Save file as...");
+		fd.setInitialFileName(attach.getFileName());
+		File path = fd.showSaveDialog(null);
+		if(path != null)
+		{
+			FileOutputStream fos;
+			try {
+				fos = new FileOutputStream(path);
+				fos.write(attach.getContent());
+				fos.close();
+				controller.showAlert(AlertType.INFORMATION, "File saved", "Attachment saved");
+			} catch (FileNotFoundException e) {
+				System.err.println("File not found even though save?");
+				controller.showAlert(AlertType.ERROR, "Error", "Trying to save file but got file not found.");
+				e.printStackTrace();
+			} catch (IOException e) {
+				controller.showAlert(AlertType.ERROR, "Error",e.getMessage());
 				e.printStackTrace();
 			}
 		}
