@@ -42,12 +42,12 @@ public class SMTPThread implements Runnable{
 		}
 		catch(BindException ex)
 		{
-			listener.notifyWithMessage(ex, "You may be able to fix this by changing the port in File > Settings or exiting a previous instance");
+			listener.notifyWithMessage(ex, "You may be able to fix this by changing the port in File > Settings > Connection or exiting a previous instance");
 			ex.printStackTrace(System.err);
 			notifyAllStatusListeners(false);
 		}
 		catch (Exception e) {
-			// TODO Auto-generated catch block
+			listener.notifyWithMessage(e, e.getMessage());
 			e.printStackTrace();
 			notifyAllStatusListeners(false);
 		}

@@ -111,7 +111,6 @@ public class Console extends Application implements ActionListener, TrayIconList
 	
 	public static void main(String[] args)
 	{
-		// Start the SMTP Server via settings
 		SettingsSingleton settings = SettingsSingleton.getInstance();
 		System.out.println("Origami GUI");
 		System.out.println("Working Dir: " + System.getProperty("user.dir"));

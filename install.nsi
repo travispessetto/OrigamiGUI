@@ -2,6 +2,8 @@
 !include MUI.nsh
 !define MUI_TEXT_LICENSE_TITLE "License Agreement"
 !define MUI_TEXT_SUBTITLE ""
+!define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\OrigamiSMTP"
+!define SFT_VERSION "0.11.RC"
 !insertmacro MUI_PAGE_LICENSE "license.txt"
 !insertmacro MUI_PAGE_INSTFILES
 
@@ -60,6 +62,20 @@ ${If} $0 != success
 	MessageBox MB_OK "Root certificate import failed: $0"
 ${EndIf}
 
+WriteRegStr HKLM "${UNINST_KEY}" "DisplayName" "Origami SMTP"
+				 
+WriteRegStr HKLM "${UNINST_KEY}" "UninstallString" "$\"$INSTDIR\uninstaller.exe$\""
+
+WriteRegStr HKLM "${UNINST_KEY}" "DisplayVersion" "${SFT_VERSION}"
+
+WriteRegStr HKLM "${UNINST_KEY}" "RegOwner" "Travis Pessetto"
+
+WriteRegStr HKLM "${UNINST_KEY}" "NoModify" 1
+
+WriteRegStr HKLM "${UNINST_KEY}" "NoRepair" 1
+
+WriteRegStr HKLM "${UNINST_KEY}" "Publisher" "Travis Pessetto"
+
 ;Delete "$INSTDIR\Origami_CA.crt"
 
 SectionEnd
@@ -84,7 +100,7 @@ Delete "$INSTDIR\Origami SMTP.exe"
 
 RMDir $INSTDIR
 
-RMDir "$APPDATA\Origami SMTP"
+RMDir /r "$APPDATA\Origami SMTP"
 
 Delete "$SMPROGRAMS\Origami SMTP\Origami SMTP.lnk"
 
@@ -92,6 +108,8 @@ Delete "$SMPROGRAMS\Origami SMTP\Uninstall.lnk"
 
 RMDir "$SMPROGRAMS\Origami SMTP"
 
+
+DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OrigamiSMTP"
 
 SectionEnd
 
@@ -158,52 +176,15 @@ Function AddCertificateToStore
 FunctionEnd
 
 Function un.RemoveCertFromStore
-  Exch $0
-  Push $1
-  Push $R0
-  
-    System::Call "crypt32::CryptQueryObject(i ${CERT_QUERY_OBJECT_FILE}, w r0, \
-    i ${CERT_QUERY_CONTENT_FLAG_ALL}, i ${CERT_QUERY_FORMAT_FLAG_ALL}, \
-    i 0, i 0, i 0, i 0, i 0, i 0, *i .r0) i .R0"
- 
-  ${If} $R0 <> 0
- 
-    System::Call "crypt32::CertOpenStore(i ${CERT_STORE_PROV_SYSTEM}, i 0, i 0, \
+
+#Open the store
+#Store should be opened in $1
+System::Call "crypt32::CertOpenStore(i ${CERT_STORE_PROV_SYSTEM}, i 0, i 0, \
       i ${CERT_STORE_OPEN_EXISTING_FLAG}|${CERT_SYSTEM_STORE_LOCAL_MACHINE}, \
       w 'ROOT') i .r1"
- 
-    ${If} $1 <> 0
- 
-      System::Call "crypt32::CertAddCertificateContextToStore(i r0) i .R0"
-      System::Call "crypt32::CertFreeCertificateContext(i r0)"
- 
-      ${If} $R0 = 0
- 
-        StrCpy $0 "Unable to remove certificate from certificate store"
- 
-      ${Else}
- 
-        StrCpy $0 "success"
- 
-      ${EndIf}
- 
-      System::Call "crypt32::CertCloseStore(i r1, i 0)"
- 
-    ${Else}
- 
-      System::Call "crypt32::CertFreeCertificateContext(i r0)"
- 
-      StrCpy $0 "Unable to open certificate store"
- 
-    ${EndIf}
- 
-  ${Else}
- 
-    StrCpy $0 "Unable to open certificate file"
- 
-  ${EndIf}
-  
-  Pop $R0
-  Pop $1
-  Exch $0
+#Get the certificate by subject
+#Compare certificates to make sure they are OK
+#Remove certificate from store
+#Close the store
+
 FunctionEnd
