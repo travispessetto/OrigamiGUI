@@ -34,7 +34,7 @@ public class SettingsSingleton implements Serializable
 	private transient boolean minimizeToTray;
 	private transient SMTPErrorListener smtpErrorListener;
 	private transient List<SMTPStatusListener> smtpStatusListeners;
-	private boolean smtpStarted;
+	private transient boolean smtpStarted;
 	private boolean usePrivateBrowsing;
 	private SettingsSingleton(int port)
 	{
@@ -62,6 +62,8 @@ public class SettingsSingleton implements Serializable
 					oin.close();
 					fin.close();
 					instance = (SettingsSingleton)obj;
+					instance.smtpStarted = false;
+					instance.smtpErrorListener = new SMTPThreadErrorListener();
 				}
 				catch(InvalidClassException ex)
 				{
