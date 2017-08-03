@@ -42,8 +42,9 @@ WriteUninstaller $INSTDIR\uninstaller.exe
 
 CreateDirectory "$SMPROGRAMS\Origami SMTP"
 
-#Change working directory temporarily for working directory of shortcut
+#Change working directory temporarily for working directory of shortcut and license file
 SetOutPath "$APPDATA\Origami SMTP"
+File "license.txt"
 
 CreateShortCut "$SMPROGRAMS\Origami SMTP\Origami SMTP.lnk" "$INSTDIR\Origami SMTP.exe" "origami.ico"
 
@@ -55,12 +56,14 @@ CreateShortCut "$SMPROGRAMS\Origami SMTP\Uninstall.lnk" "$INSTDIR\uninstaller.ex
 
 #Add Trusted Root
 File "Origami_CA.crt"
+File "license.txt"
 Push "$INSTDIR\Origami_CA.crt"
 Call AddCertificateToStore
 Pop $0
 ${If} $0 != success
 	MessageBox MB_OK "Root certificate import failed: $0"
 ${EndIf}
+
 
 WriteRegStr HKLM "${UNINST_KEY}" "DisplayName" "Origami SMTP"
 				 
@@ -87,12 +90,12 @@ SetShellVarContext all
 Delete "$INSTDIR\uninstaller.exe"
 
 #remove certificate
-Push "$INSTDIR\Origami_CA.crt"
-Call un.RemoveCertFromStore
-Pop $0
-${If} $0 != success
-	MessageBox MB_OK "Could not remove the Origami CA root certificate.  Manually delete. Error: $0";
-${EndIf}
+#Push "$INSTDIR\Origami_CA.crt"
+#Call un.RemoveCertFromStore
+#Pop $0
+#${If} $0 != success
+	MessageBox MB_OK "Could not remove the Origami CA root certificate.  Manually delete.";
+#${EndIf}
 
 Delete "$INSTDIR\Origami_CA.crt"
 

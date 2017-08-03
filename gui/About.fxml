@@ -2,9 +2,13 @@
 
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="221.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="221.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controllers.AboutController">
    <children>
-      <TextArea editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" text="Origami SMTP 0.11.RC&#10;Copyright Ⓒ 2017 Travis Pessetto&#10;All Rights Reserved&#10;&#10;Permission is hereby granted, free of charge, to any person obtaining a copy of this&#10;software ad associated documentation files (the &quot;software&quot;), the rights to use this&#10;software and distribute the software to anyone provided it is distributed free of charge.&#10;&#10;This software is provided &quot;as is&quot;, without warranty of any kind, express or implied, &#10;including but not limited to waranties  of merchantability, fitness for a particular&#10;purpose and noninfringement.  In no event shall the authors or copyright holders be &#10;liable for any claim, damages or other liability, whether in action of contrct, tort or&#10;otherwise, arising from, out or in connection with the software or other dealings in&#10; the software.&#10;&#10;" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+      <TextArea fx:id="AboutText" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="200.0" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <font>
+            <Font name="Arial" size="12.0" />
+         </font></TextArea>
    </children>
 </AnchorPane>
