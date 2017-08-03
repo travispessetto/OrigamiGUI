@@ -141,11 +141,11 @@ DeleteMessageListener, SMTPStatusListener
 						selectedMessage = message;
 						if(message.getHTMLMessage() != null)
 						{
-							loadEmailLineByLine(webengine,message.getHTMLMessage());
+							loadEmail(webengine,message.getHTMLMessage());
 						}
 						else
 						{
-							loadEmailLineByLine(webengine,message.getPlainMessage());
+							loadEmail(webengine,message.getPlainMessage());
 						}
 						loadAttachments(webengine,message);
 					
@@ -170,7 +170,7 @@ DeleteMessageListener, SMTPStatusListener
 				{
 					int selected = emails.getSelectionModel().getSelectedIndex();
 					inbox.deleteMessage(selected);
-					loadEmailLineByLine(webengine,"");
+					loadEmail(webengine,"");
 					loadAttachments(webengine,null);
 					selectedMessage = null;
 				}
@@ -275,16 +275,12 @@ DeleteMessageListener, SMTPStatusListener
 		addEmailToList();
 	}
 	
-	private void loadEmailLineByLine(WebEngine engine, String message)
+	private void loadEmail(WebEngine engine, String message)
 	{
-		String[] lines = message.split("\\r?\\n");
+		String scrubbedContent = message.replaceAll("\\r?\\n","\\\\n");
+		scrubbedContent = scrubbedContent.replace("\"", "\\\"");
 		engine.executeScript("clearContent()");
-		for(String line : lines)
-		{
-			line = line.replace("\"", "\\\"");
-			System.out.println("Line: "+line);
-			engine.executeScript("addContentLine(\""+line+ "\");");
-		}
+		engine.executeScript("setContent(\""+scrubbedContent+ "\");");
 	}
 	
 	private void loadAttachments(WebEngine engine, Message message)
