@@ -22,6 +22,6 @@ Donations will be put towards maintaining this repository as well as bounties fo
 
 ## License
 
-The license for this program is to be determined.
+[MIT License](license.txt)
 
 [1]: https://github.com/travispessetto/origamismtp
