@@ -55,6 +55,7 @@ public class BrowserBridge
 		{
 			try
 			{
+				System.out.println("Use system browser");
 				Desktop.getDesktop().browse(new URI(href));
 			}
 			catch (IOException e) 

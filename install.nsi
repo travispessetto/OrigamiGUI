@@ -3,7 +3,7 @@
 !define MUI_TEXT_LICENSE_TITLE "License Agreement"
 !define MUI_TEXT_SUBTITLE ""
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\OrigamiSMTP"
-!define SFT_VERSION "0.11.RC"
+!define SFT_VERSION "0.13.RC"
 !insertmacro MUI_PAGE_LICENSE "license.txt"
 !insertmacro MUI_PAGE_INSTFILES
 
