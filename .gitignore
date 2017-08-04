@@ -1,6 +1,6 @@
+bin
 *\.class
 *\.mht
 *\.ser
 *\.exe
-bin\*
 Origami\ SMTP.jar

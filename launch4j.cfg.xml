@@ -2,7 +2,7 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>C:\Users\Travis\git\OrigamiGUI\Origami SMTP.jar</jar>
+  <jar>C:\Users\travis.pessetto\git\OrigamiGUI\Origami SMTP.jar</jar>
   <outfile>C:\Users\Travis\git\OrigamiGUI\Origami SMTP.exe</outfile>
   <errTitle>Java Required</errTitle>
   <cmdLine></cmdLine>
@@ -13,7 +13,7 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>C:\Users\Travis\git\OrigamiGUI\origami.ico</icon>
+  <icon>C:\Users\travis.pessetto\git\OrigamiGUI\origami.ico</icon>
   <jre>
     <path></path>
     <bundledJre64Bit>false</bundledJre64Bit>
