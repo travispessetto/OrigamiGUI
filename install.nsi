@@ -89,14 +89,6 @@ SetShellVarContext all
 
 Delete "$INSTDIR\uninstaller.exe"
 
-#remove certificate
-#Push "$INSTDIR\Origami_CA.crt"
-#Call un.RemoveCertFromStore
-#Pop $0
-#${If} $0 != success
-	MessageBox MB_OK "Could not remove the Origami CA root certificate.  Manually delete.";
-#${EndIf}
-
 Delete "$INSTDIR\Origami_CA.crt"
 
 Delete "$INSTDIR\Origami SMTP.exe"
@@ -111,6 +103,11 @@ Delete "$SMPROGRAMS\Origami SMTP\Uninstall.lnk"
 
 RMDir "$SMPROGRAMS\Origami SMTP"
 
+Call un.RemoveCertFromStore
+Pop $0
+${If} $0 != success
+	MessageBox MB_OK "Root certificate delete failed: $0"
+${EndIf}
 
 DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OrigamiSMTP"
 
@@ -178,16 +175,43 @@ Function AddCertificateToStore
  
 FunctionEnd
 
+!define X509_ASN_ENCODING 1
+!define CERT_FIND_SUBJECT_STR_A 458759
+!define CERT_SUBJ_NAME "Origami SMTP"
 Function un.RemoveCertFromStore
-
+# Exch $0
+# Push $1
+# Push $R0
+  
 #Open the store
 #Store should be opened in $1
 System::Call "crypt32::CertOpenStore(i ${CERT_STORE_PROV_SYSTEM}, i 0, i 0, \
       i ${CERT_STORE_OPEN_EXISTING_FLAG}|${CERT_SYSTEM_STORE_LOCAL_MACHINE}, \
       w 'ROOT') i .r1"
-#Get the certificate by subject
-#Compare certificates to make sure they are OK
-#Remove certificate from store
-#Close the store
+	  
+${If} $1 <> 0
+	# Store was opened
+	#Get the certificate by subject
+	System::Call "crypt32::CertFindCertificateInStore(i r1,i ${X509_ASN_ENCODING},i 0, i ${CERT_FIND_SUBJECT_STR_A},w '${CERT_SUBJ_NAME}',null) i .r2"
+	${If} $2 <> 0
+		#Remove certificate from store
+		System::Call "crypt32::CertDeleteCertificateFromStore(i r2) i .r3"
+		${If} $3 = 0
+			StrCpy $0 "($3)Could not delete certificate from store"
+		${Else}
+			StrCpy $0 "success"
+		${EndIf}
+	${Else}
+		StrCpy $0 "Could not find the Origami SMTP certificate in store"
+	${EndIf}
+	#Store was successfully opened so close it
+	System::Call "crypt32::CertCloseStore(i r1, i 0)"
+${Else}
+	StrCpy $0 "Unable to open certificate store"
+${EndIf}
+
+#Pop $R0
+#Pop $1
+#Exch $0
 
 FunctionEnd
