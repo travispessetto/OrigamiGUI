@@ -3,7 +3,7 @@
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
   <jar>C:\Users\travis.pessetto\git\OrigamiGUI\Origami SMTP.jar</jar>
-  <outfile>C:\Users\Travis\git\OrigamiGUI\Origami SMTP.exe</outfile>
+  <outfile>C:\Users\travis.pessetto\git\OrigamiGUI\Origami SMTP.exe</outfile>
   <errTitle>Java Required</errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
