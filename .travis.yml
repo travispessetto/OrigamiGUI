@@ -1,3 +1,5 @@
+before_install:
+        - sudo apt-get install -y nsis-common
 language: java
 jdk:
         - oraclejdk8
@@ -5,3 +7,15 @@ script:
         - ant build
         - ant create_run_jar
         - ./launch4j-linux/launch4j launch4j.cfg.xml
+        - makensis install.nsi
+deploy:
+        provider: releases
+        file:
+                - "Origami SMTP.jar"
+                - "Origami SMTP.exe"
+                - "Origami Setup.exe"
+        skip_cleanup: true
+        on:
+                tags: true
+        api_key:
+                secure: "gBZu0+2xS+GTWq8tpqAayLVqvb67zlmyWGYRfWZOFs9c5JqFtLOUfRe5Fmo4ts1SBRIPkWZODa4VVM+5Zkcl1MmCwhnbhTLl7+FY0lGUWrqTxDSwc3ZdQm4EGK+T2EqUnRwSR1QrNj9IodehqfccfCohyxC8C0HHEXwM8+ibFaG8BrZjqcgbJnD0JoXQJ7g7b7zheuHLWrseGlH81Dj+bkSkE7PKCAXKX2rGAM4Ht8MKjj31keeibfi4NKitYIlA3SndE0/ePuwq0V2gepUPvouJEbov7+IxkxlGX5c6fSfV00NlCqka52zL5RjdekNI+yOiQSGrzSHeuBmmLfVF8KvurC91Gw3nC444MqEIPL53MA2V2BMaNLpJMH0ouWgQ0M9+tHszySKsisarvsIhuiDSVkQFo+2V2957MzepwI4s4bPLzLnLICP0w0F10G2OlvLlr9DdWFbO9OYuDtTiilARWpL84A+EpCaocn2l0w3P/MdvOJg4uCFqO8/zZ3FWPjOgtUJIzGWwWO8qRNVdo3fuuNM/SewZv77f4ZJwlkimjYzGkKnphJY5xZT7qGbt0qBK4xkeGPERgZGiuh6cbtp6SvAjytyUgNqAZ93wihErwY0RiysgEn4hl6ksvsTxsEVn+qWpPiUHcrhMc9O/rSAt1D01FcIAwEjWbCHfOzc="

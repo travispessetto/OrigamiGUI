@@ -1,7 +1,7 @@
 !include LogicLib.nsh
 !include MUI.nsh
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\OrigamiSMTP"
-!define SFT_VERSION "0.13.RC"
+!define SFT_VERSION "1.0.0"
 !insertmacro MUI_PAGE_LICENSE "license.txt"
 !insertmacro MUI_PAGE_INSTFILES
 
