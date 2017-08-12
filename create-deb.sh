@@ -3,7 +3,7 @@ mkdir origami-smtp_v1.0.0
 mkdir origami-smtp_v1.0.0/DEBIAN
 mkdir -p origami-smtp_v1.0.0/etc/menu
 mkdir -p origami-smtp_v1.0.0/usr/bin
-mkdir -p origami-smtp_v1.0.0/etc/ssl/certsi
+mkdir -p origami-smtp_v1.0.0/etc/ssl/certs
 mkdir -p origami-smtp_v1.0.0/usr/share/applications
 mv Origami\ SMTP.jar Origami.SMTP.jar
 ./jar2sh.sh linux-launch.config
