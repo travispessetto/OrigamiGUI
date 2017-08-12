@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Exec=/usr/bin/Origami.SMTP.sh
+Type=Application
+Terminal=false
+Comment=Origami SMTP Server
+Name=Origami SMTP
+GenericName=origami-smtp v1.0.0
+StartupNotify=false
+Categories=Internet

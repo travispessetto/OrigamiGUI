@@ -4,4 +4,7 @@ bin
 *\.mht
 *\.ser
 *\.exe
+*\.deb
 Origami\ SMTP.jar
+Origami.SMTP.sh
+Origami.SMTP.jar
