@@ -9,14 +9,14 @@ script:
         - ant create_run_jar
         - ./launch4j-linux/launch4j launch4j.cfg.xml
         - makensis install.nsi
-	- ./create-deb.sh
+        - ./create-deb.sh
 deploy:
         provider: releases
         file:
                 - "Origami SMTP.jar"
                 - "Origami SMTP.exe"
                 - "Origami Setup.exe"
-		- "Origami-smtp_v1.0.0.deb"
+                - "Origami-smtp_v1.0.0.deb"
         skip_cleanup: true
         on:
                 tags: true
