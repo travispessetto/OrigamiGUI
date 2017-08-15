@@ -18,7 +18,9 @@ via one of our Gitcheese or Bountysource badges.
 
 ## How Donations are Spent
 
-Donations will be put towards maintaining this repository as well as bounties for particular features.
+* Bounties
+* Paying Developers
+* Advertising
 
 ## License
 

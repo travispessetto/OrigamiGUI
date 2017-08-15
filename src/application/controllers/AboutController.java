@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 
 public class AboutController 
@@ -16,9 +17,13 @@ public class AboutController
 	private TextArea AboutText;
 	
 	@FXML
+	private Label Version;
+	
+	@FXML
 	private void initialize()
 	{
 		setLicenseText();
+		setVersion();
 	}
 	
 	private void setLicenseText()
@@ -34,6 +39,23 @@ public class AboutController
 		catch(Exception ex)
 		{
 			Alert alert = new Alert(AlertType.ERROR, "Could not open license file", ButtonType.OK);
+		}
+	}
+	
+	private void setVersion()
+	{
+		try
+		{
+			File versionFile = new File("VERSION");
+			Scanner scan = new Scanner(versionFile);
+			scan.useDelimiter("\\Z");
+			String versionText = Version.getText();
+			versionText = String.format(versionText, scan.next());
+			Version.setText(versionText);
+		}
+		catch(Exception ex)
+		{
+			Alert alert = new Alert(AlertType.ERROR, "Could not open version file", ButtonType.OK);
 		}
 	}
 }
