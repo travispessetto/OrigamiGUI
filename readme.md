@@ -13,8 +13,34 @@ in order to make it easier to use. I decided to call the combined work Origami S
 
 ## Contributing
 
-Monetary as well as code donations are greatly appreciated.  You can donate money
-via one of our Gitcheese or Bountysource badges.
+Monetary as well as code donations are greatly appreciated.  You can donate 
+money via one of our Gitcheese or Bountysource badges.
+
+Contributing code is easy.  Just fork the project and send us a pull 
+request when you are done.
+
+## Tips for Setting up your Environment
+
+The `VERSION` file should match the tag at all times.  Changing this
+value should align with creating a new version.  In order to make git 
+automatically create a tag if that file changes paste the following code
+in your `.git/post-commit` file.
+
+```sh
+#!/bin/sh
+
+# Only show most recent tag without trailing commit information
+git describe --tags | awk "{split(\$0,a,\"-\"); print a[1];}" > version.tmp
+
+# Only proceed if version number has actually changed (i.e. a new tag has been created)
+if [ ! $(cmp --silent version.tmp version.txt) ] 
+then
+    NEWVER=$(cat version.txt)
+    echo Adding tag $NEWVER
+    git tag -a $NEWVER -m ''
+    rm version.tmp
+fi
+```
 
 ## How Donations are Spent
 
