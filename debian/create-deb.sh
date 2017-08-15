@@ -19,7 +19,7 @@ rm -rf origami-smtp_v1.0.0$version
 mv origami-smtp_v$version.deb ../
 cd ..
 if test -e "origami-smtp_v$version.deb"; then
-	echo origami-smtp_v$version.deb created"
+	echo "origami-smtp_v$version.deb created"
     return 0
 else
     return 1
