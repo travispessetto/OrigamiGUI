@@ -16,7 +16,7 @@ cat Origami_CA.crt > origami-smtp_v$version/etc/ssl/certs/Origami_CA.pem
 dpkg-deb --build origami-smtp_v$version
 rm -rf origami-smtp_v1.0.0$version
 mv origami-smtp_v$version.deb ../
-if -e "../origami-smtp_v$version.deb"; then
+if test -e "../origami-smtp_v$version.deb"; then
     return 0
 else
     return 1
