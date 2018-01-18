@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import application.constants.SettingsVariables;
+import application.debug.DebugLogSingleton;
 import application.listeners.SMTPErrorListener;
 import application.listeners.SMTPStatusListener;
 import application.listeners.SMTPThreadErrorListener;
@@ -36,6 +37,7 @@ public class SettingsSingleton implements Serializable
 	private transient List<SMTPStatusListener> smtpStatusListeners;
 	private transient boolean smtpStarted;
 	private boolean usePrivateBrowsing;
+	private transient static DebugLogSingleton debugLog;
 	private SettingsSingleton(int port)
 	{
 		// No direct creation
@@ -44,6 +46,7 @@ public class SettingsSingleton implements Serializable
 		smtpErrorListener = new SMTPThreadErrorListener();
 		smtpStatusListeners = new LinkedList<SMTPStatusListener>();
 		usePrivateBrowsing = false;
+		debugLog = DebugLogSingleton.getInstance();
 	}
 	
 	public static SettingsSingleton getInstance()
@@ -67,14 +70,14 @@ public class SettingsSingleton implements Serializable
 				}
 				catch(InvalidClassException ex)
 				{
-					System.err.println("Bad settings file");
+					debugLog.writeToLog("Bad settings file");
 					if(file.delete())
 					{
 						return getInstance();
 					}
 					else
 					{
-						System.err.println("Could not delete bad settings file");
+						debugLog.writeToLog("Error: Could not delete bad settings file");
 					}
 				}
 				catch(Exception ex)
@@ -116,6 +119,11 @@ public class SettingsSingleton implements Serializable
 		}
 	}
 	
+	public void getSMTPServerMessages()
+	{
+		smtp.getMessages();
+	}
+	
 	public boolean getMinimizeToTray()
 	{
 		return minimizeToTray;
@@ -128,7 +136,7 @@ public class SettingsSingleton implements Serializable
 	
 	public void startSMTPServer()
 	{
-		System.out.println("Starting SMTP Server Thread");
+		debugLog.writeToLog("Starting SMTP Server Thread");
 		smtp = new SMTPThread(this.port,this.smtpErrorListener,smtpStatusListeners);
 		smtpThread = new Thread(smtp);
 		smtpThread.start();
@@ -136,18 +144,18 @@ public class SettingsSingleton implements Serializable
 	
 	public void stopSMTPServer()
 	{
-		System.out.println("Interupting SMTP threads");
+		debugLog.writeToLog("Interupting SMTP threads");
 		try
 		{
 			smtp.stop();
 		}
 		catch(Exception ex)
 		{
-			System.err.println("Error: " + ex.getMessage());
+			debugLog.writeToLog("Error: " + ex.getMessage());
 			ex.printStackTrace(System.err);
 		}
 		smtpThread.interrupt();
-		System.out.println("SMTP threads interupted");
+		debugLog.writeToLog("SMTP threads interupted");
 	}
 	
 	public int getSMTPPort()

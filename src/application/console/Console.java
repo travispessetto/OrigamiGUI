@@ -31,6 +31,7 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
+import application.debug.DebugLogSingleton;
 import application.listeners.TrayIconListener;
 import application.settings.SettingsSingleton;
 import application.threads.SMTPThread;
@@ -40,6 +41,7 @@ public class Console extends Application implements ActionListener, TrayIconList
 	
 	private Image icon;
 	private Stage mainStage;
+	private static DebugLogSingleton debugLog;
 	
 	
 	@Override
@@ -78,7 +80,6 @@ public class Console extends Application implements ActionListener, TrayIconList
 	{
 		try
 		{	
-			SettingsSingleton settings = SettingsSingleton.getInstance();
 			if(mainStage != null)
 			{
 				mainStage.show();
@@ -111,9 +112,9 @@ public class Console extends Application implements ActionListener, TrayIconList
 	
 	public static void main(String[] args)
 	{
-		SettingsSingleton settings = SettingsSingleton.getInstance();
-		System.out.println("Origami GUI");
-		System.out.println("Working Dir: " + System.getProperty("user.dir"));
+		debugLog = DebugLogSingleton.getInstance();
+		debugLog.writeToLog("Origami GUI");
+		debugLog.writeToLog("Working Dir: " + System.getProperty("user.dir"));
 		launch(args);
 	}
 
