@@ -25,6 +25,7 @@ import com.pessetto.FileHandlers.Inbox.Message;
 import com.pessetto.FileHandlers.Inbox.NewMessageListener;
 import com.pessetto.Variables.InboxVariables;
 
+import application.debug.DebugLogSingleton;
 import application.listeners.SMTPStatusListener;
 import application.listeners.TrayIconListener;
 import application.settings.SettingsSingleton;
@@ -64,6 +65,7 @@ public class EmailController implements NewMessageListener,
 DeleteMessageListener, SMTPStatusListener
 {
 
+	private DebugLogSingleton debugLog;
 	private ObservableList<String> emailList;
 	@FXML
 	private ListView<String> emails = new ListView<>();
@@ -103,8 +105,15 @@ DeleteMessageListener, SMTPStatusListener
 	}
 	
 	@FXML
+	protected void handleDebugMenuClicked(ActionEvent event)
+	{
+		showDebugConsole();
+	}
+	
+	@FXML
 	private void initialize() throws Exception
 	{
+		debugLog = DebugLogSingleton.getInstance();
 		SettingsSingleton settings = SettingsSingleton.getInstance();
 		settings.addSmtpStatusListener(this);
 		settings.startSMTPServer();
@@ -135,7 +144,7 @@ DeleteMessageListener, SMTPStatusListener
 					event.consume();
 					Inbox inbox = Inbox.getInstance();
 					int selectedItem = emails.getSelectionModel().getSelectedIndex();
-					System.out.println("Mouse clicked on " + selectedItem);
+					debugLog.writeToLog("Mouse clicked on " + selectedItem);
 					try {
 						Message message = inbox.getMessage(selectedItem);
 						selectedMessage = message;
@@ -150,8 +159,8 @@ DeleteMessageListener, SMTPStatusListener
 						loadAttachments(webengine,message);
 					
 					} catch (Exception e) {
-						System.err.println("Could not open file");
-						System.err.println(e.getMessage());
+						debugLog.writeToLog("Could not open file");
+						debugLog.writeToLog(e.getMessage());
 						e.printStackTrace(System.err);
 					}
 				}
@@ -248,6 +257,24 @@ DeleteMessageListener, SMTPStatusListener
 			AnchorPane settings = FXMLLoader.load(getClass().getClassLoader().getResource("About.fxml"));
 			Scene scene = new Scene(settings,600,221);
 			stage.setTitle("About Origami SMTP");
+			stage.setScene(scene);
+			stage.show();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void showDebugConsole()
+	{
+		try 
+		{
+			System.out.println("Show debug console");
+			Stage stage = new Stage();
+			stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("origami.png")));
+			AnchorPane debug = FXMLLoader.load(getClass().getClassLoader().getResource("DebugConsole.fxml"));
+			Scene scene = new Scene(debug,600,221);
+			stage.setTitle("Debug Console Origami SMTP");
 			stage.setScene(scene);
 			stage.show();
 		} catch (Exception e) {

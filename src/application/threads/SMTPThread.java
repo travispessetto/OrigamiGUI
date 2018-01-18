@@ -1,5 +1,7 @@
 package application.threads;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.net.BindException;
 import java.net.SocketException;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.List;
 import com.pessetto.Status.StatusListener;
 import com.pessetto.main.ConsoleMain;
 
+import application.debug.DebugLogSingleton;
 import application.listeners.SMTPErrorListener;
 import application.listeners.SMTPStatusListener;
 
@@ -17,12 +20,21 @@ public class SMTPThread implements Runnable{
 	private SMTPErrorListener listener;
 	private boolean smtpStarted;
 	private List<SMTPStatusListener> statusListeners;
+	private DebugLogSingleton debugLog;
+	private ByteArrayOutputStream baos;
+	private PrintStream printStream;
+	private PrintStream systemPrintStream;
+	
 	public SMTPThread(int port,SMTPErrorListener listener,List<SMTPStatusListener> statusListeners)
 	{
 		this.port = port;
 		this.listener = listener;
 		this.statusListeners = statusListeners;
 		smtpServer = new ConsoleMain(this.port);
+		debugLog = DebugLogSingleton.getInstance();
+		baos = new ByteArrayOutputStream();
+		printStream = new PrintStream(baos);
+		systemPrintStream = System.out;
 	}
 	
 	
@@ -36,9 +48,11 @@ public class SMTPThread implements Runnable{
 	{
 		try 
 		{
-			System.out.println("Starting bundled SMTP Server");
+			debugLog.writeToLog("Starting bundled SMTP Server");
 			notifyAllStatusListeners(true);
+			System.setOut(printStream);
 			smtpServer.startSMTP();
+			getMessages();
 		}
 		catch(BindException ex)
 		{
@@ -57,6 +71,13 @@ public class SMTPThread implements Runnable{
 	{
 		smtpServer.closeSMTP();
 		notifyAllStatusListeners(false);
+	}
+	
+	public void getMessages()
+	{
+		System.out.flush();
+		System.setOut(systemPrintStream);
+		debugLog.writeToLog(baos.toString());;
 	}
 	
 	public void notifyAllStatusListeners(boolean started)
