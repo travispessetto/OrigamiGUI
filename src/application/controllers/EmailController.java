@@ -56,6 +56,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
@@ -197,15 +199,14 @@ DeleteMessageListener, SMTPStatusListener
 	{
 		System.out.println("Load emails");
 		LinkedList subjects = new LinkedList();
+		emailList = FXCollections.observableList(subjects);
+		emails.setItems(emailList);
 		Inbox inbox = Inbox.getInstance();
 		for(int i = 0; i < inbox.getMessageCount(); ++i)
 		{
 			Message message = inbox.getMessage(i);
-			String subject = message.getSubject();
-			subjects.add(0,subject);
+			addMessageToList(message);
 		}
-		emailList = FXCollections.observableList(subjects);
-		emails.setItems(emailList);
 	}
 	
 	public void addEmailToList()
@@ -218,7 +219,7 @@ DeleteMessageListener, SMTPStatusListener
 				SettingsSingleton settings = SettingsSingleton.getInstance();
 				Inbox inbox = Inbox.getInstance();
 				Message message = inbox.getNewestMessage();
-				emailList.add(0,message.getSubject());
+				addMessageToList(message);
 				if(settings.getMinimizeToTray())
 				{
 					SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
@@ -342,13 +343,21 @@ DeleteMessageListener, SMTPStatusListener
 						if(started)
 						{
 							smtpStatus.setText("Started on port " + settings.getSMTPPort());
+							smtpStatus.setTextFill(Color.DARKGREEN);
 						}
 						else
 						{
 							smtpStatus.setText("Stopped");
+							smtpStatus.setTextFill(Color.DARKRED);
 						}						
 					}
 			
 				});
+	}
+	
+	private void addMessageToList(Message message)
+	{
+		String subject = message.getSubject();
+		emailList.add(0,subject+"\r\nTo: "+message.getTo()+"\r\nFrom: "+message.getFrom());
 	}
 }

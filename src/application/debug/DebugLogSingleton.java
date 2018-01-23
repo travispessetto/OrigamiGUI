@@ -1,5 +1,8 @@
 package application.debug;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class DebugLogSingleton
@@ -7,11 +10,13 @@ public class DebugLogSingleton
 	
 	private static DebugLogSingleton instance = null;
 	private static final ReentrantLock lock = new ReentrantLock();
-	private String log;
+	private PrintStream systemStream;
+	private PrintStream debugStream;
+	private ByteArrayOutputStream baos;
 	
 	protected DebugLogSingleton()
 	{
-		log = "";
+		redirectSystemOut();
 	}
 	
 	public static DebugLogSingleton getInstance()
@@ -26,18 +31,34 @@ public class DebugLogSingleton
 	public String readLog()
 	{
 		String out = null;
-		lock.lock();
-		out = log;
-		lock.unlock();
+		try
+		{
+			lock.lock();
+			out = baos.toString();
+			baos.flush();
+			lock.unlock();
+		}
+		catch(IOException ex)
+		{
+			System.err.println(ex.getMessage());
+			ex.printStackTrace(System.err);
+		}
 		return out;
 	}
 	
 	public void writeToLog(String message)
 	{
 		lock.lock();
-		log += message;
-		log += "\r\n";
+		System.out.println(message);
 		lock.unlock();
+	}
+	
+	private void redirectSystemOut()
+	{
+		baos = new ByteArrayOutputStream();
+		systemStream = System.out;
+		debugStream = new PrintStream(baos);
+		System.setOut(debugStream);
 	}
 
 }
