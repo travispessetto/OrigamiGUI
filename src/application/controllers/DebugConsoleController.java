@@ -16,7 +16,6 @@ public class DebugConsoleController
 	private void initialize()
 	{
 		settings = SettingsSingleton.getInstance();
-		settings.getSMTPServerMessages();
 		DebugLogSingleton debugLog = DebugLogSingleton.getInstance();
 		String logText = debugLog.readLog();
 		debugConsole.setText(logText);

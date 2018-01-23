@@ -96,9 +96,16 @@ public class Console extends Application implements ActionListener, TrayIconList
 	
 	public void exit(WindowEvent event)
 	{
-		SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
-		systemTray.displayMessage("I am here", "I will be down here if you need me. Exit from the menu if you want me to go away.", MessageType.INFO);
-		mainStage.hide();
+		if(exitApplication())
+		{
+			stop();
+		}
+		else
+		{
+			SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
+			systemTray.displayMessage("I am here", "I will be down here if you need me. Exit from the menu if you want me to go away.", MessageType.INFO);
+			mainStage.hide();
+		}
 	}
 	
 	@Override
@@ -143,6 +150,31 @@ public class Console extends Application implements ActionListener, TrayIconList
 		if(action.equals("open stage"))
 		{
 			mainStage.show();
+		}
+		
+	}
+	
+	private boolean exitApplication()
+	{
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Exit or Minimize?");
+		alert.setHeaderText("Do you wish to exit or minimize to tray?");
+		alert.setContentText("Choose one");
+		
+		ButtonType buttonExit = new ButtonType("Exit");
+		ButtonType buttonMinimize = new ButtonType("Minimize");
+		
+		alert.getButtonTypes().setAll(buttonExit,buttonMinimize);
+		
+		Optional<ButtonType> result = alert.showAndWait();
+		
+		if(result.get() == buttonExit)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 		
 	}

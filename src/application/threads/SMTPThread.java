@@ -21,9 +21,6 @@ public class SMTPThread implements Runnable{
 	private boolean smtpStarted;
 	private List<SMTPStatusListener> statusListeners;
 	private DebugLogSingleton debugLog;
-	private ByteArrayOutputStream baos;
-	private PrintStream printStream;
-	private PrintStream systemPrintStream;
 	
 	public SMTPThread(int port,SMTPErrorListener listener,List<SMTPStatusListener> statusListeners)
 	{
@@ -32,9 +29,6 @@ public class SMTPThread implements Runnable{
 		this.statusListeners = statusListeners;
 		smtpServer = new ConsoleMain(this.port);
 		debugLog = DebugLogSingleton.getInstance();
-		baos = new ByteArrayOutputStream();
-		printStream = new PrintStream(baos);
-		systemPrintStream = System.out;
 	}
 	
 	
@@ -50,9 +44,7 @@ public class SMTPThread implements Runnable{
 		{
 			debugLog.writeToLog("Starting bundled SMTP Server");
 			notifyAllStatusListeners(true);
-			System.setOut(printStream);
 			smtpServer.startSMTP();
-			getMessages();
 		}
 		catch(BindException ex)
 		{
@@ -73,12 +65,6 @@ public class SMTPThread implements Runnable{
 		notifyAllStatusListeners(false);
 	}
 	
-	public void getMessages()
-	{
-		System.out.flush();
-		System.setOut(systemPrintStream);
-		debugLog.writeToLog(baos.toString());;
-	}
 	
 	public void notifyAllStatusListeners(boolean started)
 	{

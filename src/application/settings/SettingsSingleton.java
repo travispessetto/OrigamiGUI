@@ -118,11 +118,7 @@ public class SettingsSingleton implements Serializable
 			ex.printStackTrace();
 		}
 	}
-	
-	public void getSMTPServerMessages()
-	{
-		smtp.getMessages();
-	}
+
 	
 	public boolean getMinimizeToTray()
 	{
