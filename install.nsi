@@ -58,6 +58,7 @@ CreateShortCut "$SMPROGRAMS\Origami SMTP\Uninstall.lnk" "$INSTDIR\uninstaller.ex
 #Add Trusted Root
 File "Origami_CA.crt"
 File "license.txt"
+FILE "VERSION"
 DetailPrint "Installing Origami SMTP root certificate..."
 Push "$INSTDIR\Origami_CA.crt"
 Call AddCertificateToStore

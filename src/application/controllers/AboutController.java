@@ -2,6 +2,7 @@ package application.controllers;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 import javafx.fxml.FXML;
@@ -49,8 +50,10 @@ public class AboutController
 			File versionFile = new File("VERSION");
 			Scanner scan = new Scanner(versionFile);
 			scan.useDelimiter("\\Z");
-			String versionText = Version.getText();
-			versionText = String.format(versionText, scan.next());
+			String versionText = scan.next();
+			System.out.println("Version is " + versionText);
+			String versionLabelText = Version.getText();
+			versionLabelText = String.format(versionText,versionLabelText);
 			Version.setText(versionText);
 		}
 		catch(Exception ex)
