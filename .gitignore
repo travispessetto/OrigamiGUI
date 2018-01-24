@@ -5,6 +5,7 @@ bin
 *\.ser
 *\.exe
 *\.deb
+*\.log
 Origami\ SMTP.jar
 Origami.SMTP.sh
 Origami.SMTP.jar
