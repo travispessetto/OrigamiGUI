@@ -10,13 +10,14 @@ script:
         - ./launch4j-linux/launch4j launch4j.cfg.xml
         - makensis install.nsi
         - ./debian/create-deb.sh
+        - ./update-travis-yml.sh
 deploy:
         provider: releases
         file:
                 - "Origami SMTP.jar"
                 - "Origami SMTP.exe"
                 - "Origami Setup.exe"
-                - "Origami-smtp_v1.0.0.deb"
+                - "Origami-smtp_{version}.deb"
         skip_cleanup: true
         on:
                 tags: true
