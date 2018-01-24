@@ -1,5 +1,5 @@
 Package: origami-smtp
-Version: 1.0.0
+Version: {version}
 Maintainer: Travis Pessetto
 Architecture: all
 Description: A fake SMTP client for developer use programmed in Java
