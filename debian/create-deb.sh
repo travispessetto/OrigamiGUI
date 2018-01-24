@@ -14,7 +14,7 @@ cp Origami.SMTP.jar origami-smtp_$version/usr/bin/Origami.SMTP.jar
 cp Origami.SMTP.sh origami-smtp_$version/usr/bin/Origami.SMTP.sh
 cp ../license.txt origami-smtp_$version/usr/bin/license.txt
 cp ../VERSION origami-smtp_$version/usr/bin/VERSION
-sed -i "s/{version}/$version/g" debian-control
+sed -i "s/{version}/$letterFreeVersion/g" debian-control
 cp debian-control origami-smtp_$version/DEBIAN/control
 cp origami-smtp.desktop origami-smtp_$version/usr/share/applications/origami-smtp.desktop
 cat ../Origami_CA.crt > origami-smtp_$version/etc/ssl/certs/Origami_CA.pem
