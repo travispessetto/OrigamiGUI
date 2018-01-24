@@ -13,11 +13,12 @@ script:
         - ./update-travis-yml.sh
 deploy:
         provider: releases
+        file_glob: true
         file:
                 - "Origami SMTP.jar"
                 - "Origami SMTP.exe"
                 - "Origami Setup.exe"
-                - "Origami-smtp_{version}.deb"
+                - "Origami-smtp_*.deb"
         skip_cleanup: true
         on:
                 tags: true
