@@ -27,6 +27,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
@@ -119,10 +120,22 @@ public class Console extends Application implements ActionListener, TrayIconList
 	
 	public static void main(String[] args)
 	{
-		debugLog = DebugLogSingleton.getInstance();
-		debugLog.writeToLog("Origami GUI");
-		debugLog.writeToLog("Working Dir: " + System.getProperty("user.dir"));
-		launch(args);
+		String workingDir = System.getProperty("user.dir");
+		File workingDirFile = new File(workingDir);
+		if(!workingDirFile.canWrite())
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error: Directory not writable");
+			alert.setContentText(workingDirFile + " is not writable when it should be");
+			alert.showAndWait();
+		}
+		else
+		{
+			debugLog = DebugLogSingleton.getInstance();
+			debugLog.writeToLog("Origami GUI");
+			debugLog.writeToLog("Working Dir: " + System.getProperty("user.dir"));
+			launch(args);
+		}
 	}
 
 	@Override

@@ -6,7 +6,7 @@
   <outfile>Origami SMTP.exe</outfile>
   <errTitle>Java Required</errTitle>
   <cmdLine></cmdLine>
-  <chdir>.</chdir>
+  <chdir>%appdata%\Origami SMTP</chdir>
   <priority>normal</priority>
   <downloadUrl>http://java.com/download</downloadUrl>
   <supportUrl></supportUrl>
@@ -22,5 +22,6 @@
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
+    <opt>-Duser.dir=&quot;%programdata%\Origami SMTP&quot;</opt>
   </jre>
 </launch4jConfig>
