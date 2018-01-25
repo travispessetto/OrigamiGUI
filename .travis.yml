@@ -11,6 +11,7 @@ script:
         - ./update-windows-installer-version.sh
         - makensis install.nsi
         - ./debian/create-deb.sh
+        - ls
 deploy:
         provider: releases
         file_glob: true
