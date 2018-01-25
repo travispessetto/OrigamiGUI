@@ -3,6 +3,7 @@ package application.controllers;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Scanner;
 
 import javafx.fxml.FXML;
@@ -31,7 +32,7 @@ public class AboutController
 	{
 		try
 		{
-			File license = new File("license.txt");
+			InputStream license = getClass().getClassLoader().getResourceAsStream("license.txt");
 			Scanner scan = new Scanner(license);
 			scan.useDelimiter("\\Z");
 			String content = scan.next();
@@ -47,14 +48,13 @@ public class AboutController
 	{
 		try
 		{
-			File versionFile = new File("VERSION");
-			Scanner scan = new Scanner(versionFile);
+			InputStream in = getClass().getClassLoader().getResourceAsStream("VERSION");
+			Scanner scan = new Scanner(in);
 			scan.useDelimiter("\\Z");
 			String versionText = scan.next();
-			System.out.println("Version is " + versionText);
 			String versionLabelText = Version.getText();
-			versionLabelText = String.format(versionText,versionLabelText);
-			Version.setText(versionText);
+			versionLabelText = String.format(versionLabelText,versionText);
+			Version.setText(versionLabelText);
 		}
 		catch(Exception ex)
 		{

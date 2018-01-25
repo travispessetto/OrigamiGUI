@@ -5,12 +5,10 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
-import application.console.Console;
+import application.console.OrigamiGUI;
 import application.settings.SettingsSingleton;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Alert;
@@ -22,7 +20,7 @@ public class SystemTraySingleton
 	private static SystemTraySingleton instance;
 	private SystemTray systemTray;
 	private TrayIcon trayIcon;
-	private Console console;
+	private OrigamiGUI console;
 	private ArrayList<ActionListener> actionListeners;
 	private Image icon;
 	
