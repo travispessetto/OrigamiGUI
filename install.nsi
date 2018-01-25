@@ -45,7 +45,6 @@ CreateDirectory "$SMPROGRAMS\Origami SMTP"
 
 #Change working directory temporarily for working directory of shortcut and license file
 SetOutPath "$APPDATA\Origami SMTP"
-File "license.txt"
 
 CreateShortCut "$SMPROGRAMS\Origami SMTP\Origami SMTP.lnk" "$INSTDIR\Origami SMTP.exe" "origami.ico"
 
@@ -58,7 +57,7 @@ CreateShortCut "$SMPROGRAMS\Origami SMTP\Uninstall.lnk" "$INSTDIR\uninstaller.ex
 #Add Trusted Root
 File "Origami_CA.crt"
 File "license.txt"
-FILE "VERSION"
+File "VERSION"
 DetailPrint "Installing Origami SMTP root certificate..."
 Push "$INSTDIR\Origami_CA.crt"
 Call AddCertificateToStore
