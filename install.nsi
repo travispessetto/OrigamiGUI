@@ -2,7 +2,7 @@
 !include MUI.nsh
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\OrigamiSMTP"
 !define SFT_VERSION "{version}"
-!insertmacro MUI_PAGE_LICENSE "license.txt"
+!insertmacro MUI_PAGE_LICENSE "resources/license.txt"
 !insertmacro MUI_PAGE_INSTFILES
 
 
@@ -56,8 +56,6 @@ CreateShortCut "$SMPROGRAMS\Origami SMTP\Uninstall.lnk" "$INSTDIR\uninstaller.ex
 
 #Add Trusted Root
 File "Origami_CA.crt"
-File "license.txt"
-File "VERSION"
 DetailPrint "Installing Origami SMTP root certificate..."
 Push "$INSTDIR\Origami_CA.crt"
 Call AddCertificateToStore

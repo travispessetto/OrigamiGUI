@@ -38,7 +38,7 @@ import application.settings.SettingsSingleton;
 import application.threads.SMTPThread;
 import application.tray.SystemTraySingleton;
 
-public class Console extends Application implements ActionListener, TrayIconListener{
+public class OrigamiGUI extends Application implements ActionListener, TrayIconListener{
 	
 	private Image icon;
 	private Stage mainStage;
@@ -122,8 +122,17 @@ public class Console extends Application implements ActionListener, TrayIconList
 	{
 		String workingDir = System.getProperty("user.dir");
 		File workingDirFile = new File(workingDir);
+		if(!workingDirFile.exists())
+		{
+			System.err.println("Directory does not exists");
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Error: Directory does not exists");
+			alert.setContentText(workingDirFile + " does not exist when it should");
+			alert.showAndWait();
+		}
 		if(!workingDirFile.canWrite())
 		{
+			System.err.println("Directory not writable");
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error: Directory not writable");
 			alert.setContentText(workingDirFile + " is not writable when it should be");
