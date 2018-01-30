@@ -121,14 +121,10 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 	public static void main(String[] args)
 	{
 		String workingDir = System.getProperty("user.dir");
-		File workingDirFile = new File(workingDir);
+		File workingDirFile = new File(workingDir+"/Origami SMTP");
 		if(!workingDirFile.exists())
 		{
-			System.err.println("Directory does not exists");
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Error: Directory does not exists");
-			alert.setContentText(workingDirFile + " does not exist when it should");
-			alert.showAndWait();
+			workingDirFile.mkdirs();
 		}
 		if(!workingDirFile.canWrite())
 		{
@@ -142,7 +138,7 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 		{
 			debugLog = DebugLogSingleton.getInstance();
 			debugLog.writeToLog("Origami GUI");
-			debugLog.writeToLog("Working Dir: " + System.getProperty("user.dir"));
+			debugLog.writeToLog("Write to: " + workingDirFile.getAbsolutePath() );
 			launch(args);
 		}
 	}
