@@ -1,14 +1,8 @@
 package application.threads;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.net.BindException;
-import java.net.SocketException;
 import java.util.List;
-
-import com.pessetto.Status.StatusListener;
-import com.pessetto.main.ConsoleMain;
-
+import com.pessetto.main.OrigamiSMTP;
 import application.debug.DebugLogSingleton;
 import application.listeners.SMTPErrorListener;
 import application.listeners.SMTPStatusListener;
@@ -16,7 +10,7 @@ import application.listeners.SMTPStatusListener;
 public class SMTPThread implements Runnable{
 
 	private int port;
-	private ConsoleMain smtpServer;
+	private OrigamiSMTP smtpServer;
 	private SMTPErrorListener listener;
 	private boolean smtpStarted;
 	private List<SMTPStatusListener> statusListeners;
@@ -27,7 +21,7 @@ public class SMTPThread implements Runnable{
 		this.port = port;
 		this.listener = listener;
 		this.statusListeners = statusListeners;
-		smtpServer = new ConsoleMain(this.port);
+		smtpServer = new OrigamiSMTP(this.port);
 		debugLog = DebugLogSingleton.getInstance();
 	}
 	

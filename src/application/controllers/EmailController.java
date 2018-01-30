@@ -26,6 +26,7 @@ import com.pessetto.FileHandlers.Inbox.NewMessageListener;
 import com.pessetto.Variables.InboxVariables;
 
 import application.debug.DebugLogSingleton;
+import application.gui.Email;
 import application.listeners.SMTPStatusListener;
 import application.listeners.TrayIconListener;
 import application.settings.SettingsSingleton;
@@ -49,6 +50,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -68,9 +72,11 @@ DeleteMessageListener, SMTPStatusListener
 {
 
 	private DebugLogSingleton debugLog;
-	private ObservableList<String> emailList;
+	private ObservableList<Email> emailList;
 	@FXML
-	private ListView<String> emails = new ListView<>();
+	private TableView emails = new TableView<String>();
+	@FXML
+	private TableColumn emailsColumn = new TableColumn<Email,String>();
 	@FXML
 	private WebView webview;
 	private WebEngine webengine;
@@ -96,7 +102,7 @@ DeleteMessageListener, SMTPStatusListener
 			Stage stage = new Stage();
 			stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("origami.png")));
 			AnchorPane settings = FXMLLoader.load(getClass().getClassLoader().getResource("ServerSettings.fxml"));
-			Scene scene = new Scene(settings,500,300);
+			Scene scene = new Scene(settings);
 			stage.setTitle("Origami SMTP Settings");
 			stage.setScene(scene);
 			stage.show();
@@ -134,6 +140,8 @@ DeleteMessageListener, SMTPStatusListener
 		InputStream emailHTMLHandlerStream = EmailController.class.getClassLoader().getResourceAsStream("jqueryEmailPage.html");
 		String emailExternalForm = ResourceLoader.loadFile(emailHTMLHandlerStream);
 		webengine.loadContent(emailExternalForm, "text/html");
+		emails.setPlaceholder(new Label("No messages"));
+		emailsColumn.setCellValueFactory(new PropertyValueFactory<Email,String>("subject"));
 		loadEmails();
 		//watchFolder();
 		emails.setOnMouseClicked(new EventHandler<MouseEvent>(){
@@ -146,7 +154,6 @@ DeleteMessageListener, SMTPStatusListener
 					event.consume();
 					Inbox inbox = Inbox.getInstance();
 					int selectedItem = emails.getSelectionModel().getSelectedIndex();
-					debugLog.writeToLog("Mouse clicked on " + selectedItem);
 					try {
 						Message message = inbox.getMessage(selectedItem);
 						selectedMessage = message;
@@ -358,6 +365,11 @@ DeleteMessageListener, SMTPStatusListener
 	private void addMessageToList(Message message)
 	{
 		String subject = message.getSubject();
-		emailList.add(0,subject+"\r\nTo: "+message.getTo()+"\r\nFrom: "+message.getFrom());
+		Email email = new Email();
+		email.setTo(message.getTo());
+		email.setFrom(message.getFrom());
+		email.setSubject(message.getSubject());
+		emailList.add(0,email);
 	}
+	
 }
