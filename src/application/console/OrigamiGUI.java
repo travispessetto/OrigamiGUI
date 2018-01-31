@@ -137,8 +137,8 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 		else
 		{
 			debugLog = DebugLogSingleton.getInstance();
-			debugLog.writeToLog("Origami GUI");
-			debugLog.writeToLog("Write to: " + workingDirFile.getAbsolutePath() );
+			System.out.println("Origami GUI");
+			System.out.println("Write to: " + workingDirFile.getAbsolutePath() );
 			launch(args);
 		}
 	}

@@ -27,7 +27,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 public class SettingsSingleton implements Serializable {
-	private static final long serialVersionUID = 3840045425215974392L;
+	private static final long serialVersionUID = 3840045425215974393L;
 	private String browserExec;
 	private int port;
 	private transient static SettingsSingleton instance;
@@ -38,8 +38,9 @@ public class SettingsSingleton implements Serializable {
 	private String smtpRemoteUserName;
 	private String smtpRemoteUserPassword;
 	private String smtpRemoteAddress;
-	private String smtpRemotePort;
+	private int smtpRemotePort;
 	private LinkedList<ForwardingAddress> smtpRemoteEmailList;
+	private boolean smtpForwardToRemote;
 
 	public LinkedList<ForwardingAddress> getSmtpRemoteEmailList() {
 		if(smtpRemoteEmailList == null)
@@ -77,11 +78,11 @@ public class SettingsSingleton implements Serializable {
 		this.smtpRemoteAddress = smtpRemoteAddress;
 	}
 
-	public String getSmtpRemotePort() {
+	public int getSmtpRemotePort() {
 		return smtpRemotePort;
 	}
 
-	public void setSmtpRemotePort(String smtpRemotePort) {
+	public void setSmtpRemotePort(int smtpRemotePort) {
 		this.smtpRemotePort = smtpRemotePort;
 	}
 
@@ -116,11 +117,11 @@ public class SettingsSingleton implements Serializable {
 					instance.smtpStarted = false;
 					instance.smtpErrorListener = new SMTPThreadErrorListener();
 				} catch (InvalidClassException ex) {
-					debugLog.writeToLog("Bad settings file");
+					System.out.println("Bad settings file");
 					if (file.delete()) {
 						return getInstance();
 					} else {
-						debugLog.writeToLog("Error: Could not delete bad settings file");
+						System.out.println("Error: Could not delete bad settings file");
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace(System.err);
@@ -137,9 +138,9 @@ public class SettingsSingleton implements Serializable {
 	public void serialize() {
 		try {
 			File settingsFolder = new File(SettingsVariables.settingsFolder);
-			if (settingsFolder.exists()) {
-				settingsFolder.setWritable(true, false);
-				settingsFolder.mkdir();
+			if (!settingsFolder.exists()) {
+				settingsFolder.mkdirs();
+				settingsFolder.setWritable(true);
 			}
 
 			FileOutputStream fout = new FileOutputStream(
@@ -162,22 +163,22 @@ public class SettingsSingleton implements Serializable {
 	}
 
 	public void startSMTPServer() {
-		debugLog.writeToLog("Starting SMTP Server Thread");
+		System.out.println("Starting SMTP Server Thread");
 		smtp = new SMTPThread(this.port, this.smtpErrorListener, smtpStatusListeners);
 		smtpThread = new Thread(smtp);
 		smtpThread.start();
 	}
 
 	public void stopSMTPServer() {
-		debugLog.writeToLog("Interupting SMTP threads");
+		System.out.println("Interupting SMTP threads");
 		try {
 			smtp.stop();
 		} catch (Exception ex) {
-			debugLog.writeToLog("Error: " + ex.getMessage());
+			System.out.println("Error: " + ex.getMessage());
 			ex.printStackTrace(System.err);
 		}
 		smtpThread.interrupt();
-		debugLog.writeToLog("SMTP threads interupted");
+		System.out.println("SMTP threads interupted");
 	}
 
 	public int getSMTPPort() {
@@ -218,6 +219,14 @@ public class SettingsSingleton implements Serializable {
 			smtpStatusListeners = new LinkedList<SMTPStatusListener>();
 		}
 		smtpStatusListeners.add(listener);
+	}
+
+	public boolean isSmtpForwardToRemote() {
+		return smtpForwardToRemote;
+	}
+
+	public void setSmtpForwardToRemote(boolean smtpForwardToRemote) {
+		this.smtpForwardToRemote = smtpForwardToRemote;
 	}
 
 }

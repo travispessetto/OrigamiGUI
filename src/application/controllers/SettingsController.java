@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import application.email.ForwardingAddress;
 import application.settings.SettingsSingleton;
 import javafx.application.Platform;
@@ -20,7 +19,6 @@ import javafx.stage.FileChooser;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -54,6 +52,9 @@ public class SettingsController
    @FXML
    protected TableColumn forwardingEmailsColumn;
    
+   @FXML
+   protected CheckBox forwardMessages;
+   
    private ObservableList<ForwardingAddress> forwardingEmailAddresses;
    
    private LinkedList<ForwardingAddress> emailList ;
@@ -79,8 +80,7 @@ public class SettingsController
 		   }
 		   else
 		   {
-			   Alert alert = new Alert(AlertType.ERROR,"That was not a valid email",ButtonType.OK);
-			   alert.showAndWait();
+			   showAlert("That is not a valid email");
 		   }
 	   }
    }
@@ -89,7 +89,10 @@ public class SettingsController
    protected void removeForwardingEmail(Event event)
    {
 	   int index = forwardingEmails.getSelectionModel().getSelectedIndex();
-	   forwardingEmailAddresses.remove(index);
+	   if(index >= 0)
+	   {
+		   forwardingEmailAddresses.remove(index);
+	   }
    }
    
    @FXML
@@ -110,8 +113,9 @@ public class SettingsController
    protected void applySMTPSettings(Event event)
    {
 	   SettingsSingleton settings = SettingsSingleton.getInstance();
-	   settings.setSMTPPort(Integer.parseInt(portNumber.getText()));
-	   settings.restartSMTPServer();
+	   saveLocalSmtpSettings();
+	   saveRemoteSmtpSettings();
+	   
 	   Alert alert = new Alert(AlertType.INFORMATION);
 	   alert.setTitle("SMTP Settings");
 	   alert.setHeaderText(null);
@@ -123,7 +127,6 @@ public class SettingsController
    @FXML
    protected void browseForBrowser(Event event)
    {
-	   SettingsSingleton settings = SettingsSingleton.getInstance();
 	   FileChooser browserChooser = new FileChooser();
 	   browserChooser.setTitle("Choose a browser");
 	   File selectedFile = browserChooser.showOpenDialog(null);
@@ -141,10 +144,64 @@ public class SettingsController
    @FXML
    protected void initialize()
    {
+	   loadLocalSmtpSettings();
+	   loadRemoteSmtpSettings();
+	   loadBrowserSettings();
+   }
+   
+   private void saveLocalSmtpSettings()
+   {
+	   SettingsSingleton settings = SettingsSingleton.getInstance();
+	   int oldSMTPPort = settings.getSMTPPort();
+	   int newSMTPPort = Integer.parseInt(portNumber.getText());
+	   if(oldSMTPPort != newSMTPPort)
+	   {
+		   settings.setSMTPPort(newSMTPPort);
+		   settings.restartSMTPServer();
+	   }
+   }
+   
+   private void saveRemoteSmtpSettings()
+   {
+	   String remoteAddressText = smtpRemoteAddress.getText();
+	   if(remoteAddressText == null || remoteAddressText.trim().isEmpty())
+	   {
+		   showAlert("SMTP remote settings not applied.  SMTP remote address required to forward");
+	   }
+	   else
+	   {
+		   SettingsSingleton settings = SettingsSingleton.getInstance();
+		   settings.setSmtpRemoteEmailList(emailList);
+		   settings.setSmtpRemoteUserName(smtpRemoteUser.getText());
+		   settings.setSmtpRemoteUserPassword(smtpRemotePassword.getText());
+		   settings.setSmtpRemotePort(Integer.parseInt(smtpRemotePort.getText()));
+		   settings.setSmtpRemoteAddress(remoteAddressText);
+		   settings.setSmtpForwardToRemote(forwardMessages.isSelected());
+		   System.out.println("Forward  messages?:" + forwardMessages.isSelected());
+	   }
+   }
+   
+   private void loadLocalSmtpSettings()
+   {
 	   SettingsSingleton settings = SettingsSingleton.getInstance();
 	   portNumber.setText(Integer.toString(settings.getSMTPPort()));
+   }
+   
+   private void loadBrowserSettings()
+   {
+	   SettingsSingleton settings = SettingsSingleton.getInstance();
 	   UsePrivateBrowsing.setSelected(settings.getPrivateBrowsing());
 	   BrowserPath.setText(settings.getBrowser());
+   }
+   
+   private void loadRemoteSmtpSettings()
+   {
+	   SettingsSingleton settings = SettingsSingleton.getInstance();
+	   smtpRemoteUser.setText(settings.getSmtpRemoteUserName());
+	   smtpRemotePassword.setText(settings.getSmtpRemoteUserPassword());
+	   smtpRemotePort.setText(Integer.toString(settings.getSmtpRemotePort()));
+	   smtpRemoteAddress.setText(settings.getSmtpRemoteAddress());
+	   forwardMessages.setSelected(settings.isSmtpForwardToRemote());
 	   loadEmailAddresses();
    }
    
@@ -172,6 +229,12 @@ public class SettingsController
 		   System.out.println("ERROR forwardingEmails is null when it should not be in settings controller");
 	   }
 	   forwardingEmails.setItems(forwardingEmailAddresses);
+   }
+   
+   private void showAlert(String message)
+   {
+	   Alert alert = new Alert(AlertType.ERROR,message,ButtonType.OK);
+	   alert.showAndWait();
    }
    
 }

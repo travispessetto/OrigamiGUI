@@ -1,7 +1,10 @@
 package application.email;
 
-public class ForwardingAddress 
+import java.io.Serializable;
+
+public class ForwardingAddress implements Serializable
 {
+	private static final long serialVersionUID = -130925708320573990L;
 	private String Address;
 	
 	public ForwardingAddress(String address)

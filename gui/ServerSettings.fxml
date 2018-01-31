@@ -52,7 +52,7 @@
                         <TextField fx:id="smtpRemotePort" layoutX="25.0" layoutY="292.0" prefHeight="25.0" prefWidth="157.0" />
                         <CheckBox fx:id="forwardMessages" layoutX="214.0" layoutY="69.0" mnemonicParsing="false" text="Forward messages by remote SMTP server" />
                         <Button fx:id="addForwardingEmail" layoutX="539.0" layoutY="278.0" mnemonicParsing="false" onAction="#addForwardingEmail" text="+" />
-                        <Button fx:id="removeForwardingEmail" layoutX="565.0" layoutY="278.0" mnemonicParsing="false" text="-" />
+                        <Button fx:id="removeForwardingEmail" layoutX="565.0" layoutY="278.0" mnemonicParsing="false" onAction="#removeForwardingEmail" text="-"/>
                      </children>
               </AnchorPane>
             </content>

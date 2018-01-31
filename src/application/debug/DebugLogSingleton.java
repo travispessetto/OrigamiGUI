@@ -46,13 +46,6 @@ public class DebugLogSingleton
 		return out;
 	}
 	
-	public void writeToLog(String message)
-	{
-		lock.lock();
-		System.out.println(message);
-		lock.unlock();
-	}
-	
 	private void redirectSystemOut()
 	{
 		baos = new ByteArrayOutputStream();

@@ -36,7 +36,7 @@ public class SMTPThread implements Runnable{
 	{
 		try 
 		{
-			debugLog.writeToLog("Starting bundled SMTP Server");
+			System.out.println("Starting bundled SMTP Server");
 			notifyAllStatusListeners(true);
 			smtpServer.startSMTP();
 		}
