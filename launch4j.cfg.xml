@@ -22,6 +22,6 @@
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
-    <opt>-Duser.dir=&quot;%appdata%\Origami SMTP&quot;</opt>
+    <opt>-Duser.dir=&quot;%appdata%&quot;</opt>
   </jre>
 </launch4jConfig>
