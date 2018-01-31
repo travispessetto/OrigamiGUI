@@ -38,9 +38,9 @@
                         <TextField fx:id="smtpRemoteUser" layoutX="17.0" layoutY="173.0" prefHeight="25.0" prefWidth="154.0" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="165.0" />
                         <Text layoutX="26.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" />
                         <PasswordField fx:id="smtpRemotePassword" layoutX="25.0" layoutY="206.0" prefHeight="25.0" prefWidth="155.0" />
-                        <TableView fx:id="fowardingEmails" layoutX="214.0" layoutY="134.0" prefHeight="142.0" prefWidth="372.0" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="214.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="134.0">
+                        <TableView fx:id="forwardingEmails" editable="true" layoutX="214.0" layoutY="134.0" prefHeight="142.0" prefWidth="372.0" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="214.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="134.0">
                           <columns>
-                            <TableColumn fx:id="fowardingEmailsColumn" minWidth="-Infinity" prefWidth="-1.0" text="Fowarding Email Addresses" />
+                            <TableColumn fx:id="forwardingEmailsColumn" minWidth="-Infinity" prefWidth="-1.0" text="Fowarding Email Addresses" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

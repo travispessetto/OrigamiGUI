@@ -1,7 +1,11 @@
 package application.controllers;
 import java.io.File;
 import java.util.LinkedList;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import application.email.ForwardingAddress;
 import application.settings.SettingsSingleton;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -10,8 +14,11 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
@@ -44,15 +51,45 @@ public class SettingsController
    @FXML
    protected TableView forwardingEmails;
    
-   private ObservableList<String> forwardingEmailAddresses;
+   @FXML
+   protected TableColumn forwardingEmailsColumn;
    
-   private LinkedList<String> emailList ;
+   private ObservableList<ForwardingAddress> forwardingEmailAddresses;
+   
+   private LinkedList<ForwardingAddress> emailList ;
+   
+   public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
+		    Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
    
    @FXML
    protected void addForwardingEmail(Event event)
    {
-	   System.out.println("Adding email to forwarding list");
-	   forwardingEmailAddresses.add("john.doe@example.com");
+	   TextInputDialog dialog = new TextInputDialog("john.doe@example.com");
+	   dialog.setTitle("Forwarding Email Address");
+	   dialog.setHeaderText("What address do you wish to forward to?");
+	   dialog.setContentText("Email:");
+	   Optional<String> result = dialog.showAndWait();
+	   if(result.isPresent())
+	   {
+		   String address = result.get();
+		   Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(address);
+		   if(matcher.find())
+		   {
+			   forwardingEmailAddresses.add(new ForwardingAddress(address));
+		   }
+		   else
+		   {
+			   Alert alert = new Alert(AlertType.ERROR,"That was not a valid email",ButtonType.OK);
+			   alert.showAndWait();
+		   }
+	   }
+   }
+   
+   @FXML
+   protected void removeForwardingEmail(Event event)
+   {
+	   int index = forwardingEmails.getSelectionModel().getSelectedIndex();
+	   forwardingEmailAddresses.remove(index);
    }
    
    @FXML
@@ -113,10 +150,27 @@ public class SettingsController
    
    private void loadEmailAddresses()
    { 
+	   System.out.println("load email addresses into settings");
 	   SettingsSingleton settings = SettingsSingleton.getInstance();
 	   emailList = settings.getSmtpRemoteEmailList();
+	   if(emailList == null)
+	   {
+		   System.out.println("ERROR emailList is null in settings controller");
+	   }
 	   forwardingEmailAddresses = FXCollections.observableList(emailList);
-	   forwardingEmails = new TableView();
+	   if(forwardingEmailAddresses == null)
+	   {
+		   System.out.println("ERROR forwardingEmailAddresses is null in settings controller");
+	   }
+	   if(forwardingEmailsColumn == null)
+	   {
+		   System.out.println("ERROR forwardingEmailsColumn is null in settings controller");
+	   }
+	   forwardingEmailsColumn.setCellValueFactory(new PropertyValueFactory<ForwardingAddress,String>("Address"));
+	   if(forwardingEmails == null)
+	   {
+		   System.out.println("ERROR forwardingEmails is null when it should not be in settings controller");
+	   }
 	   forwardingEmails.setItems(forwardingEmailAddresses);
    }
    

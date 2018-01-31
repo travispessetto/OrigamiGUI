@@ -18,6 +18,7 @@ import java.util.List;
 
 import application.constants.SettingsVariables;
 import application.debug.DebugLogSingleton;
+import application.email.ForwardingAddress;
 import application.listeners.SMTPErrorListener;
 import application.listeners.SMTPStatusListener;
 import application.listeners.SMTPThreadErrorListener;
@@ -38,17 +39,17 @@ public class SettingsSingleton implements Serializable {
 	private String smtpRemoteUserPassword;
 	private String smtpRemoteAddress;
 	private String smtpRemotePort;
-	private LinkedList<String> smtpRemoteEmailList;
+	private LinkedList<ForwardingAddress> smtpRemoteEmailList;
 
-	public LinkedList<String> getSmtpRemoteEmailList() {
+	public LinkedList<ForwardingAddress> getSmtpRemoteEmailList() {
 		if(smtpRemoteEmailList == null)
 		{
-			smtpRemoteEmailList = new LinkedList<String>();
+			smtpRemoteEmailList = new LinkedList<ForwardingAddress>();
 		}
 		return smtpRemoteEmailList;
 	}
 
-	public void setSmtpRemoteEmailList(LinkedList<String> smtpRemoteEmailList) {
+	public void setSmtpRemoteEmailList(LinkedList<ForwardingAddress> smtpRemoteEmailList) {
 		this.smtpRemoteEmailList = smtpRemoteEmailList;
 	}
 
