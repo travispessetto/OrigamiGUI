@@ -5,14 +5,28 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.EventListener;
 import java.util.LinkedList;
+import java.util.Properties;
+
+import javax.activation.DataHandler;
+import javax.mail.BodyPart;
+import javax.mail.MessagingException;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -24,8 +38,10 @@ import com.pessetto.FileHandlers.Inbox.Inbox;
 import com.pessetto.FileHandlers.Inbox.Message;
 import com.pessetto.FileHandlers.Inbox.NewMessageListener;
 import com.pessetto.Variables.InboxVariables;
+import com.sun.mail.smtp.SMTPTransport;
 
 import application.debug.DebugLogSingleton;
+import application.email.ForwardingAddress;
 import application.gui.Email;
 import application.listeners.SMTPStatusListener;
 import application.listeners.TrayIconListener;
@@ -168,8 +184,8 @@ DeleteMessageListener, SMTPStatusListener
 						loadAttachments(webengine,message);
 					
 					} catch (Exception e) {
-						debugLog.writeToLog("Could not open file");
-						debugLog.writeToLog(e.getMessage());
+						System.out.println("Could not open file");
+						System.out.println(e.getMessage());
 						e.printStackTrace(System.err);
 					}
 				}
@@ -216,7 +232,7 @@ DeleteMessageListener, SMTPStatusListener
 		}
 	}
 	
-	public void addEmailToList()
+	public void handleNewEmail()
 	{
 
 		Platform.runLater(new Runnable()
@@ -227,6 +243,7 @@ DeleteMessageListener, SMTPStatusListener
 				Inbox inbox = Inbox.getInstance();
 				Message message = inbox.getNewestMessage();
 				addMessageToList(message);
+				forwardMessage(message);
 				if(settings.getMinimizeToTray())
 				{
 					SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
@@ -244,6 +261,7 @@ DeleteMessageListener, SMTPStatusListener
 		});
 		
 	}
+	
 	
 	public void removeEmail(int index)
 	{
@@ -307,7 +325,7 @@ DeleteMessageListener, SMTPStatusListener
 	@Override
 	public void messageRecieved()
 	{
-		addEmailToList();
+		handleNewEmail();
 	}
 	
 	private void loadEmail(WebEngine engine, String message)
@@ -364,12 +382,78 @@ DeleteMessageListener, SMTPStatusListener
 	
 	private void addMessageToList(Message message)
 	{
-		String subject = message.getSubject();
 		Email email = new Email();
 		email.setTo(message.getTo());
 		email.setFrom(message.getFrom());
 		email.setSubject(message.getSubject());
 		emailList.add(0,email);
+	}
+	
+	private void forwardMessage(Message message)
+	{
+		System.out.println("Attempting to forward message");
+		try {
+			SettingsSingleton settings = SettingsSingleton.getInstance();
+			if(settings.isSmtpForwardToRemote() && settings.getSmtpRemoteEmailList().size() > 0)
+			{
+				Properties props = System.getProperties();
+				props.put("mail.smtps.host",settings.getSmtpRemoteAddress());
+				props.put("mail.smtp.port", settings.getSMTPPort());
+				String authorize = "false";
+				String remoteUser = settings.getSmtpRemoteUserName();
+				if(remoteUser != null && !remoteUser.trim().isEmpty())
+				{
+					authorize = "true";
+				}
+				props.put("mail.smtps.auth",authorize);
+				Session session = Session.getInstance(props,null);
+				MimeMessage sendingMessage = new MimeMessage(session);
+				sendingMessage.setFrom(new InternetAddress(message.getFrom()));
+				for(ForwardingAddress forwardingAddress : settings.getSmtpRemoteEmailList())
+				{
+					sendingMessage.addRecipients(javax.mail.Message.RecipientType.BCC, InternetAddress.parse(forwardingAddress.getAddress(),false));
+				}
+				sendingMessage.setSubject(message.getSubject());
+				sendingMessage.setHeader("X-Mailer", "Origami SMTP");
+				sendingMessage.setSentDate(new Date());
+				BodyPart messageBodyPart = new MimeBodyPart();
+				if(message.getHTMLMessage() != null)
+				{
+					messageBodyPart.setContent(message.getHTMLMessage(),"text/html");
+				}
+				else
+				{
+					messageBodyPart.setText(message.getPlainMessage());
+				}
+				Multipart multipart = new MimeMultipart();
+				multipart.addBodyPart(messageBodyPart);
+				LinkedList<Attachment> attachments = message.getAttachments();
+				for(Attachment attachment : attachments)
+				{
+					messageBodyPart = new MimeBodyPart();
+					String mimeType = attachment.getMimeType();
+					System.out.println("Mime Type is: " + mimeType);
+					ByteArrayDataSource byteDS = new ByteArrayDataSource(attachment.getContent(),attachment.getMimeType());
+					messageBodyPart.setDataHandler(new DataHandler(byteDS));
+					messageBodyPart.setFileName(attachment.getFileName());
+					multipart.addBodyPart(messageBodyPart);
+				}
+				sendingMessage.setContent(multipart);
+				SMTPTransport smtpTransport = (SMTPTransport)session.getTransport("smtps");
+				smtpTransport.connect(settings.getSmtpRemoteAddress(),settings.getSmtpRemoteUserName(),settings.getSmtpRemoteUserPassword());
+				smtpTransport.sendMessage(sendingMessage, sendingMessage.getAllRecipients());
+				System.out.println("Remote SMTP Server Response: " + smtpTransport.getLastServerResponse());
+				smtpTransport.close();
+			}
+			else
+			{
+				System.out.println("Message not forwarded due to lack of forwarding email addresses");
+			}
+		} catch (MessagingException e)
+		{
+			showAlert(AlertType.ERROR,"Failed to forward",e.getMessage());
+			e.printStackTrace();
+		}
 	}
 	
 }
