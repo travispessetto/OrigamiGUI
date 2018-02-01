@@ -5,7 +5,7 @@ before_install:
         - tar -xzvf apache-ant-1.10.1-bin.tar.gz
         - export PATH=`pwd`/apache-ant-1.10.1/bin:$PATH
         - echo $(ant -version)
-        - apt-get install unzip
+        - sudo apt-get -y install unzip
 language: java
 jdk:
         - oraclejdk9
