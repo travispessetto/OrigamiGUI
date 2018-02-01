@@ -16,4 +16,5 @@ else
     echo "license.txt NOT FOUND IN JAR!"
     success=1
 fi
+cd ..
 return $success
