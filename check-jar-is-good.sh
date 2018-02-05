@@ -1,5 +1,5 @@
 #!/bin/sh
-cp Origami\ SMTP.jar origami-test.zip
+cp Origami.jar origami-test.zip
 unzip origami-test.zip -d origami-test
 cd origami-test
 success=0
