@@ -3,7 +3,6 @@ cp origami.jar origami-test.zip
 unzip origami-test.zip -d origami-test -u
 cd origami-test
 success=0
-ls
 if test -e "VERSION"; then
 	echo "VERSION found"
 else
