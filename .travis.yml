@@ -18,7 +18,7 @@ script:
         - ./debian/create-deb.sh
         - ./check-jar-is-good.sh
         - ls
-        - ls origami-test
+        - ls ./origami-test
 deploy:
         provider: releases
         file_glob: true
