@@ -1,5 +1,5 @@
 #!/bin/sh
-cp Origami.jar origami-test.zip
+cp origami.jar origami-test.zip
 unzip origami-test.zip -d origami-test
 cd origami-test
 success=0
