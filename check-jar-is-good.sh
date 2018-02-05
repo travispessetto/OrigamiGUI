@@ -1,6 +1,6 @@
 #!/bin/sh
 cp origami.jar origami-test.zip
-unzip origami-test.zip -d origami-test -u
+unzip -u origami-test.zip -d origami-test
 cd origami-test
 success=0
 if test -e "VERSION"; then
