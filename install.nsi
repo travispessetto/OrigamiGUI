@@ -9,7 +9,7 @@
 LangString MUI_TEXT_LICENSE_TITLE ${LANG_ENGLISH} "License terms for Origami SMTP"
 
 
-Outfile "Origami Setup.exe"
+Outfile "origami-smtp_v{version}.exe"
 
 InstallDir "$PROGRAMFILES\Origami SMTP"
 

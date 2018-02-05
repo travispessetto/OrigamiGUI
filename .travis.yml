@@ -24,7 +24,7 @@ deploy:
         file:
                 - "Origami SMTP.jar"
                 - "Origami SMTP.exe"
-                - "Origami Setup.exe"
+                - "origami-smtp_*.exe"
                 - "origami-smtp_*.deb"
         skip_cleanup: true
         on:
