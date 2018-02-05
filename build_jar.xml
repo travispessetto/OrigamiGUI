@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project default="create_run_jar" name="Create Runnable Jar for Project OrigamiSMTP">
+<project default="create_run_jar" name="Create Runnable Jar for Project OrigamiGUI">
     <!--this file was created by Eclipse Runnable JAR Export Wizard-->
     <!--ANT 1.7 is required                                        -->
     <!--define folder properties-->
     <property name="dir.buildfile" value="."/>
-    <property name="dir.workspace" value="C:/Users/travis.pessetto/eclipse-workspace"/>
-    <property name="dir.jarfile" value="${dir.buildfile}/jars"/>
+    <property name="dir.workspace" value="."/>
+    <property name="dir.jarfile" value="${dir.buildfile}"/>
     <target name="create_run_jar">
-        <jar destfile="${dir.jarfile}/origami.jar" filesetmanifest="mergewithoutmain">
+        <jar destfile="${dir.jarfile}/origamiGUI.jar" filesetmanifest="mergewithoutmain">
             <manifest>
-                <attribute name="Main-Class" value="com.pessetto.main.OrigamiSMTP"/>
+                <attribute name="Main-Class" value="application.console.OrigamiGUI"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
-            <fileset dir="C:/Users/travis.pessetto/git/OrigamiSMTP/bin"/>
-            <zipfileset excludes="META-INF/*.SF" src="C:/Users/travis.pessetto/git/OrigamiSMTP/resources/javax.mail.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="C:/Users/travis.pessetto/git/OrigamiSMTP/resources/jsoup-1.10.2.jar"/>
+            <fileset dir="${dir.jarfile}/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/jars/javax.mail.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/jars/jsoup-1.10.2.jar"/>
+            <fileset dir="${dir.jarfile}/jars"/>
+            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/jars/origami.jar"/>
         </jar>
     </target>
 </project>
