@@ -8,7 +8,7 @@ before_install:
         - sudo apt-get -y install unzip
 language: java
 jdk:
-        - oraclejdk9
+        - oraclejdk8
 script: 
         - ant build
         - ant create_run_jar
