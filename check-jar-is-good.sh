@@ -17,4 +17,4 @@ else
     success=1
 fi
 cd ..
-return $success
+exit $success
