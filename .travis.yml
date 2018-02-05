@@ -23,7 +23,7 @@ deploy:
         provider: releases
         file_glob: true
         file:
-                - "Origami SMTP.jar"
+                - "origami.jar"
                 - "Origami SMTP.exe"
                 - "origami-smtp_*.exe"
                 - "origami-smtp_*.deb"
