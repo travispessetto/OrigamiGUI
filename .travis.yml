@@ -16,8 +16,8 @@ script:
         - ./update-windows-installer-version.sh
         - makensis install.nsi
         - ./debian/create-deb.sh
-        - ls
         - ./check-jar-is-good.sh
+        - ls
 deploy:
         provider: releases
         file_glob: true
