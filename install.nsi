@@ -9,7 +9,7 @@
 LangString MUI_TEXT_LICENSE_TITLE ${LANG_ENGLISH} "License terms for Origami SMTP"
 
 
-Outfile "origami-smtp_v{version}.exe"
+Outfile "origami-smtp_v{version}-setup.exe"
 
 InstallDir "$PROGRAMFILES\Origami SMTP"
 
@@ -35,7 +35,7 @@ CreateDirectory "$APPDATA\Origami SMTP"
 
 #Install the files
 
-File "Origami SMTP.exe"
+File "origami-smtp.exe"
 
 WriteUninstaller $INSTDIR\uninstaller.exe
 
@@ -46,7 +46,7 @@ CreateDirectory "$SMPROGRAMS\Origami SMTP"
 #Change working directory temporarily for working directory of shortcut and license file
 SetOutPath "$APPDATA\Origami SMTP"
 
-CreateShortCut "$SMPROGRAMS\Origami SMTP\Origami SMTP.lnk" "$INSTDIR\Origami SMTP.exe" "origami.ico"
+CreateShortCut "$SMPROGRAMS\Origami SMTP\Origami SMTP.lnk" "$INSTDIR\origami-smtp.exe" "origami.ico"
 
 #Change working directory back
 

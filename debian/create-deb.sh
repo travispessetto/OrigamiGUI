@@ -8,15 +8,16 @@ mkdir -p origami-smtp_$version/etc/menu
 mkdir -p origami-smtp_$version/usr/bin
 mkdir -p origami-smtp_$version/etc/ssl/certs
 mkdir -p origami-smtp_$version/usr/share/applications
-cp ../Origami\ SMTP.jar ./Origami.SMTP.jar
+cp ../origami-smtp.jar ./origami-smtp.jar
 ./jar2sh.sh linux-launch.config
-cp Origami.SMTP.jar origami-smtp_$version/usr/bin/Origami.SMTP.jar
-cp Origami.SMTP.sh origami-smtp_$version/usr/bin/Origami.SMTP.sh
+cp origami-smtp.jar origami-smtp_$version/usr/bin/origami-smtp.jar
+cp origami-smtp.sh origami-smtp_$version/usr/bin/origami-smtp.sh
 cp ../license.txt origami-smtp_$version/usr/bin/license.txt
 cp ../VERSION origami-smtp_$version/usr/bin/VERSION
 sed -i "s/{version}/$letterFreeVersion/g" debian-control
 cp debian-control origami-smtp_$version/DEBIAN/control
 cp origami-smtp.desktop origami-smtp_$version/usr/share/applications/origami-smtp.desktop
+sed -i "s/{version}/$letterFreeVersion/g" ./origami-smtp_$version/usr/share/applications/origami-smtp.desktop
 cat ../Origami_CA.crt > origami-smtp_$version/etc/ssl/certs/Origami_CA.pem
 dpkg-deb --build origami-smtp_$version
 rm -rf origami-smtp_$version

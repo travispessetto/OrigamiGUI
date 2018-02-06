@@ -7,7 +7,7 @@
     <property name="dir.workspace" value="."/>
     <property name="dir.jarfile" value="${dir.buildfile}"/>
     <target name="create_run_jar">
-        <jar destfile="${dir.jarfile}/origami.jar" filesetmanifest="mergewithoutmain">
+        <jar destfile="${dir.jarfile}/origami-smtp.jar" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Main-Class" value="application.console.OrigamiGUI"/>
                 <attribute name="Class-Path" value="."/>

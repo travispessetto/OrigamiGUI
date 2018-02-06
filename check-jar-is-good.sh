@@ -1,5 +1,5 @@
 #!/bin/sh
-cp origami.jar origami-test.zip
+cp origami-smtp.jar origami-test.zip
 unzip -o origami-test.zip -d origami-test
 cd origami-test
 success=0
@@ -16,4 +16,5 @@ else
     success=1
 fi
 cd ..
+rm -rf ./origami-test
 exit $success
