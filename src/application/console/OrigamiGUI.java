@@ -128,7 +128,7 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 		}
 		if(!workingDirFile.canWrite())
 		{
-			System.err.println("Directory not writable");
+			System.err.println("Directory not writable ("+workingDirFile+")");
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error: Directory not writable");
 			alert.setContentText(workingDirFile + " is not writable when it should be");
