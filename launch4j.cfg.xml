@@ -3,7 +3,7 @@
   <dontWrapJar>false</dontWrapJar>
   <headerType>console</headerType>
   <jar>origami-smtp.jar</jar>
-  <outfile>origami-smtp.exe</outfile>
+  <outfile>origami-smtp_{version}.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
