@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch4jConfig>
-  <dontWrapJar>false</dontWrapJar>
+  <dontWrapJar>true</dontWrapJar>
   <headerType>console</headerType>
   <jar>origami-smtp.jar</jar>
-  <outfile>origami-smtp_{version}.exe</outfile>
+  <outfile>Origami SMTP.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
