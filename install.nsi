@@ -94,6 +94,8 @@ Delete "$INSTDIR\Origami_CA.crt"
 
 Delete "$INSTDIR\Origami SMTP.exe"
 
+Delete "INSTDIR\origami-smtp.jar"
+
 RMDir $INSTDIR
 
 RMDir /r "$APPDATA\Origami SMTP"
