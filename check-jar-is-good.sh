@@ -15,6 +15,12 @@ else
     echo "license.txt NOT FOUND IN JAR!"
     success=1
 fi
+if test -e "application/console/OrigamiGUI.class"
+	echo "Main class found"
+else
+	echo "OrigamiGUI.class (Main class not found in jar)"
+	success=1
+fi
 cd ..
 rm -rf ./origami-test
 exit $success
