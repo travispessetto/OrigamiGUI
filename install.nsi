@@ -47,7 +47,7 @@ CreateDirectory "$SMPROGRAMS\Origami SMTP"
 #Change working directory temporarily for working directory of shortcut and license file
 SetOutPath "$APPDATA\Origami SMTP"
 
-CreateShortCut "$SMPROGRAMS\Origami SMTP\Origami SMTP.lnk" "$INSTDIR\origami-smtp.exe" "origami.ico"
+CreateShortCut "$SMPROGRAMS\Origami SMTP\Origami SMTP.lnk" "$INSTDIR\Origami Smtp.exe" "origami.ico"
 
 #Change working directory back
 
