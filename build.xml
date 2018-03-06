@@ -11,6 +11,7 @@
 	<property name="dir.buildfile" value="."/>
 	<property name="dir.jarfile" value="${dir.buildfile}"/>
 	<property name="resources" value="resources" />
+	<property name="gui" value="gui" />
 	
 	<target name="build" depends="create_run_jar">
 	</target>
@@ -40,6 +41,7 @@
 	                <attribute name="Class-Path" value="."/>
 	            </manifest>
 	        	<fileset dir="${resources}" />
+	        	<fileset dir="${gui}" />
 	            <fileset dir="${dir.jarfile}/bin"/>
 	            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/jars/javax.mail.jar"/>
 	            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/jars/jsoup-1.10.2.jar"/>
