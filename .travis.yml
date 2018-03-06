@@ -12,7 +12,6 @@ jdk:
 script: 
         - ant clean
         - ant build
-        - ant create_run_jar
         - ./update-windows-installer-version.sh
         - ./launch4j-linux/launch4j launch4j.cfg.xml
         - makensis install.nsi
