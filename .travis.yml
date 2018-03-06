@@ -13,6 +13,7 @@ script:
         - ant clean
         - ant build
         - ./update-windows-installer-version.sh
+        - cp resources/origami.ico ./origami.ico
         - ./launch4j-linux/launch4j launch4j.cfg.xml
         - makensis install.nsi
         - ./debian/create-deb.sh
