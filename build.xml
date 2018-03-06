@@ -10,6 +10,7 @@
 	<property name="jars" location="jars" />
 	<property name="dir.buildfile" value="."/>
 	<property name="dir.jarfile" value="${dir.buildfile}"/>
+	<property name="resources" value="resources" />
 	
 	<target name="build" depends="create_run_jar">
 	</target>
@@ -38,6 +39,7 @@
 	                <attribute name="Main-Class" value="application.console.OrigamiGUI"/>
 	                <attribute name="Class-Path" value="."/>
 	            </manifest>
+	        	<fileset dir="${resources}" />
 	            <fileset dir="${dir.jarfile}/bin"/>
 	            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/jars/javax.mail.jar"/>
 	            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/jars/jsoup-1.10.2.jar"/>
