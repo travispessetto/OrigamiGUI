@@ -22,5 +22,4 @@ else
 	success=1
 fi
 cd ..
-rm -rf ./origami-test
 exit $success
