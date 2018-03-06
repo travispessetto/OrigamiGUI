@@ -13,6 +13,7 @@
 	<property name="resources" value="resources" />
 	<property name="gui" value="gui" />
 	<property name="icons" value="icons" />
+	<property name="html" value="html" />
 	
 	<target name="build" depends="create_run_jar">
 	</target>
@@ -44,6 +45,7 @@
 	        	<fileset dir="${resources}" />
 	        	<fileset dir="${gui}" />
 	        	<fileset dir="${icons}" />
+	        	<fileset dir="${html}" />
 	            <fileset dir="${dir.jarfile}/bin"/>
 	            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/jars/javax.mail.jar"/>
 	            <zipfileset excludes="META-INF/*.SF" src="${dir.jarfile}/jars/jsoup-1.10.2.jar"/>
