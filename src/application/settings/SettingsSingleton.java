@@ -105,9 +105,11 @@ public class SettingsSingleton implements Serializable {
 		if (instance == null) {
 			// Load from the serialized file if there is one
 			String path = SettingsVariables.settingsFolder+"/"+SettingsVariables.settingsFile;
+			System.out.println("Checking for settings file: " + path);
 			File file = new File(path);
 			if (file.exists()) {
 				try {
+					System.out.println("Settings file exists");
 					FileInputStream fin = new FileInputStream(path);
 					ObjectInputStream oin = new ObjectInputStream(fin);
 					Object obj = oin.readObject();
@@ -128,7 +130,9 @@ public class SettingsSingleton implements Serializable {
 				}
 			}
 			// if not just create a new instance
-			else {
+			else 
+			{
+				System.out.println("Settings file not found.  Creating new settings instance.");
 				instance = new SettingsSingleton(2525);
 			}
 		}
@@ -139,10 +143,12 @@ public class SettingsSingleton implements Serializable {
 		try {
 			File settingsFolder = new File(SettingsVariables.settingsFolder);
 			if (!settingsFolder.exists()) {
+				System.out.println("Settings folder created");
 				settingsFolder.mkdirs();
 				settingsFolder.setWritable(true);
 			}
 
+			System.out.println("Saving settings to " + SettingsVariables.settingsFolder + "/" + SettingsVariables.settingsFile);
 			FileOutputStream fout = new FileOutputStream(
 					SettingsVariables.settingsFolder + "/" + SettingsVariables.settingsFile);
 			ObjectOutputStream oout = new ObjectOutputStream(fout);
