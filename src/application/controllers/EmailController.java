@@ -82,6 +82,10 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
+import javafx.scene.control.TableRow;
+import javafx.util.Callback;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleBooleanProperty;
 
 public class EmailController implements NewMessageListener,
 DeleteMessageListener, SMTPStatusListener
@@ -99,6 +103,7 @@ DeleteMessageListener, SMTPStatusListener
 	@FXML
 	private Label smtpStatus;
 	private Message selectedMessage;
+	
 	
 	public Message getSelectedMessage() {
 		return selectedMessage;
@@ -157,9 +162,28 @@ DeleteMessageListener, SMTPStatusListener
 		String emailExternalForm = ResourceLoader.loadFile(emailHTMLHandlerStream);
 		webengine.loadContent(emailExternalForm, "text/html");
 		emails.setPlaceholder(new Label("No messages"));
+		emails.setRowFactory(new Callback<TableView<Email>,TableRow<Email>>(){
+
+			@Override
+			public TableRow<Email> call(TableView<Email> param) {
+				final TableRow<Email> row = new TableRow<Email>()
+						{
+							@Override
+							protected void updateItem(Email row, boolean empty)
+							{
+								super.updateItem(row, empty);
+								if(!empty)
+								{
+									styleProperty().bind(Bindings.when(row.getRead()).then("").otherwise("-fx-font-weight: bold;"));
+								}
+							}
+						};
+						return row;
+			}
+			
+		});
 		emailsColumn.setCellValueFactory(new PropertyValueFactory<Email,String>("subject"));
 		loadEmails();
-		//watchFolder();
 		emails.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
 			@Override
@@ -173,6 +197,7 @@ DeleteMessageListener, SMTPStatusListener
 					try {
 						Message message = inbox.getMessage(selectedItem);
 						selectedMessage = message;
+						message.setRead(true);
 						if(message.getHTMLMessage() != null)
 						{
 							loadEmail(webengine,message.getHTMLMessage());
@@ -386,6 +411,7 @@ DeleteMessageListener, SMTPStatusListener
 		email.setTo(message.getTo());
 		email.setFrom(message.getFrom());
 		email.setSubject(message.getSubject());
+		email.setRead(new SimpleBooleanProperty(message.isRead()));
 		emailList.add(0,email);
 	}
 	
