@@ -33,6 +33,7 @@
                                     <Menu mnemonicParsing="false" text="Help">
                                        <items>
                                           <MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />
+                                          <MenuItem mnemonicParsing="false" onAction="#donate" text="Donate" />
                                        </items>
                                     </Menu>
                                  </menus>
