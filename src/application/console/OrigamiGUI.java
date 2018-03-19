@@ -91,6 +91,7 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setContentText(ex.getMessage());
 			alert.showAndWait();
+			System.err.println(ex);
 		}
 	}
 	

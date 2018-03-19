@@ -42,7 +42,6 @@ import com.sun.mail.smtp.SMTPTransport;
 
 import application.debug.DebugLogSingleton;
 import application.email.ForwardingAddress;
-import application.gui.Email;
 import application.listeners.SMTPStatusListener;
 import application.listeners.TrayIconListener;
 import application.settings.SettingsSingleton;
@@ -92,17 +91,19 @@ DeleteMessageListener, SMTPStatusListener
 {
 
 	private DebugLogSingleton debugLog;
-	private ObservableList<Email> emailList;
+	private ObservableList<Message> emailList;
 	@FXML
 	private TableView emails = new TableView<String>();
 	@FXML
-	private TableColumn emailsColumn = new TableColumn<Email,String>();
+	private TableColumn emailsColumn = new TableColumn<Message,String>();
 	@FXML
 	private WebView webview;
 	private WebEngine webengine;
 	@FXML
 	private Label smtpStatus;
 	private Message selectedMessage;
+	
+	private BrowserBridge bridge;
 	
 	
 	public Message getSelectedMessage() {
@@ -149,7 +150,7 @@ DeleteMessageListener, SMTPStatusListener
 		Inbox inbox = Inbox.getInstance();
 		inbox.addNewMessageListener(this);
 		inbox.addDeleteMessageListener(this);
-		BrowserBridge bridge = new BrowserBridge(this);
+		bridge = new BrowserBridge(this);
 		webengine = webview.getEngine();
 		webengine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>(){
 			public void changed(ObservableValue ov, State oldState, State newState)
@@ -162,19 +163,19 @@ DeleteMessageListener, SMTPStatusListener
 		String emailExternalForm = ResourceLoader.loadFile(emailHTMLHandlerStream);
 		webengine.loadContent(emailExternalForm, "text/html");
 		emails.setPlaceholder(new Label("No messages"));
-		emails.setRowFactory(new Callback<TableView<Email>,TableRow<Email>>(){
+		emails.setRowFactory(new Callback<TableView<Message>,TableRow<Message>>(){
 
 			@Override
-			public TableRow<Email> call(TableView<Email> param) {
-				final TableRow<Email> row = new TableRow<Email>()
+			public TableRow<Message> call(TableView<Message> param) {
+				final TableRow<Message> row = new TableRow<Message>()
 						{
 							@Override
-							protected void updateItem(Email row, boolean empty)
+							protected void updateItem(Message row, boolean empty)
 							{
 								super.updateItem(row, empty);
 								if(!empty)
 								{
-									styleProperty().bind(Bindings.when(row.getRead()).then("").otherwise("-fx-font-weight: bold;"));
+									styleProperty().bind(Bindings.when(row.isRead()).then("").otherwise("-fx-font-weight: bold;"));
 								}
 							}
 						};
@@ -182,7 +183,7 @@ DeleteMessageListener, SMTPStatusListener
 			}
 			
 		});
-		emailsColumn.setCellValueFactory(new PropertyValueFactory<Email,String>("subject"));
+		emailsColumn.setCellValueFactory(new PropertyValueFactory<Message,String>("subject"));
 		loadEmails();
 		emails.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
@@ -192,27 +193,7 @@ DeleteMessageListener, SMTPStatusListener
 				if(!event.isConsumed())
 				{
 					event.consume();
-					Inbox inbox = Inbox.getInstance();
-					int selectedItem = emails.getSelectionModel().getSelectedIndex();
-					try {
-						Message message = inbox.getMessage(selectedItem);
-						selectedMessage = message;
-						message.setRead(true);
-						if(message.getHTMLMessage() != null)
-						{
-							loadEmail(webengine,message.getHTMLMessage());
-						}
-						else
-						{
-							loadEmail(webengine,message.getPlainMessage());
-						}
-						loadAttachments(webengine,message);
-					
-					} catch (Exception e) {
-						System.out.println("Could not open file");
-						System.out.println(e.getMessage());
-						e.printStackTrace(System.err);
-					}
+					loadSelectedEmail();
 				}
 			}
 			
@@ -233,6 +214,10 @@ DeleteMessageListener, SMTPStatusListener
 					loadAttachments(webengine,null);
 					selectedMessage = null;
 				}
+				else if(keyCode == KeyCode.UP || keyCode == KeyCode.DOWN)
+				{
+					loadSelectedEmail();
+				}
 				else
 				{
 					System.err.println("Keycode " + keyCode + " not recognized");
@@ -246,8 +231,8 @@ DeleteMessageListener, SMTPStatusListener
 	public void loadEmails()
 	{
 		System.out.println("Load emails");
-		LinkedList subjects = new LinkedList();
-		emailList = FXCollections.observableList(subjects);
+		LinkedList messages = new LinkedList();
+		emailList = FXCollections.observableList(messages);
 		emails.setItems(emailList);
 		Inbox inbox = Inbox.getInstance();
 		for(int i = 0; i < inbox.getMessageCount(); ++i)
@@ -297,6 +282,11 @@ DeleteMessageListener, SMTPStatusListener
 				emailList.remove(index);
 			}
 		});
+	}
+	
+	public void donate()
+	{
+		bridge.openLink("https://www.gitcheese.com/donate/users/930497/repos/81178106");
 	}
 	
 	public void showAbout()
@@ -407,21 +397,16 @@ DeleteMessageListener, SMTPStatusListener
 	
 	private void addMessageToList(Message message)
 	{
-		Email email = new Email();
-		email.setTo(message.getTo());
-		email.setFrom(message.getFrom());
-		email.setSubject(message.getSubject());
-		email.setRead(new SimpleBooleanProperty(message.isRead()));
-		emailList.add(0,email);
+		emailList.add(0,message);
 	}
 	
 	private void forwardMessage(Message message)
 	{
-		System.out.println("Attempting to forward message");
 		try {
 			SettingsSingleton settings = SettingsSingleton.getInstance();
 			if(settings.isSmtpForwardToRemote() && settings.getSmtpRemoteEmailList().size() > 0)
 			{
+				System.out.println("Attempting to forward message");
 				Properties props = System.getProperties();
 				props.put("mail.smtps.host",settings.getSmtpRemoteAddress());
 				props.put("mail.smtp.port", settings.getSMTPPort());
@@ -473,12 +458,40 @@ DeleteMessageListener, SMTPStatusListener
 			}
 			else
 			{
-				System.out.println("Message not forwarded due to lack of forwarding email addresses");
+				System.out.println("Message not forwarded due to lack of forwarding email addresses or forward flag not set");
 			}
 		} catch (MessagingException e)
 		{
 			showAlert(AlertType.ERROR,"Failed to forward",e.getMessage());
 			e.printStackTrace();
+		}
+	}
+	
+	private void loadSelectedEmail()
+	{
+		Inbox inbox = Inbox.getInstance();
+		int selectedItem = emails.getSelectionModel().getSelectedIndex();
+		try {
+			Message message = inbox.getMessage(selectedItem);
+			
+			selectedMessage = message;
+			message.setRead(true);
+			emails.refresh();
+			inbox.serialize();
+			if(message.getHTMLMessage() != null)
+			{
+				loadEmail(webengine,message.getHTMLMessage());
+			}
+			else
+			{
+				loadEmail(webengine,message.getPlainMessage());
+			}
+			loadAttachments(webengine,message);
+		
+		} catch (Exception e) {
+			System.out.println("Could not open file");
+			System.out.println(e.getMessage());
+			e.printStackTrace(System.err);
 		}
 	}
 	
