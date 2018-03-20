@@ -163,27 +163,6 @@ DeleteMessageListener, SMTPStatusListener
 		String emailExternalForm = ResourceLoader.loadFile(emailHTMLHandlerStream);
 		webengine.loadContent(emailExternalForm, "text/html");
 		emails.setPlaceholder(new Label("No messages"));
-		emails.setRowFactory(new Callback<TableView<Message>,TableRow<Message>>(){
-
-			@Override
-			public TableRow<Message> call(TableView<Message> param) {
-				final TableRow<Message> row = new TableRow<Message>()
-						{
-							@Override
-							protected void updateItem(Message row, boolean empty)
-							{
-								super.updateItem(row, empty);
-								if(!empty)
-								{
-									styleProperty().bind(Bindings.when(row.isRead()).then("").otherwise("-fx-font-weight: bold;"));
-								}
-							}
-						};
-						return row;
-			}
-			
-		});
-		emailsColumn.setCellValueFactory(new PropertyValueFactory<Message,String>("subject"));
 		loadEmails();
 		emails.setOnMouseClicked(new EventHandler<MouseEvent>(){
 
@@ -235,7 +214,7 @@ DeleteMessageListener, SMTPStatusListener
 		emailList = FXCollections.observableList(messages);
 		emails.setItems(emailList);
 		Inbox inbox = Inbox.getInstance();
-		for(int i = 0; i < inbox.getMessageCount(); ++i)
+		for(int i = inbox.getMessageCount() - 1; i >= 0; --i)
 		{
 			Message message = inbox.getMessage(i);
 			addMessageToList(message);
