@@ -1,7 +1,9 @@
 !include LogicLib.nsh
 !include MUI.nsh
+!include x64.nsh
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\OrigamiSMTP"
 !define SFT_VERSION "{version}"
+!define JRE_URL ""
 !insertmacro MUI_PAGE_LICENSE "resources/license.txt"
 !insertmacro MUI_PAGE_INSTFILES
 
@@ -21,12 +23,13 @@ Section
 
 SetShellVarContext all
 
+#Check Java Version
+Call FindJava
+
+SetRegView 32
+
 SetOutPath $INSTDIR
 
-
-#Check Java Version
-# read the value from the registry into the $0 register
-#ReadRegStr $0 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment" CurrentVersion
 
 # print the results in a popup message box
 #MessageBox MB_OK "version: $0"
@@ -80,9 +83,110 @@ WriteRegStr HKLM "${UNINST_KEY}" "NoRepair" 1
 
 WriteRegStr HKLM "${UNINST_KEY}" "Publisher" "Travis Pessetto"
 
-;Delete "$INSTDIR\Origami_CA.crt"
 
 SectionEnd
+
+
+
+Function FindJava
+
+	DetailPrint 'Attempting to find 32 bit JRE'
+	SetRegView 32
+	StrCpy $1 "SOFTWARE\JavaSoft\Java Runtime Environment"
+	StrCpy $2 0
+	ReadRegStr $2 HKLM "$1" "CurrentVersion"
+	StrCmp $2 "" DetectTry2
+	DetailPrint 'JRE Version found'
+	ReadRegStr $5 HKLM "$1\$2" "JavaHome"
+	StrCmp $5 "" DetectTry2
+	DetailPrint 'JRE JAVA_HOME found'
+	DetailPrint 'JRE Detected'
+	goto done
+	
+	DetectTry2:
+	SetRegView 32
+	DetailPrint 'Attempting to find 32 bit JDK'
+	StrCpy $1 "SOFTWARE\JavaSoft\Java Development Kit"
+	StrCpy $2 0
+	ReadRegStr $2 HKLM "$1" "CurrentVersion"
+	StrCmp $2 "" DetectTry3
+	DetailPrint 'JDK Version found'
+	ReadRegStr $5 HKLM "$1\$2" "JavaHome"
+	StrCmp $5 "" DetectTry3
+	DetailPrint 'JDK JAVA_HOME Detected'
+	goto done
+	
+	DetectTry3:
+	DetailPrint 'Attempting to find 64 bit JRE'
+	${If} ${RunningX64}
+		SetRegView 64
+		StrCpy $1 "SOFTWARE\JavaSoft\Java Runtime Environment"
+		StrCpy $2 0
+		ReadRegStr $2 HKLM "$1" "CurrentVersion"
+		StrCmp $2 "" DetectTry4
+		DetailPrint 'JRE Version found'
+		ReadRegStr $5 HKLM "$1\$2" "JavaHome"
+		StrCmp $5 "" DetectTry4
+		DetailPrint '64 Bit JRE JAVA_HOME found'
+		DetailPrint '64 Bit JRE Detected'
+		SetRegView 32
+	${EndIf}
+	goto done
+	
+	DetectTry4:
+	DetailPrint '64 bit JRE not found. Checking JDK'
+	${If} ${RunningX64}
+		SetRegView 64
+		StrCpy $1 "SOFTWARE\JavaSoft\Java Development Kit"
+		StrCpy $2 0
+		ReadRegStr $2 HKLM "$1" "CurrentVersion"
+		StrCmp $2 "" NoJava
+		DetailPrint '64 bit JDK Version found'
+		ReadRegStr $5 HKLM "$1\$2" "JavaHome"
+		StrCmp $5 "" NoJava
+		DetailPrint '64 Bit JDK JAVA_HOME Detected'
+		SetRegView 32
+	${EndIf}
+	goto done
+	
+	done:
+	; All done
+	DetailPrint 'Finished detecting Java'
+	Return
+	
+	NoJava:
+	DetailPrint 'Java not found'
+	;Ask if want to install
+	MessageBox MB_YESNO "Java was not found.  Install now?" IDYES true IDNO false
+	true:
+		;Install Java
+		Call InstallJava
+		Return
+	false:
+		Call JavaRefused
+	
+
+FunctionEnd
+
+Function JavaRefused
+	DetailPrint 'Java install refused or failed'
+	MessageBox  MB_OK 'Java required for program.  Quitting install now.' IDOK 
+		DetailPrint 'Quitting'
+		Quit
+FunctionEnd
+
+Function InstallJava
+
+	SetOutPath	'$TEMP'
+	SetOverwrite on
+	File "jre-8u161-windows-i586-iftw.exe"
+	ExecWait '$TEMP\jre-8u161-windows-i586-iftw.exe' $0
+	DetailPrint 'Java Installer Exit Code: $0'
+	Delete '$TEMP\jre-8u161-windows-i586-iftw.exe'
+	Call FindJava
+
+FunctionEnd
+
 
 Section "Uninstall"
 
@@ -114,7 +218,14 @@ ${If} $0 != success
 	MessageBox MB_OK "Root certificate delete failed: $0"
 ${EndIf}
 
+SetRegView 32
 DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OrigamiSMTP"
+
+${If} ${RunningX64}
+	SetRegView 64
+	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\OrigamiSMTP"
+	SetRegView 32
+${EndIf}
 
 SectionEnd
 

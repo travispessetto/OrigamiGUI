@@ -4,8 +4,10 @@ bin
 *\.mht
 *\.ser
 *\.exe
+!jre-8u161-windows-i586-iftw.exe
 *\.deb
 *\.log
 Origami\ SMTP.jar
 Origami.SMTP.sh
 Origami.SMTP.jar
+origami-smtp.jar
