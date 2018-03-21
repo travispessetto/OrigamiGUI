@@ -21,7 +21,6 @@ script:
         - ls
 deploy:
         provider: releases
-        prerelease: true
         file_glob: true
         file:
                 - "origami-smtp.jar"
