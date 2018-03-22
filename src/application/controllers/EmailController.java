@@ -12,6 +12,7 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Date;
 import java.util.EventListener;
 import java.util.LinkedList;
@@ -99,6 +100,11 @@ DeleteMessageListener, SMTPStatusListener
 	@FXML
 	private WebView webview;
 	private WebEngine webengine;
+	
+	@FXML
+	private WebView detailsWebview;
+	private WebEngine detailsWebEngine;
+	
 	@FXML
 	private Label smtpStatus;
 	private Message selectedMessage;
@@ -140,16 +146,8 @@ DeleteMessageListener, SMTPStatusListener
 		showDebugConsole();
 	}
 	
-	@FXML
-	private void initialize() throws Exception
+	private void initEmailWebview()
 	{
-		debugLog = DebugLogSingleton.getInstance();
-		SettingsSingleton settings = SettingsSingleton.getInstance();
-		settings.addSmtpStatusListener(this);
-		settings.startSMTPServer();
-		Inbox inbox = Inbox.getInstance();
-		inbox.addNewMessageListener(this);
-		inbox.addDeleteMessageListener(this);
 		bridge = new BrowserBridge(this);
 		webengine = webview.getEngine();
 		webengine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>(){
@@ -162,6 +160,30 @@ DeleteMessageListener, SMTPStatusListener
 		InputStream emailHTMLHandlerStream = EmailController.class.getClassLoader().getResourceAsStream("jqueryEmailPage.html");
 		String emailExternalForm = ResourceLoader.loadFile(emailHTMLHandlerStream);
 		webengine.loadContent(emailExternalForm, "text/html");
+	}
+	
+	private void initDetailsWebView()
+	{
+		detailsWebEngine = detailsWebview.getEngine();
+		InputStream htmlHandlerStream = EmailController.class.getClassLoader().getResourceAsStream("jqueryDetailsPage.html");
+		String detailsExternalForm = ResourceLoader.loadFile(htmlHandlerStream);
+		detailsWebEngine.loadContent(detailsExternalForm,"text/html");
+	}
+	
+	@FXML
+	private void initialize() throws Exception
+	{
+		debugLog = DebugLogSingleton.getInstance();
+		SettingsSingleton settings = SettingsSingleton.getInstance();
+		settings.addSmtpStatusListener(this);
+		settings.startSMTPServer();
+		Inbox inbox = Inbox.getInstance();
+		inbox.addNewMessageListener(this);
+		inbox.addDeleteMessageListener(this);
+		
+		initEmailWebview();
+		initDetailsWebView();
+		
 		emails.setPlaceholder(new Label("No messages"));
 		loadEmails();
 		emails.setOnMouseClicked(new EventHandler<MouseEvent>(){
@@ -190,6 +212,7 @@ DeleteMessageListener, SMTPStatusListener
 					int selected = emails.getSelectionModel().getSelectedIndex();
 					inbox.deleteMessage(selected);
 					loadEmail(webengine,"");
+					clearDetails();
 					loadAttachments(webengine,null);
 					selectedMessage = null;
 				}
@@ -322,10 +345,16 @@ DeleteMessageListener, SMTPStatusListener
 		handleNewEmail();
 	}
 	
-	private void loadEmail(WebEngine engine, String message)
+	private String scrubContent(String message)
 	{
 		String scrubbedContent = message.replaceAll("\\r?\\n","\\\\n");
 		scrubbedContent = scrubbedContent.replace("\"", "\\\"");
+		return scrubbedContent;
+	}
+	
+	private void loadEmail(WebEngine engine, String message)
+	{
+		String scrubbedContent = scrubContent(message);
 		engine.executeScript("clearContent()");
 		engine.executeScript("setContent(\""+scrubbedContent+ "\");");
 	}
@@ -446,6 +475,48 @@ DeleteMessageListener, SMTPStatusListener
 		}
 	}
 	
+	private String HtmlToViewableSource(String html)
+	{
+		html = html.replace("\"", "\\\"");
+		html = html.replaceAll(">","&gt;");
+		html = html.replace("<", "&lt;");
+		html = html.replaceAll("\\r?\\n","<br />");
+		return html;
+	}
+	
+	private void clearDetails()
+	{
+		detailsWebEngine.executeScript("clearContent()");
+	}
+	
+	private void loadSelectedEmailDetails(Message message)
+	{
+		try
+		{
+			String plainContent = message.getPlainMessage();
+			plainContent = scrubContent(plainContent);
+			String htmlContent = message.getHTMLMessage();
+			htmlContent = HtmlToViewableSource(htmlContent);
+			
+			detailsWebEngine.executeScript("setContent(\""+message.getFrom()+"\",\""+message.getTo()+
+					"\",\""+message.getSubject()+"\",\""+plainContent+"\",\""+htmlContent+"\")");
+			
+			LinkedList<Attachment> attachments = message.getAttachments();
+			for(Attachment attachment : attachments)
+			{
+				String content = Base64.getEncoder().encodeToString(attachment.getContent());
+				detailsWebEngine.executeScript("loadAttachment(\""+attachment.getFileName()+"\",\""+
+						attachment.getSize()+"\",\""+attachment.getMimeType()+"\",\""+content+"\")");
+			}
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+			e.printStackTrace(System.err);;
+		}
+		
+	}
+	
 	private void loadSelectedEmail()
 	{
 		Inbox inbox = Inbox.getInstance();
@@ -466,6 +537,7 @@ DeleteMessageListener, SMTPStatusListener
 				loadEmail(webengine,message.getPlainMessage());
 			}
 			loadAttachments(webengine,message);
+			loadSelectedEmailDetails(message);
 		
 		} catch (Exception e) {
 			System.out.println("Could not open file");
