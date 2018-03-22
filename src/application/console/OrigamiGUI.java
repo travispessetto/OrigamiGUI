@@ -15,6 +15,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -59,7 +60,7 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 		systemTray.addActionListener(this);
 		systemTray.startTrayIcon();
 		
-		AnchorPane console = FXMLLoader.load(getClass().getClassLoader().getResource("Console.fxml"));
+		VBox console = FXMLLoader.load(getClass().getClassLoader().getResource("Console.fxml"));
 		Scene scene = new Scene(console);
 		
 		

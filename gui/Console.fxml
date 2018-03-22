@@ -5,88 +5,89 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.web.WebView?>
+
 <?import application.gui.EmailTableFactory?>
 <?import application.gui.EmailTableValueFactory ?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controllers.EmailController">
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.controllers.EmailController">
    <children>
-      <SplitPane dividerPositions="0.9271356783919598" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+      <MenuBar>
+         <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleServerSettingsMenuItemClicked" text="Settings" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleDebugMenuClicked" text="Debug Console" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleExitMenuItemClicked" text="Exit" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />
+                  <MenuItem mnemonicParsing="false" onAction="#donate" text="Donate" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+      <SplitPane dividerPositions="0.42474916387959866" VBox.vgrow="ALWAYS">
+         <items>
+            <AnchorPane maxWidth="400.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <SplitPane fx:id="menu" dividerPositions="0.10552763819095477" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <items>
-                        <AnchorPane maxHeight="30.0" minHeight="30.0" minWidth="-Infinity" prefWidth="598.0">
-                           <children>
-                              <MenuBar layoutX="-50.0" prefHeight="39.0" prefWidth="598.0" AnchorPane.bottomAnchor="-12.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <menus>
-                                    <Menu mnemonicParsing="false" text="File">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" onAction="#handleServerSettingsMenuItemClicked" text="Settings" />
-                                          <MenuItem mnemonicParsing="false" onAction="#handleDebugMenuClicked" text="Debug Console" />
-                                          <MenuItem mnemonicParsing="false" onAction="#handleExitMenuItemClicked" text="Exit" />
-                                       </items>
-                                    </Menu>
-                                    <Menu mnemonicParsing="false" text="Help">
-                                       <items>
-                                          <MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />
-                                          <MenuItem mnemonicParsing="false" onAction="#donate" text="Donate" />
-                                       </items>
-                                    </Menu>
-                                 </menus>
-                              </MenuBar>
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-                           <children>
-                              <SplitPane dividerPositions="0.42474916387959866" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <items>
-                                    <AnchorPane maxWidth="400.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="100.0">
-                                       <children>
-                                          <TableView fx:id="emails" layoutX="25.0" layoutY="71.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <columns>
-                                              <TableColumn fx:id="emailsColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="-1.0" sortable="false" text="Messages">
-                                              	<cellFactory>
-                                              		<EmailTableFactory/>
-                                              	</cellFactory>
-                                              	<cellValueFactory>
-                                              		<EmailTableValueFactory/>
-                                              	</cellValueFactory>
-                                              </TableColumn>
-                                            </columns>
-                                             <columnResizePolicy>
-                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                             </columnResizePolicy>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
-                                    <AnchorPane minWidth="-Infinity">
-                                       <children>
-                                          <WebView fx:id="webview" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                       </children>
-                                    </AnchorPane>
-                                 </items>
-                              </SplitPane>
-                           </children>
-                        </AnchorPane>
-                     </items>
-                  </SplitPane>
+                  <TableView fx:id="emails" layoutX="25.0" layoutY="71.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <columns>
+                        <TableColumn fx:id="emailsColumn" editable="false" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="-1.0" sortable="false" text="Messages">
+	                        <cellFactory>
+	                        	<EmailTableFactory />
+	                        </cellFactory>
+	                        <cellValueFactory>
+	                        	<EmailTableValueFactory />
+	                        </cellValueFactory>
+                        </TableColumn>
+                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
                </children>
             </AnchorPane>
-          <AnchorPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="160.0">
+            <AnchorPane minWidth="-Infinity">
                <children>
-                  <Label fx:id="smtpStatus" layoutX="78.0" layoutY="2.0" prefHeight="17.0" prefWidth="508.0" text="Stopped" textFill="#ff0505" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font></Label>
+                  <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <tabs>
+                      <Tab text="Message">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <WebView fx:id="webview" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="Details">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <WebView fx:id="detailsWebview" layoutX="37.0" layoutY="43.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children></AnchorPane>
+                        </content>
+                      </Tab>
+                    </tabs>
+                  </TabPane>
                </children>
             </AnchorPane>
-        </items>
+         </items>
       </SplitPane>
+      <ToolBar>
+         <items>
+            <Label fx:id="smtpStatus" text="SMTP Status" />
+         </items>
+      </ToolBar>
    </children>
-</AnchorPane>
+</VBox>
