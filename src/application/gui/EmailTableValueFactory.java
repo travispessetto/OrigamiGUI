@@ -1,7 +1,6 @@
 package application.gui;
 
-import com.pessetto.FileHandlers.Inbox.Message;
-
+import com.pessetto.origamismtp.filehandlers.inbox.Message;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TableColumn;

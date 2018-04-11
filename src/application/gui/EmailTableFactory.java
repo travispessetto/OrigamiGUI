@@ -1,6 +1,7 @@
 package application.gui;
 
-import com.pessetto.FileHandlers.Inbox.Message;
+
+import com.pessetto.origamismtp.filehandlers.inbox.Message;
 
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.Label;

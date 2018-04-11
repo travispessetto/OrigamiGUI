@@ -33,12 +33,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.pessetto.FileHandlers.Inbox.Attachment;
-import com.pessetto.FileHandlers.Inbox.DeleteMessageListener;
-import com.pessetto.FileHandlers.Inbox.Inbox;
-import com.pessetto.FileHandlers.Inbox.Message;
-import com.pessetto.FileHandlers.Inbox.NewMessageListener;
-import com.pessetto.Variables.InboxVariables;
+import com.pessetto.origamismtp.filehandlers.inbox.Attachment;
+import com.pessetto.origamismtp.filehandlers.inbox.DeleteMessageListener;
+import com.pessetto.origamismtp.filehandlers.inbox.Inbox;
+import com.pessetto.origamismtp.filehandlers.inbox.Message;
+import com.pessetto.origamismtp.filehandlers.inbox.NewMessageListener;
 import com.sun.mail.smtp.SMTPTransport;
 
 import application.debug.DebugLogSingleton;

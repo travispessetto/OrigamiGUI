@@ -11,7 +11,7 @@ import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import com.pessetto.FileHandlers.Inbox.Attachment;
+import com.pessetto.origamismtp.filehandlers.inbox.Attachment;
 
 import application.controllers.EmailController;
 import application.settings.SettingsSingleton;
