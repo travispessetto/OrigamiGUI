@@ -2,7 +2,7 @@ package application.threads;
 
 import java.net.BindException;
 import java.util.List;
-import com.pessetto.main.OrigamiSMTP;
+import com.pessetto.origamismtp.OrigamiSMTP;
 import application.debug.DebugLogSingleton;
 import application.listeners.SMTPErrorListener;
 import application.listeners.SMTPStatusListener;
