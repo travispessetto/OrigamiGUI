@@ -3,7 +3,7 @@
 !include x64.nsh
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\OrigamiSMTP"
 !define SFT_VERSION "{version}"
-!define JRE_URL ""
+!define JRE_URL "https://s3-us-west-2.amazonaws.com/origami-dependencies/jre-10.0.1_windows-x64_bin.exe"
 !insertmacro MUI_PAGE_LICENSE "resources/license.txt"
 !insertmacro MUI_PAGE_INSTFILES
 
@@ -177,13 +177,16 @@ Function JavaRefused
 FunctionEnd
 
 Function InstallJava
-
-	SetOutPath	'$TEMP'
 	SetOverwrite on
-	File "jre-10.0.1_windows-x64_bin.exe"
-	ExecWait '$TEMP\jre-10.0.1_windows-x64_bin.exe' $0
+	StrCpy $2 "$TEMP\JRE.exe"
+	nsisdl::dlownload /TIMEOUT=30000 ${JRE_URL} $2
+	Pop $R0 ;Return value
+    StrCmp $R0 "success" +3
+		MessageBox MB_ICONSTOP "Downoad of Java Failed: $R0"
+		Abort
+	ExecWait $2
 	DetailPrint 'Java Installer Exit Code: $0'
-	Delete '$TEMP\jre-10.0.1_windows-x64_bin.exe'
+	Delete $2
 	Call FindJava
 
 FunctionEnd
