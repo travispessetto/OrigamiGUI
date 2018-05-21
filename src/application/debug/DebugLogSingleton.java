@@ -11,12 +11,14 @@ public class DebugLogSingleton
 	private static DebugLogSingleton instance = null;
 	private static final ReentrantLock lock = new ReentrantLock();
 	private PrintStream systemStream;
+	private PrintStream systemErrStream;
 	private PrintStream debugStream;
 	private ByteArrayOutputStream baos;
 	
 	protected DebugLogSingleton()
 	{
 		redirectSystemOut();
+		redirectSystemErr();
 	}
 	
 	public static DebugLogSingleton getInstance()
@@ -48,10 +50,25 @@ public class DebugLogSingleton
 	
 	private void redirectSystemOut()
 	{
-		baos = new ByteArrayOutputStream();
+		createDebugStream();
 		systemStream = System.out;
-		debugStream = new PrintStream(baos);
 		System.setOut(debugStream);
+	}
+	
+	private void redirectSystemErr()
+	{
+		createDebugStream();
+		systemErrStream = System.err;
+		System.setErr(debugStream);
+	}
+	
+	private void createDebugStream()
+	{
+		if(baos == null || debugStream == null)
+		{
+			baos = new ByteArrayOutputStream();
+			debugStream = new PrintStream(baos);
+		}
 	}
 
 }
