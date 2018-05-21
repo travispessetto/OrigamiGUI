@@ -63,6 +63,7 @@ public class SystemTraySingleton
 				BufferedImage trayImage = SwingFXUtils.fromFXImage(icon, null);
 				trayIcon = new TrayIcon(trayImage);
 				trayIcon.setToolTip("Origami SMTP");
+				trayIcon.setImageAutoSize(true);
 				this.addAllListenersToTrayIcon();
 				trayIcon.setActionCommand("Open");
 				// add event listener to show stage

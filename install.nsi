@@ -152,6 +152,7 @@ Function FindJava
 	done:
 	; All done
 	DetailPrint 'Finished detecting Java'
+	DetailPrint 'Checking Java Version'
 	Return
 	
 	NoJava:
@@ -179,10 +180,10 @@ Function InstallJava
 
 	SetOutPath	'$TEMP'
 	SetOverwrite on
-	File "jre-8u161-windows-i586-iftw.exe"
-	ExecWait '$TEMP\jre-8u161-windows-i586-iftw.exe' $0
+	File "jre-10.0.1_windows-x64_bin.exe"
+	ExecWait '$TEMP\jre-10.0.1_windows-x64_bin.exe' $0
 	DetailPrint 'Java Installer Exit Code: $0'
-	Delete '$TEMP\jre-8u161-windows-i586-iftw.exe'
+	Delete '$TEMP\jre-10.0.1_windows-x64_bin.exe'
 	Call FindJava
 
 FunctionEnd
