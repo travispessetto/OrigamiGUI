@@ -58,7 +58,7 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 		SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
 		systemTray.setIcon(icon);
 		systemTray.addActionListener(this);
-		systemTray.startTrayIcon();
+		//systemTray.startTrayIcon();
 		
 		VBox console = FXMLLoader.load(getClass().getClassLoader().getResource("Console.fxml"));
 		Scene scene = new Scene(console);
@@ -82,6 +82,8 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 	{
 		try
 		{	
+			SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
+			systemTray.stop();
 			if(mainStage != null)
 			{
 				mainStage.show();
@@ -105,9 +107,10 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 		}
 		else
 		{
-			SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
-			systemTray.displayMessage("I am here", "I will be down here if you need me. Exit from the menu if you want me to go away.", MessageType.INFO);
 			mainStage.hide();
+			SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
+			systemTray.startTrayIcon();
+			systemTray.displayMessage("I am here", "I will be down here if you need me. Exit from the menu if you want me to go away.", MessageType.INFO);
 		}
 	}
 	
@@ -150,6 +153,8 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 	{
 		if(e.getActionCommand().equals("Open"))
 		{
+			SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
+			systemTray.stop();
 			Platform.runLater(new Runnable()
 			{
 				@Override

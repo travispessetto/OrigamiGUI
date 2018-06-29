@@ -23,10 +23,12 @@ public class SystemTraySingleton
 	private OrigamiGUI console;
 	private ArrayList<ActionListener> actionListeners;
 	private Image icon;
+	private boolean started;
 	
 	private SystemTraySingleton()
 	{
 		actionListeners = new ArrayList<ActionListener>();
+		started = false;
 	}
 	
 	public static SystemTraySingleton getInstance()
@@ -116,11 +118,15 @@ public class SystemTraySingleton
 	
 	public void startTrayIcon()
 	{
+		started = true;
 		javax.swing.SwingUtilities.invokeLater(this::addAppToTray);
 	}
 	
 	public void stop()
 	{
-		systemTray.remove(trayIcon);
+		if(started)
+		{
+			systemTray.remove(trayIcon);
+		}
 	}
 }
