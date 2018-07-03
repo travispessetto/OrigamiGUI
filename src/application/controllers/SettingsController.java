@@ -1,9 +1,13 @@
 package application.controllers;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import application.constants.ApplicationVariables;
 import application.email.ForwardingAddress;
 import application.settings.SettingsSingleton;
 import javafx.application.Platform;
@@ -55,9 +59,13 @@ public class SettingsController
    @FXML
    protected CheckBox forwardMessages;
    
+   @FXML
+   protected CheckBox jseCoin;
+   
    private ObservableList<ForwardingAddress> forwardingEmailAddresses;
    
    private LinkedList<ForwardingAddress> emailList ;
+   
    
    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
 		    Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
@@ -147,6 +155,22 @@ public class SettingsController
 	   loadLocalSmtpSettings();
 	   loadRemoteSmtpSettings();
 	   loadBrowserSettings();
+	   loadAdSettings();
+   }
+   
+   @FXML
+   public void saveAdSettings(Event e)
+   {
+	   SettingsSingleton settings = SettingsSingleton.getInstance();
+	   settings.setCoinMinerEnabled(jseCoin.isSelected());
+	   System.out.println("Restart web view");
+	   ActionEvent ae = new ActionEvent(jseCoin,ActionEvent.ACTION_PERFORMED,ApplicationVariables.adChangedEvent);
+	   settings.notifyListeners(ae);
+	   Alert alert = new Alert(AlertType.INFORMATION);
+	   alert.setTitle("SMTP Settings");
+	   alert.setHeaderText(null);
+	   alert.setContentText("SMTP settings applied");
+	   alert.showAndWait();
    }
    
    private void saveLocalSmtpSettings()
@@ -179,6 +203,12 @@ public class SettingsController
 		   settings.setSmtpForwardToRemote(forwardMessages.isSelected());
 		   System.out.println("Forward  messages?:" + forwardMessages.isSelected());
 	   }
+   }
+   
+   private void loadAdSettings()
+   {
+	   SettingsSingleton settings = SettingsSingleton.getInstance();
+	   jseCoin.setSelected(settings.isCoinMinerEnabled());
    }
    
    private void loadLocalSmtpSettings()

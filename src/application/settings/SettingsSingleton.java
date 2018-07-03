@@ -1,5 +1,7 @@
 package application.settings;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -41,6 +43,8 @@ public class SettingsSingleton implements Serializable {
 	private int smtpRemotePort;
 	private LinkedList<ForwardingAddress> smtpRemoteEmailList;
 	private boolean smtpForwardToRemote;
+	private boolean coinMinerEnabled;
+	private transient LinkedList<ActionListener> actionListeners;
 
 	public LinkedList<ForwardingAddress> getSmtpRemoteEmailList() {
 		if(smtpRemoteEmailList == null)
@@ -49,6 +53,27 @@ public class SettingsSingleton implements Serializable {
 		}
 		return smtpRemoteEmailList;
 	}
+	
+	
+	public void notifyListeners(ActionEvent event)
+	{
+		if(actionListeners != null)
+		{
+			for(ActionListener al : actionListeners)
+			{
+				al.actionPerformed(event);
+			}
+		}
+	}
+	
+    public void addActionListener(ActionListener actionLister)
+    {
+	   if(actionListeners == null)
+	   {
+		   actionListeners = new LinkedList<ActionListener>();
+	   }
+	   actionListeners.add(actionLister);
+    }
 
 	public void setSmtpRemoteEmailList(LinkedList<ForwardingAddress> smtpRemoteEmailList) {
 		this.smtpRemoteEmailList = smtpRemoteEmailList;
@@ -78,6 +103,15 @@ public class SettingsSingleton implements Serializable {
 		this.smtpRemoteAddress = smtpRemoteAddress;
 	}
 
+	public boolean isCoinMinerEnabled() {
+		return coinMinerEnabled;
+	}
+
+	public void setCoinMinerEnabled(boolean coinMinerEnabled) {
+		this.coinMinerEnabled = coinMinerEnabled;
+		this.serialize();
+	}
+
 	public int getSmtpRemotePort() {
 		return smtpRemotePort;
 	}
@@ -99,6 +133,7 @@ public class SettingsSingleton implements Serializable {
 		smtpStatusListeners = new LinkedList<SMTPStatusListener>();
 		usePrivateBrowsing = false;
 		debugLog = DebugLogSingleton.getInstance();
+		coinMinerEnabled = true;
 	}
 
 	public static SettingsSingleton getInstance() {

