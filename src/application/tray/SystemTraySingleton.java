@@ -7,6 +7,7 @@ import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import application.console.OrigamiGUI;
 import application.settings.SettingsSingleton;
@@ -14,6 +15,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
+import javafx.scene.control.ButtonType;
 
 public class SystemTraySingleton
 {
@@ -108,7 +110,24 @@ public class SystemTraySingleton
 	
 	public void displayMessage(String caption, String message, MessageType messageType)
 	{
-		trayIcon.displayMessage(caption, message, messageType);
+		if(trayIcon != null)
+		{
+			javax.swing.SwingUtilities.invokeLater(new Runnable()
+					{
+
+						@Override
+						public void run() {
+							trayIcon.displayMessage(caption, message, messageType);	
+						}
+				
+					});
+		}
+		else
+		{
+			Alert alert = new Alert(AlertType.INFORMATION, message, ButtonType.OK);
+			alert.show();
+		}
+		
 	}
 	
 	public void setIcon(Image icon)
