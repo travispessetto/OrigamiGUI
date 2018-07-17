@@ -58,7 +58,7 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 		SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
 		systemTray.setIcon(icon);
 		systemTray.addActionListener(this);
-		//systemTray.startTrayIcon();
+		systemTray.startTrayIcon();
 		
 		VBox console = FXMLLoader.load(getClass().getClassLoader().getResource("Console.fxml"));
 		Scene scene = new Scene(console);
