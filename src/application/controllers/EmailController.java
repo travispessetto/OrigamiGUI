@@ -500,11 +500,18 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 	
 	private String HtmlToViewableSource(String html)
 	{
-		html = html.replace("\"", "\\\"");
-		html = html.replaceAll(">","&gt;");
-		html = html.replace("<", "&lt;");
-		html = html.replaceAll("\\r?\\n","<br />");
-		return html;
+		if(html != null)
+		{
+			html = html.replace("\"", "\\\"");
+			html = html.replaceAll(">","&gt;");
+			html = html.replace("<", "&lt;");
+			html = html.replaceAll("\\r?\\n","<br />");
+			return html;
+		}
+		else
+		{
+			return "";
+		}
 	}
 	
 	private void clearDetails()
