@@ -5,62 +5,128 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>OrigamiGUI</name>
   <description>The GUI to OrigamiSMTP</description>
-  <build>
-    <sourceDirectory>src</sourceDirectory>
-    <resources>
-      <resource>
-        <directory>gui</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-      <resource>
-        <directory>icons</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-      <resource>
-        <directory>html</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-      <resource>
-        <directory>resources</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-    </resources>
-    <plugins>
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+  
+	<properties>
+	    <maven.compiler.source>1.8</maven.compiler.source>
+	    <maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+	
+	<contributors>
+        <contributor>
+            <name>Travis Pessetto</name>
+            <roles>
+                <role>Owner</role>
+            </roles>
+            <url>https://github.com/travispessetto</url>
+        </contributor>
+    </contributors>
+    
+    <developers>
+        <developer>
+            <id>travispessetto</id>
+            <name>Travis Pessetto</name>
+            <email>travis@pessetto.com</email>
+            <url>https://pessetto.com</url>
+            <roles>
+                <role>Lead Developer</role>
+            </roles>
+            <timezone>America/Denver</timezone>
+        </developer>
+    </developers>
+  
+ <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>1.15</version>
+                <executions>
+                    <execution>
+                        <id>download-licenses</id>
+                        <goals>
+                            <goal>download-licenses</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-assembly-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <phase>package</phase>
+			            <goals>
+			                <goal>single</goal>
+			            </goals>
+			            <configuration>
+			                <archive>
+			                <manifest>
+			                    <mainClass>
+			                        com.pessetto.origamigui.console.OrigamiGUI
+			                    </mainClass>
+			                </manifest>
+			                </archive>
+			                <descriptorRefs>
+			                    <descriptorRef>jar-with-dependencies</descriptorRef>
+			                </descriptorRefs>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+            <!--Copy dependencyfiles to bin folder-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                            <excludeTransitive>true</excludeTransitive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    
   <url>https://github.com/travispessetto/OrigamiGUI</url>
   <organization>
   	<name>Travis Pessetto</name>
   	<url>https://pessetto.com</url>
   </organization>
-  <scm>
-  	<url>https://github.com/travispessetto/OrigamiGUI</url>
-  	<developerConnection>Travis Pessetto</developerConnection>
-  </scm>
-  <dependencyManagement>
+   <scm>
+        <url>https://github.com/travispessetto/OrigamiGUI</url>
+        <connection>scm:git:https://github.com/travispessetto/OrigamiGUI.git</connection>
+        <!-- <developerConnection>scm:git:git@github.com:travispessetto/OrigamiSMTP.git</developerConnection> -->
+        <tag>HEAD</tag>
+    </scm>
   	<dependencies>
   		<dependency>
   			<groupId>com.pessetto.origamismtp</groupId>
   			<artifactId>OrigamiSMTP</artifactId>
   			<version>1.1.0</version>
   			<type>jar</type>
-  		</dependency>
+		</dependency>
+		<dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.11.2</version>
+            <type>jar</type>
+        </dependency>
   	</dependencies>
-  </dependencyManagement>
+
 </project>

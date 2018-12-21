@@ -1,4 +1,4 @@
-package application.console;
+package com.pessetto.origamigui.console;
 
 import javafx.application.Application;
 import javafx.application.Platform;
