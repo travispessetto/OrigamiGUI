@@ -1,0 +1,65 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>OrigamiGUI</groupId>
+  <artifactId>OrigamiGUI</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>OrigamiGUI</name>
+  <description>The GUI to OrigamiSMTP</description>
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>gui</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>icons</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>html</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>resources</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.7.0</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <url>https://github.com/travispessetto/OrigamiGUI</url>
+  <organization>
+  	<name>Travis Pessetto</name>
+  	<url>https://pessetto.com</url>
+  </organization>
+  <scm>
+  	<url>https://github.com/travispessetto/OrigamiGUI</url>
+  	<developerConnection>Travis Pessetto</developerConnection>
+  </scm>
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>com.pessetto.origamismtp</groupId>
+  			<artifactId>OrigamiSMTP</artifactId>
+  			<version>1.0.3</version>
+  		</dependency>
+  	</dependencies>
+  </dependencyManagement>
+</project>
