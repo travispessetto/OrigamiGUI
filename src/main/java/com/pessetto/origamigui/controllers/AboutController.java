@@ -1,4 +1,4 @@
-package application.controllers;
+package com.pessetto.origamigui.controllers;
 
 import java.io.File;
 import java.io.FileNotFoundException;

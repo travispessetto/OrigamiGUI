@@ -1,4 +1,4 @@
-package application.web;
+package com.pessetto.origamigui.web;
 
 import java.awt.Desktop;
 import java.awt.FileDialog;
@@ -13,8 +13,8 @@ import java.net.URISyntaxException;
 
 import com.pessetto.origamismtp.filehandlers.inbox.Attachment;
 
-import application.controllers.EmailController;
-import application.settings.SettingsSingleton;
+import com.pessetto.origamigui.controllers.EmailController;
+import com.pessetto.origamigui.settings.SettingsSingleton;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 

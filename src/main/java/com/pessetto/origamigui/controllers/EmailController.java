@@ -1,4 +1,4 @@
-package application.controllers;
+package com.pessetto.origamigui.controllers;
 
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionListener;
@@ -42,15 +42,15 @@ import com.pessetto.origamismtp.filehandlers.inbox.Message;
 import com.pessetto.origamismtp.filehandlers.inbox.NewMessageListener;
 import com.sun.mail.smtp.SMTPTransport;
 
-import application.constants.ApplicationVariables;
-import application.debug.DebugLogSingleton;
-import application.email.ForwardingAddress;
-import application.listeners.SMTPStatusListener;
-import application.listeners.TrayIconListener;
-import application.settings.SettingsSingleton;
-import application.tray.SystemTraySingleton;
-import application.web.BrowserBridge;
-import application.web.ResourceLoader;
+import com.pessetto.origamigui.constants.ApplicationVariables;
+import com.pessetto.origamigui.debug.DebugLogSingleton;
+import com.pessetto.origamigui.email.ForwardingAddress;
+import com.pessetto.origamigui.listeners.SMTPStatusListener;
+import com.pessetto.origamigui.listeners.TrayIconListener;
+import com.pessetto.origamigui.settings.SettingsSingleton;
+import com.pessetto.origamigui.tray.SystemTraySingleton;
+import com.pessetto.origamigui.web.BrowserBridge;
+import com.pessetto.origamigui.web.ResourceLoader;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;

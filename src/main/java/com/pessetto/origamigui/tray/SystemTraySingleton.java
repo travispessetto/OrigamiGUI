@@ -1,4 +1,4 @@
-package application.tray;
+package com.pessetto.origamigui.tray;
 
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -9,8 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import application.console.OrigamiGUI;
-import application.settings.SettingsSingleton;
+import com.pessetto.origamigui.console.OrigamiGUI;
+import com.pessetto.origamigui.settings.SettingsSingleton;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;

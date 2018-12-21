@@ -1,4 +1,4 @@
-package application.constants;
+package com.pessetto.origamigui.constants;
 
 public class ApplicationVariables {
 	public static String convertedMessageFolder = "converted_messages";

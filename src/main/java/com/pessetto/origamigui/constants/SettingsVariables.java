@@ -1,4 +1,4 @@
-package application.constants;
+package com.pessetto.origamigui.constants;
 
 public class SettingsVariables 
 {

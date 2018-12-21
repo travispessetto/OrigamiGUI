@@ -1,4 +1,4 @@
-package application.debug;
+package com.pessetto.origamigui.debug;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

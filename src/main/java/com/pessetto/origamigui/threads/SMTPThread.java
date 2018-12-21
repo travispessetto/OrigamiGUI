@@ -1,11 +1,11 @@
-package application.threads;
+package com.pessetto.origamigui.threads;
 
 import java.net.BindException;
 import java.util.List;
 import com.pessetto.origamismtp.OrigamiSMTP;
-import application.debug.DebugLogSingleton;
-import application.listeners.SMTPErrorListener;
-import application.listeners.SMTPStatusListener;
+import com.pessetto.origamigui.debug.DebugLogSingleton;
+import com.pessetto.origamigui.listeners.SMTPErrorListener;
+import com.pessetto.origamigui.listeners.SMTPStatusListener;
 
 public class SMTPThread implements Runnable{
 

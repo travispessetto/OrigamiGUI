@@ -33,11 +33,11 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
-import application.debug.DebugLogSingleton;
-import application.listeners.TrayIconListener;
-import application.settings.SettingsSingleton;
-import application.threads.SMTPThread;
-import application.tray.SystemTraySingleton;
+import com.pessetto.origamigui.debug.DebugLogSingleton;
+import com.pessetto.origamigui.listeners.TrayIconListener;
+import com.pessetto.origamigui.settings.SettingsSingleton;
+import com.pessetto.origamigui.threads.SMTPThread;
+import com.pessetto.origamigui.tray.SystemTraySingleton;
 
 public class OrigamiGUI extends Application implements ActionListener, TrayIconListener{
 	

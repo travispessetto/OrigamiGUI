@@ -1,4 +1,4 @@
-package application.gui;
+package com.pessetto.origamigui.gui;
 
 
 import com.pessetto.origamismtp.filehandlers.inbox.Message;

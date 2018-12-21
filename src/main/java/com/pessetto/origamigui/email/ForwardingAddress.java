@@ -1,4 +1,4 @@
-package application.email;
+package com.pessetto.origamigui.email;
 
 import java.io.Serializable;
 

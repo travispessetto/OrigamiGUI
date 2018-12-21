@@ -1,4 +1,4 @@
-package application.listeners;
+package com.pessetto.origamigui.listeners;
 
 public interface TrayIconListener 
 {

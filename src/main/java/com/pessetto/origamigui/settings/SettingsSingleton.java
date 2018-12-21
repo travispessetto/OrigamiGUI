@@ -1,4 +1,4 @@
-package application.settings;
+package com.pessetto.origamigui.settings;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,13 +18,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import application.constants.SettingsVariables;
-import application.debug.DebugLogSingleton;
-import application.email.ForwardingAddress;
-import application.listeners.SMTPErrorListener;
-import application.listeners.SMTPStatusListener;
-import application.listeners.SMTPThreadErrorListener;
-import application.threads.SMTPThread;
+import com.pessetto.origamigui.constants.SettingsVariables;
+import com.pessetto.origamigui.debug.DebugLogSingleton;
+import com.pessetto.origamigui.email.ForwardingAddress;
+import com.pessetto.origamigui.listeners.SMTPErrorListener;
+import com.pessetto.origamigui.listeners.SMTPStatusListener;
+import com.pessetto.origamigui.listeners.SMTPThreadErrorListener;
+import com.pessetto.origamigui.threads.SMTPThread;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 

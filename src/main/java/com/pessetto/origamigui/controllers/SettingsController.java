@@ -1,4 +1,4 @@
-package application.controllers;
+package com.pessetto.origamigui.controllers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -7,9 +7,9 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import application.constants.ApplicationVariables;
-import application.email.ForwardingAddress;
-import application.settings.SettingsSingleton;
+import com.pessetto.origamigui.constants.ApplicationVariables;
+import com.pessetto.origamigui.email.ForwardingAddress;
+import com.pessetto.origamigui.settings.SettingsSingleton;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

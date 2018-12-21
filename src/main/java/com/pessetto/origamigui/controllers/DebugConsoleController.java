@@ -1,7 +1,7 @@
-package application.controllers;
+package com.pessetto.origamigui.controllers;
 
-import application.debug.DebugLogSingleton;
-import application.settings.SettingsSingleton;
+import com.pessetto.origamigui.debug.DebugLogSingleton;
+import com.pessetto.origamigui.settings.SettingsSingleton;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
