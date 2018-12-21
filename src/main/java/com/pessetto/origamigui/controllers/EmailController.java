@@ -311,7 +311,7 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 	
 	public void donate()
 	{
-		bridge.openLink("https://www.gitcheese.com/donate/users/930497/repos/81178106");
+		bridge.openLink("https://liberapay.com/travispessetto/");
 	}
 	
 	public void showAbout()

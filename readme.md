@@ -1,6 +1,6 @@
 # Origami SMTP
 
-[![gitcheese.com](https://s3.amazonaws.com/gitcheese-ui-master/images/badge.svg)](https://www.gitcheese.com/donate/users/930497/repos/81178106) [![Gitter chat](https://badges.gitter.im/OrigamiSMTP/gitter.png)](https://gitter.im/OrigamiSMTP) [![Bountysource](https://img.shields.io/bountysource/team/origami-smtp/activity.svg)](https://www.bountysource.com/teams/origami-smtp) [![Github Releases](https://img.shields.io/github/downloads/travispessetto/OrigamiGUI/latest/total.svg)](https://travispessetto.github.io/OrigamiSMTP/#download) [![Build Status](https://travis-ci.org/travispessetto/OrigamiGUI.svg?branch=master)](https://travis-ci.org/travispessetto/OrigamiGUI)
+[![Liberapay](https://img.shields.io/liberapay/receives/Changaco.svg)][![Gitter chat](https://badges.gitter.im/OrigamiSMTP/gitter.png)](https://gitter.im/OrigamiSMTP) [![Bountysource](https://img.shields.io/bountysource/team/origami-smtp/activity.svg)](https://www.bountysource.com/teams/origami-smtp) [![Github Releases](https://img.shields.io/github/downloads/travispessetto/OrigamiGUI/latest/total.svg)](https://travispessetto.github.io/OrigamiSMTP/#download) [![Build Status](https://travis-ci.org/travispessetto/OrigamiGUI.svg?branch=master)](https://travis-ci.org/travispessetto/OrigamiGUI)
 
 Origami originally started as an attempt to make an SMTP server for development that could
 handle TLS (secure) connections due to a project I was working on at work.  There was code
