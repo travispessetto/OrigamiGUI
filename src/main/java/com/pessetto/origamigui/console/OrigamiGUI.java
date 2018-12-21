@@ -125,14 +125,23 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 	
 	public static void main(String[] args)
 	{
+		try
+		{
+		System.out.println("starting Origami GUI");
 		String workingDir = System.getProperty("user.dir");
 		File workingDirFile = new File(workingDir+"/Origami SMTP");
+		System.out.println("working dir: " + workingDirFile.getAbsolutePath());
 		if(!workingDirFile.exists())
 		{
-			workingDirFile.mkdirs();
+			System.out.println("working dir non exist");
+			if(!workingDirFile.mkdirs())
+			{
+				System.out.println("Failed to make directory");
+			}
 		}
 		if(!workingDirFile.canWrite())
 		{
+			System.out.println("Cannot write dir");
 			System.err.println("Directory not writable ("+workingDirFile+")");
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Error: Directory not writable");
@@ -145,6 +154,13 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 			System.out.println("Origami GUI");
 			System.out.println("Write to: " + workingDirFile.getAbsolutePath() );
 			launch(args);
+		}
+		System.out.println("done");
+		}
+		catch(Exception ex)
+		{
+			System.out.println("Exception:");
+			System.out.println(ex.getMessage());
 		}
 	}
 
