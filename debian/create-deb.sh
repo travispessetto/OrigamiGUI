@@ -8,7 +8,7 @@ mkdir -p origami-smtp_$version/etc/menu
 mkdir -p origami-smtp_$version/usr/bin
 mkdir -p origami-smtp_$version/etc/ssl/certs
 mkdir -p origami-smtp_$version/usr/share/applications
-cp ../origami-smtp.jar ./origami-smtp.jar
+cp ../target/OrigamiGUI*.jar ./origami-smtp.jar
 ./jar2sh.sh linux-launch.config
 cp origami-smtp.jar origami-smtp_$version/usr/bin/origami-smtp.jar
 cp origami-smtp.sh origami-smtp_$version/usr/bin/origami-smtp.sh
