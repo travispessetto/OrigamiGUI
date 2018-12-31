@@ -172,7 +172,7 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 			}
 			else
 			{
-				InputStream emailHTMLHandlerStream = EmailController.class.getClassLoader().getResourceAsStream("jqueryEmailPage.html");
+				InputStream emailHTMLHandlerStream = EmailController.class.getClassLoader().getResourceAsStream("html/jqueryEmailPage.html");
 				String emailExternalForm = ResourceLoader.loadFile(emailHTMLHandlerStream);
 				webengine.loadContent(emailExternalForm, "text/html");
 			}
@@ -187,7 +187,7 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 	private void initDetailsWebView()
 	{
 		detailsWebEngine = detailsWebview.getEngine();
-		InputStream htmlHandlerStream = EmailController.class.getClassLoader().getResourceAsStream("jqueryDetailsPage.html");
+		InputStream htmlHandlerStream = getClass().getClassLoader().getResourceAsStream("html/jqueryDetailsPage.html");
 		String detailsExternalForm = ResourceLoader.loadFile(htmlHandlerStream);
 		detailsWebEngine.loadContent(detailsExternalForm,"text/html");
 	}

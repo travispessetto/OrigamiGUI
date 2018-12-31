@@ -29,6 +29,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.PrintStream;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
@@ -43,6 +44,7 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 	
 	private Image icon;
 	private Stage mainStage;
+	private static PrintStream debugOut;
 	private static DebugLogSingleton debugLog;
 	
 	
@@ -52,7 +54,7 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 		Platform.setImplicitExit(false);
 		
 		// icons
-		icon = new Image(getClass().getClassLoader().getResourceAsStream("origami.png"));
+		icon = new Image(getClass().getClassLoader().getResourceAsStream("icons/origami.png"));
 		stage.getIcons().add(icon);
 		
 		SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
@@ -60,7 +62,7 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 		systemTray.addActionListener(this);
 		systemTray.startTrayIcon();
 		
-		VBox console = FXMLLoader.load(getClass().getClassLoader().getResource("Console.fxml"));
+		VBox console = FXMLLoader.load(getClass().getClassLoader().getResource("gui/Console.fxml"));
 		Scene scene = new Scene(console);
 		
 		
@@ -127,6 +129,7 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 	{
 		try
 		{
+		debugOut = System.err;
 		System.out.println("starting Origami GUI");
 		String workingDir = System.getProperty("user.dir");
 		File workingDirFile = new File(workingDir+"/Origami SMTP");
@@ -159,8 +162,9 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 		}
 		catch(Exception ex)
 		{
-			System.out.println("Exception:");
-			System.out.println(ex.getMessage());
+			debugOut.println("Exception:");
+			debugOut.println(ex.getMessage());
+			ex.printStackTrace(debugOut);
 		}
 	}
 
