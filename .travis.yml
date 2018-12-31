@@ -10,20 +10,18 @@ language: java
 jdk:
         - oraclejdk8
 script: 
-        - ant clean
-        - ant build
+        - mvn package
         - ./update-windows-installer-version.sh
         - cp resources/origami.ico ./origami.ico
         - ./launch4j-linux/launch4j launch4j.cfg.xml
         - makensis install.nsi
         - ./debian/create-deb.sh
         - ./check-jar-is-good.sh
-        - ls
 deploy:
         provider: releases
         file_glob: true
         file:
-                - "origami-smtp.jar"
+                - "target/origami-smtp*.jar"
                 - "origami-smtp_*.exe"
                 - "origami-smtp_*.deb"
         skip_cleanup: true

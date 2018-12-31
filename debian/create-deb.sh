@@ -1,6 +1,6 @@
 #!/bin/sh
 cd ./debian
-version=`cat ../resources/VERSION`
+version=`cat ../src/main/resources/VERSION`
 letterFreeVersion=`echo $version | sed -e "s/v//g"`
 mkdir origami-smtp_$version
 mkdir origami-smtp_$version/DEBIAN

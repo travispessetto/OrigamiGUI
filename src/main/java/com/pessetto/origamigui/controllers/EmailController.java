@@ -132,8 +132,8 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 	{
 		try {
 			Stage stage = new Stage();
-			stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("origami.png")));
-			AnchorPane settings = FXMLLoader.load(getClass().getClassLoader().getResource("ServerSettings.fxml"));
+			stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("icons/origami.png")));
+			AnchorPane settings = FXMLLoader.load(getClass().getClassLoader().getResource("gui/ServerSettings.fxml"));
 			Scene scene = new Scene(settings);
 			stage.setTitle("Origami SMTP Settings");
 			stage.setScene(scene);
@@ -319,8 +319,8 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 		try 
 		{
 			Stage stage = new Stage();
-			stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("origami.png")));
-			AnchorPane settings = FXMLLoader.load(getClass().getClassLoader().getResource("About.fxml"));
+			stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("icons/origami.png")));
+			AnchorPane settings = FXMLLoader.load(getClass().getClassLoader().getResource("gui/About.fxml"));
 			Scene scene = new Scene(settings,600,221);
 			stage.setTitle("About Origami SMTP");
 			stage.setScene(scene);
@@ -337,8 +337,8 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 		{
 			System.out.println("Show debug console");
 			Stage stage = new Stage();
-			stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("origami.png")));
-			AnchorPane debug = FXMLLoader.load(getClass().getClassLoader().getResource("DebugConsole.fxml"));
+			stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("icons/origami.png")));
+			AnchorPane debug = FXMLLoader.load(getClass().getClassLoader().getResource("gui/DebugConsole.fxml"));
 			Scene scene = new Scene(debug,600,221);
 			stage.setTitle("Debug Console Origami SMTP");
 			stage.setScene(scene);

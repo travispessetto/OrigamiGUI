@@ -2,7 +2,7 @@
 <launch4jConfig>
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>origami-smtp.jar</jar>
+  <jar>target/OrigamiGUI-{version}.jar</jar>
   <outfile>Origami SMTP.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>

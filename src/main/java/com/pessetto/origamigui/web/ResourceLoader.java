@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.pessetto.origamigui.controllers.EmailController;
+import com.pessetto.origamigui.debug.DebugLogSingleton;
 
 public class ResourceLoader
 {
@@ -28,6 +29,7 @@ public class ResourceLoader
 	
 	public static String ExternalJSLoader(String html)
 	{
+		DebugLogSingleton debuglog = DebugLogSingleton.getInstance();
 		Pattern p = Pattern.compile("src=\"(.+)\"");
 		Matcher m = p.matcher(html);
 		while(m.find())

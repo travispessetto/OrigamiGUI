@@ -4,7 +4,7 @@
 !define UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\OrigamiSMTP"
 !define SFT_VERSION "{version}"
 !define JRE_URL "http://s3-us-west-2.amazonaws.com/origami-dependencies/jre-10.0.1_windows-x64_bin.exe"
-!insertmacro MUI_PAGE_LICENSE "resources/license.txt"
+!insertmacro MUI_PAGE_LICENSE "src/main/resources/license.txt"
 !insertmacro MUI_PAGE_INSTFILES
 
 
