@@ -38,7 +38,7 @@ CreateDirectory "$APPDATA\Origami SMTP"
 
 #Install the files
 
-File "OrigamiGUI-{version}.jar"
+File "target/OrigamiGUI-{version}.jar"
 File "Origami SMTP.exe"
 
 WriteUninstaller $INSTDIR\uninstaller.exe
