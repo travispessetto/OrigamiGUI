@@ -13,3 +13,4 @@ origami-smtp.jar
 /target/
 \.project
 \.classpath
+\.settings*
