@@ -50,6 +50,7 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 	
 	@Override
 	public void start(Stage stage) throws Exception {
+		
 		mainStage = stage;
 		Platform.setImplicitExit(false);
 		

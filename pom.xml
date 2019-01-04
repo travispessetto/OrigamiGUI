@@ -138,6 +138,12 @@
             <version>1.11.2</version>
             <type>jar</type>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180813</version>
+            <type>jar</type>
+        </dependency>
   	</dependencies>
 
 </project>

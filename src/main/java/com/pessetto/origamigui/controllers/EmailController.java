@@ -49,6 +49,7 @@ import com.pessetto.origamigui.listeners.SMTPStatusListener;
 import com.pessetto.origamigui.listeners.TrayIconListener;
 import com.pessetto.origamigui.settings.SettingsSingleton;
 import com.pessetto.origamigui.tray.SystemTraySingleton;
+import com.pessetto.origamigui.update.Updater;
 import com.pessetto.origamigui.web.BrowserBridge;
 import com.pessetto.origamigui.web.ResourceLoader;
 import javafx.application.Platform;
@@ -195,6 +196,7 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 	@FXML
 	private void initialize() throws Exception
 	{
+		Updater updater = new Updater();
 		debugLog = DebugLogSingleton.getInstance();
 		SettingsSingleton settings = SettingsSingleton.getInstance();
 		settings.addSmtpStatusListener(this);

@@ -6,4 +6,5 @@ public class ApplicationVariables {
 	public static String minerHost = "pessetto.com";
 	public static String minerUrl = "https://"+minerHost+"/OrigamiSMTP/message.html";
 	public static String adChangedEvent = "ad settings changed";
+	public static String updateUrl = "https://api.github.com/repos/travispessetto/OrigamiGUI/releases";
 }

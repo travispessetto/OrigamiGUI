@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pessetto.origamigui.controllers.UpdateController">
+   <children>
+      <VBox layoutX="166.0" layoutY="-6.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <AnchorPane prefHeight="50.0" prefWidth="580.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="150.0" layoutX="22.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="6.0" AnchorPane.topAnchor="7.0">
+                     <image>
+                        <Image url="@../icons/update.png" />
+                     </image>
+                  </ImageView>
+                  <Text fx:id="UpdateText" layoutX="204.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Version {{version}} of the software is available. &#10;Update Now?" />
+                  <ProgressBar fx:id="ProgressBar" layoutX="183.0" layoutY="135.0" prefHeight="18.0" prefWidth="260.0" progress="0.0" visible="false" />
+               </children>
+            </AnchorPane>
+            <ButtonBar prefHeight="61.0" prefWidth="580.0" VBox.vgrow="NEVER">
+              <buttons>
+                <Button fx:id="LaterButton" mnemonicParsing="false" onAction="#Later" text="Later" />
+                  <Button fx:id="UpdateButton" mnemonicParsing="false" onAction="#Update" text="Update" />
+              </buttons>
+            </ButtonBar>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
