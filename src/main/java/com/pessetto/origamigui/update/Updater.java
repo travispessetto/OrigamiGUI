@@ -47,10 +47,6 @@ public class Updater
 		{
 			return windowsLocation;
 		}
-		else if(os.contains("debian"))
-		{
-			return debianLocation;
-		}
 		else
 		{
 			return otherLocation;
@@ -85,16 +81,21 @@ public class Updater
 	
 	private void checkLatestVersion()
 	{
-		latestVersion = findLatestVersion(updateAsJson());
-		String currentVersion = findCurrentVersion();
-		if(!currentVersion.trim().equals(latestVersion.trim()))
+		String os = System.getProperty("os.name").toLowerCase();
+		//Linux should use their package manager
 		{
-			System.out.println("Update avalible");
-			showUpdateDialog();
-		}
-		else
-		{
-			System.out.println("Application up to date");
+			if(!os.equals("linux"))
+			latestVersion = findLatestVersion(updateAsJson());
+			String currentVersion = findCurrentVersion();
+			if(!currentVersion.trim().equals(latestVersion.trim()))
+			{
+				System.out.println("Update avalible");
+				showUpdateDialog();
+			}
+			else
+			{
+				System.out.println("Application up to date");
+			}
 		}
 	}
 	

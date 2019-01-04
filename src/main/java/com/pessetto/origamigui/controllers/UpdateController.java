@@ -96,6 +96,7 @@ public class UpdateController {
 							UpdateText.setText("Opening installer...");	
 							Updater.runSystemInstallCmd(name);
 							Platform.exit();
+							Updater.close();
 						}
 						catch(Exception ex)
 						{
