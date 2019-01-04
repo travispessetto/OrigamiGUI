@@ -11,3 +11,5 @@ Origami.SMTP.sh
 Origami.SMTP.jar
 origami-smtp.jar
 /target/
+\.project
+\.classpath
