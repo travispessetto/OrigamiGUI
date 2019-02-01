@@ -2,6 +2,7 @@ package com.pessetto.origamigui.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 
 import com.pessetto.origamigui.update.UpdateThread;
 import com.pessetto.origamigui.update.Updater;
