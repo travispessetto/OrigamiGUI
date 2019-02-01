@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>OrigamiGUI</groupId>
   <artifactId>OrigamiGUI</artifactId>
-  <version>1.8.2</version>
+  <version>1.8.3</version>
   <name>OrigamiGUI</name>
   <description>The GUI to OrigamiSMTP</description>
   
@@ -123,7 +123,7 @@
   		<dependency>
   			<groupId>com.pessetto.origamismtp</groupId>
   			<artifactId>OrigamiSMTP</artifactId>
-  			<version>1.1.1</version>
+  			<version>1.1.2</version>
 		</dependency>
 		<dependency>
             <groupId>javax.mail</groupId>
