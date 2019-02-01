@@ -86,7 +86,7 @@ WriteRegStr HKLM "${UNINST_KEY}" "Publisher" "Travis Pessetto"
 
 SectionEnd
 
-Function .Function .onInit
+Function .onInit
   call RunUninstallerIfExists
 FunctionEnd
 
