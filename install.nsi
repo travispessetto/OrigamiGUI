@@ -86,6 +86,9 @@ WriteRegStr HKLM "${UNINST_KEY}" "Publisher" "Travis Pessetto"
 
 SectionEnd
 
+Function .Function .onInit
+  call RunUninstallerIfExists
+FunctionEnd
 
 
 Function FindJava
@@ -167,6 +170,26 @@ Function FindJava
 		Call JavaRefused
 	
 
+FunctionEnd
+
+Function RunUninstallerIfExists
+	ReadRegStr $R0 HKLM \
+	"Software\Microsoft\Windows\CurrentVersion\Uninstall\${PROGRAM_NAME}" \
+	"UninstallString"
+	StrCmp $R0 "" done
+
+	MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+	"${PROGRAM_NAME} is already installed. $\n$\nClick `OK` to remove the \
+	previous version or `Cancel` to cancel this upgrade." \
+	IDOK uninst
+	Abort
+
+	;Run the uninstaller
+	uninst:
+	ClearErrors
+	Exec $R0
+
+	done:
 FunctionEnd
 
 Function JavaRefused
