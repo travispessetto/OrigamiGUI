@@ -372,8 +372,12 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 	
 	private String scrubContent(String message)
 	{
-		String scrubbedContent = message.replaceAll("\\r?\\n","\\\\n");
-		scrubbedContent = scrubbedContent.replace("\"", "\\\"");
+		String scrubbedContent = null;
+		if(message != null)
+		{
+			scrubbedContent = message.replaceAll("\\r?\\n","\\\\n");
+			scrubbedContent = scrubbedContent.replace("\"", "\\\"");
+		}
 		return scrubbedContent;
 	}
 	
@@ -526,7 +530,10 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 		try
 		{
 			String plainContent = message.getPlainMessage();
-			plainContent = scrubContent(plainContent);
+			if(plainContent != null)
+			{
+				plainContent = scrubContent(plainContent);
+			}
 			String htmlContent = message.getHTMLMessage();
 			htmlContent = HtmlToViewableSource(htmlContent);
 			
@@ -564,9 +571,13 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 			{
 				loadEmail(webengine,message.getHTMLMessage());
 			}
-			else
+			else if(message.getPlainMessage() != null)
 			{
 				loadEmail(webengine,message.getPlainMessage());
+			}
+			else
+			{
+				loadEmail(webengine,message.getMessage());
 			}
 			loadAttachments(webengine,message);
 			loadSelectedEmailDetails(message);

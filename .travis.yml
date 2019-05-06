@@ -11,10 +11,12 @@ jdk:
         - oraclejdk8
 script: 
         - mvn package
+        - mvn jfx:native
         - ./update-windows-installer-version.sh
         - ./launch4j-linux/launch4j launch4j.cfg.xml
         - makensis install.nsi
         - ./debian/create-deb.sh
+        - ls ./target/jfx/native 
 deploy:
         provider: releases
         file_glob: true
