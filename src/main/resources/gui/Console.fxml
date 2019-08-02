@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -10,14 +11,18 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <?import javafx.scene.web.WebView?>
 
 <?import com.pessetto.origamigui.gui.EmailTableFactory?>
 <?import com.pessetto.origamigui.gui.EmailTableValueFactory ?>
-
-<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pessetto.origamigui.controllers.EmailController">
+<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pessetto.origamigui.controllers.EmailController" stylesheets="@Console.css">
    <children>
       <MenuBar>
          <menus>
@@ -36,6 +41,23 @@
             </Menu>
          </menus>
       </MenuBar>
+      <HBox prefHeight="75.0" prefWidth="600.0">
+         <children>
+            <ImageView pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+               <image>
+                  <Image url="@../icons/logo_64.png" />
+               </image>
+               <HBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </HBox.margin>
+            </ImageView>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Origami SMTP">
+               <font>
+                  <Font name="Leelawadee UI" size="62.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
       <SplitPane dividerPositions="0.42474916387959866" VBox.vgrow="ALWAYS">
          <items>
             <AnchorPane maxWidth="400.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="100.0">
@@ -84,7 +106,7 @@
             </AnchorPane>
          </items>
       </SplitPane>
-      <ToolBar>
+      <ToolBar prefWidth="602.0">
          <items>
             <Label fx:id="smtpStatus" text="SMTP Status" />
          </items>

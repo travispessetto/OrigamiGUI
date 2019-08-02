@@ -66,7 +66,6 @@ public class OrigamiGUI extends Application implements ActionListener, TrayIconL
 		VBox console = FXMLLoader.load(getClass().getClassLoader().getResource("gui/Console.fxml"));
 		Scene scene = new Scene(console);
 		
-		
 		mainStage.setTitle("Origami SMTP");
 		mainStage.setScene(scene);
 		

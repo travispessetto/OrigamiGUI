@@ -1,0 +1,11 @@
+*
+{
+	-fx-background-color: white;
+}
+
+#emails, #webview
+{
+	-fx-border-width: 3;
+	-fx-border-style: solid;
+	-fx-border-color: #ccc;
+}
