@@ -11,6 +11,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import javafx.beans.property.SimpleBooleanProperty;
 
 public class EmailTableFactory implements Callback<TableColumn<Message,Message>,TableCell<Message,Message>> {
 
