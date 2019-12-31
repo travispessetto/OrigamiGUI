@@ -114,9 +114,9 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.zenjava</groupId>
+                <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
-                <version>8.8.3</version>
+                <version>0.0.3</version>
                 <configuration>
                     <vendor>Travis Pessetto</vendor>
                     <mainClass>
