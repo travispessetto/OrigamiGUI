@@ -16,6 +16,7 @@ script:
         - ./launch4j-linux/launch4j launch4j.cfg.xml
         - makensis install.nsi
         - ./debian/create-deb.sh
+        - ls
         - ls ./target/
 deploy:
         provider: releases
