@@ -22,25 +22,8 @@
 
 <?import com.pessetto.origamigui.gui.EmailTableFactory?>
 <?import com.pessetto.origamigui.gui.EmailTableValueFactory ?>
-<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pessetto.origamigui.controllers.EmailController" stylesheets="@Console.css">
+<VBox prefHeight="600.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pessetto.origamigui.controllers.EmailController" stylesheets="@Console.css" fx:id="console">
    <children>
-      <MenuBar>
-         <menus>
-            <Menu mnemonicParsing="false" text="File">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#handleServerSettingsMenuItemClicked" text="Settings" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleDebugMenuClicked" text="Debug Console" />
-                  <MenuItem mnemonicParsing="false" onAction="#handleExitMenuItemClicked" text="Exit" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />
-                  <MenuItem mnemonicParsing="false" onAction="#donate" text="Donate" />
-               </items>
-            </Menu>
-         </menus>
-      </MenuBar>
       <HBox prefHeight="75.0" prefWidth="600.0">
          <children>
             <ImageView pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
@@ -58,6 +41,23 @@
             </Text>
          </children>
       </HBox>
+      <MenuBar>
+         <menus>
+            <Menu mnemonicParsing="false" text="File">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#handleServerSettingsMenuItemClicked" text="Settings" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleDebugMenuClicked" text="Debug Console" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleExitMenuItemClicked" text="Exit" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />
+                  <MenuItem mnemonicParsing="false" onAction="#donate" text="Donate" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
       <SplitPane dividerPositions="0.42474916387959866" VBox.vgrow="ALWAYS">
          <items>
             <AnchorPane maxWidth="400.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="100.0">
@@ -79,7 +79,7 @@
                   </TableView>
                </children>
             </AnchorPane>
-            <AnchorPane minWidth="-Infinity">
+            <AnchorPane minWidth="-Infinity" fx:id="messagePane">
                <children>
                   <TabPane tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <tabs>
@@ -97,7 +97,8 @@
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                  <children>
                                     <WebView fx:id="detailsWebview" layoutX="37.0" layoutY="43.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                                 </children></AnchorPane>
+                                 </children>
+                          </AnchorPane>
                         </content>
                       </Tab>
                     </tabs>
@@ -106,7 +107,7 @@
             </AnchorPane>
          </items>
       </SplitPane>
-      <ToolBar prefWidth="602.0">
+      <ToolBar prefWidth="602.0" fx:id="statusbar">
          <items>
             <Label fx:id="smtpStatus" text="SMTP Status" />
          </items>

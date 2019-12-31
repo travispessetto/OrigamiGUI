@@ -1,11 +1,69 @@
-*
+.root
 {
 	-fx-background-color: white;
 }
 
-#emails, #webview
+.tab 
 {
-	-fx-border-width: 3;
-	-fx-border-style: solid;
-	-fx-border-color: #ccc;
+    -fx-faint-focus-color: transparent;
+    -fx-background-color: white;
+}
+
+.tab-label
+{
+    -fx-text-fill: #5DBCD2;
+}
+
+.tab:selected
+{
+    -fx-background-color: #5DBCD2;
+}
+
+.tab:selected .tab-label
+{
+    -fx-text-fill: white;
+}
+
+.menu-bar
+{
+    -fx-background-color: white;
+}
+
+.menu:hover, .menu:focused, .menu:showing
+{
+    -fx-background-color: #5DBCD2;
+}
+
+.tabs
+{
+    -fx-background-color: red;
+}
+
+.tab-pane > .tab-header-area > .tab-header-background 
+{
+    -fx-background-color: white;
+    -fx-border-color: #ccc;
+    -fx-border-width: 0 0 1 0;
+}
+
+
+.menu-item:focused
+{
+    -fx-background-color: #5DBCD2;
+}
+
+.label
+{
+    -fx-background-color: transparent;
+}
+
+#statusbar, #statusbar *
+{
+    -fx-background-color: #c3e7ef;
+    -fx-font-weight: bold;
+}
+
+#smtpStatus
+{
+    -fx-background-color: transparent;
 }

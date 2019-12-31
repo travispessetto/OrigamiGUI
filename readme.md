@@ -1,4 +1,4 @@
-# Origami SMTP
+# Origami SMTP (Origami GUI)
 
 [![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/travispessetto/donate)[![Gitter chat](https://badges.gitter.im/OrigamiSMTP/gitter.png)](https://gitter.im/OrigamiSMTP) [![Bountysource](https://img.shields.io/bountysource/team/origami-smtp/activity.svg)](https://www.bountysource.com/teams/origami-smtp) [![Github Releases](https://img.shields.io/github/downloads/travispessetto/OrigamiGUI/latest/total.svg)](https://travispessetto.github.io/OrigamiSMTP/#download) [![Build Status](https://travis-ci.org/travispessetto/OrigamiGUI.svg?branch=master)](https://travis-ci.org/travispessetto/OrigamiGUI)
 
@@ -10,6 +10,18 @@ I tried either did not have the ability to use TLS or crashed thus Origami SMTP 
 It started out and still is two separate projects. [Origami SMTP][1] was the console application
 and library and Origami GUI (this project) was the graphical user interface for that library
 in order to make it easier to use. I decided to call the combined work Origami SMTP.
+
+This project, Origami GUI, is built around JavaFX and in the latest versions of Java you will
+have to do some additional steps to get it to run.  Instructions will be provided for Netbeans
+only at this time.
+
+## Configuring Netbeans
+
+After you have imported the project into Netbeans:
+
+* Make sure you have downloaded the [OpenJFX Libraries][2] and installed them to a location you are comfortable with (I used C:\javafx-sdk-11.0.2)
+* Right-click on the project name and the Properties in the menu
+* Find run under Categories and then enter the arguments `--module-path=C:\javafx-sdk-11.0.2\lib --add-modules=javafx.controls,javafx.graphics,javafx.fxml,javafx.web,javafx.base`, but make sure to change this to your machine's path.  That should be it.
 
 ## Contributing
 
@@ -53,3 +65,4 @@ fi
 [MIT License](license.txt)
 
 [1]: https://github.com/travispessetto/origamismtp
+[2]: https://openjfx.io/
