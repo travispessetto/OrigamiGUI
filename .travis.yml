@@ -11,7 +11,7 @@ jdk:
         - oraclejdk13
 script: 
         - mvn package
-        - mvn jfx:native
+        - mvn javafx:compile
         - ./update-windows-installer-version.sh
         - ./launch4j-linux/launch4j launch4j.cfg.xml
         - makensis install.nsi
