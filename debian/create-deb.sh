@@ -13,7 +13,7 @@ cp ../target/OrigamiGUI*.jar ./origami-smtp.jar
 cp origami-smtp.jar origami-smtp_$version/usr/bin/origami-smtp.jar
 cp origami-smtp.sh origami-smtp_$version/usr/bin/origami-smtp.sh
 cp ../license.txt origami-smtp_$version/usr/bin/license.txt
-cp ../VERSION origami-smtp_$version/usr/bin/VERSION
+cp ../src/main/resources/VERSION origami-smtp_$version/usr/bin/VERSION
 sed -i "s/{version}/$letterFreeVersion/g" debian-control
 cp debian-control origami-smtp_$version/DEBIAN/control
 cp origami-smtp.desktop origami-smtp_$version/usr/share/applications/origami-smtp.desktop
