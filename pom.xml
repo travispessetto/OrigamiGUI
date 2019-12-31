@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>OrigamiGUI</groupId>
   <artifactId>OrigamiGUI</artifactId>
-  <version>1.8.3</version>
+  <version>1.9.2</version>
   <name>OrigamiGUI</name>
   <description>The GUI to OrigamiSMTP</description>
   
