@@ -3,4 +3,4 @@ Version: {version}
 Maintainer: Travis Pessetto
 Architecture: all
 Description: A fake SMTP client for developer use programmed in Java
-Depends: default-jre | ibm-java80-jre, openjfx 
+Depends: openjdk-11-jre, openjfx 

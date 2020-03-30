@@ -126,7 +126,8 @@ public class Updater implements Serializable
 		String os = System.getProperty("os.name").toLowerCase();
 		//Linux should use their package manager
 		{
-			if(!os.equals("linux"))
+			if(!(os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0))
+                        System.out.println("OS is: " + os);
 			latestVersion = findLatestVersion(updateAsJson());
 			String currentVersion = findCurrentVersion();
 			if(!currentVersion.trim().equals(latestVersion.trim()))

@@ -18,11 +18,12 @@ script:
         - ./debian/create-deb.sh
         - ls
         - ls ./target/
+        - cp target/OrigamiGUI-*.jar target/origami-smtp.jar
 deploy:
         provider: releases
         file_glob: true
         file:
-                - "target/origami-smtp*.jar"
+                - "target/origami-smtp.jar"
                 - "origami-smtp_*.exe"
                 - "origami-smtp_*.deb"
         skip_cleanup: true
