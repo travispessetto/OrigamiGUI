@@ -5,6 +5,7 @@
 !define SFT_VERSION "{version}"
 !define JRE_URL "http://s3-us-west-2.amazonaws.com/origami-dependencies/jre-10.0.1_windows-x64_bin.exe"
 !insertmacro MUI_PAGE_LICENSE "src/main/resources/license.txt"
+!insertmacro MUI_PAGE_LICENSE "src/main/resources/sapmachine-license.txt"
 !insertmacro MUI_PAGE_INSTFILES
 
 
@@ -24,7 +25,8 @@ Section
 SetShellVarContext all
 
 #Check Java Version
-Call FindJava
+#Disabled because we will now pack in sap machine
+#Call FindJava
 
 SetRegView 32
 
@@ -40,6 +42,7 @@ CreateDirectory "$APPDATA\Origami SMTP"
 
 File "target/OrigamiGUI-{version}.jar"
 File "Origami SMTP.exe"
+File /r "windows\"
 
 WriteUninstaller $INSTDIR\uninstaller.exe
 

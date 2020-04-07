@@ -67,3 +67,9 @@
 {
     -fx-background-color: transparent;
 }
+
+#appTitle
+{
+    -fx-text-fill: #b7c8c4;
+    -fx-fill: #b7c8c4;
+}

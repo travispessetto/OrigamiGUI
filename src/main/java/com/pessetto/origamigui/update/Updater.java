@@ -148,6 +148,10 @@ public class Updater implements Serializable
 
 	private String findLatestVersion(JSONArray jsonArr)
 	{
+                if(jsonArr == null)
+                {
+                    return null;
+                }
 		for(int i = 0; i < jsonArr.length(); ++i)
 		{
 			JSONObject obj = (JSONObject)jsonArr.get(i);
@@ -235,8 +239,21 @@ public class Updater implements Serializable
 	
 	private JSONArray updateAsJson()
 	{
-		JSONArray arr = new JSONArray(readUpdateAsString());
+            try
+            {
+                String rawData = readUpdateAsString();
+                System.out.println("Raw Data:");
+                System.out.println(rawData);
+                System.out.println();
+		JSONArray arr = new JSONArray(rawData);
 		return arr;
+            }
+            catch(Exception ex)
+            {
+                System.err.println("Could not update due to issue with JSON parsing");
+                ex.printStackTrace(System.err);
+            }
+            return null;
 	}
 	
 	public void serialize() {
