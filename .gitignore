@@ -3,7 +3,6 @@ bin
 *\.class
 *\.mht
 *\.ser
-*\.exe
 *\.deb
 *\.log
 Origami\ SMTP.jar
