@@ -13,7 +13,7 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>.\src\main\resources\origami.ico</icon>
+  <icon>..\src\main\resources\origami.ico</icon>
   <jre>
     <path>./jre</path>
     <bundledJre64Bit>true</bundledJre64Bit>
