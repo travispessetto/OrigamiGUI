@@ -20,7 +20,7 @@
     <bundledJreAsFallback>false</bundledJreAsFallback>
     <minVersion>1.8.0</minVersion>
     <maxVersion></maxVersion>
-    <jdkPreference>jreOnly</jdkPreference>
+    <jdkPreference>jdkOnly</jdkPreference>
     <runtimeBits>64</runtimeBits>
     <opt>-Duser.dir=&quot;%appdata%&quot;</opt>
   </jre>
