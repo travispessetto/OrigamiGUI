@@ -15,7 +15,7 @@
   <manifest></manifest>
   <icon>./src/main/resources/origami.ico</icon>
   <jre>
-    <path>./jre</path>
+    <path>./sapmachine-jre-11.0.6.0.1</path>
     <bundledJre64Bit>true</bundledJre64Bit>
     <bundledJreAsFallback>false</bundledJreAsFallback>
     <minVersion>1.8.0</minVersion>
@@ -23,5 +23,7 @@
     <jdkPreference>jdkOnly</jdkPreference>
     <runtimeBits>64</runtimeBits>
     <opt>-Duser.dir=&quot;%appdata%&quot;</opt>
+	<opt>--module-path .\javafx-sdk-11.0.2\lib</opt>
+	<opt>--add-modules javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.media,javafx.swing,javafx.web</opt>
   </jre>
 </launch4jConfig>
