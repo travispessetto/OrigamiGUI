@@ -45,7 +45,7 @@ public class UpdateThread  implements Runnable{
 			while((x = in.read(data,0,1024)) >=0)
 			{
 				downloadFileSize += x;
-				final int currentProgress = (int)((((double)downloadFileSize) / ((double)completeFileSize)) * 100000d);
+				double currentProgress = ((double)downloadFileSize) / ((double)completeFileSize);
 				controller.setProgress(currentProgress);
 				bos.write(data, 0, x);
 			}

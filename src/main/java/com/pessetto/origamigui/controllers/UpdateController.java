@@ -70,7 +70,7 @@ public class UpdateController {
 		updateThread.start();
 	}
 	
-	public void setProgress(int progress)
+	public void setProgress(double progress)
 	{
 		Platform.runLater(new Runnable()
 		{
