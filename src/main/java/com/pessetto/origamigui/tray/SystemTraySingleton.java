@@ -7,7 +7,6 @@ import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import com.pessetto.origamigui.console.OrigamiGUI;
 import com.pessetto.origamigui.settings.SettingsSingleton;
@@ -26,6 +25,7 @@ public class SystemTraySingleton
 	private ArrayList<ActionListener> actionListeners;
 	private Image icon;
 	private boolean started;
+        private Alert trayIconAlert;
 	
 	private SystemTraySingleton()
 	{
@@ -122,10 +122,10 @@ public class SystemTraySingleton
 				
 					});
 		}
-		else
-		{
-			Alert alert = new Alert(AlertType.INFORMATION, message, ButtonType.OK);
-			alert.show();
+                else if(trayIconAlert != null || !trayIconAlert.isShowing())
+		{                        
+			trayIconAlert = new Alert(AlertType.INFORMATION, message, ButtonType.OK);
+			trayIconAlert.show();
 		}
 		
 	}

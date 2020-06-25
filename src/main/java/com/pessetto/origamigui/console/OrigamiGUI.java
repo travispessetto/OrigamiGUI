@@ -2,42 +2,27 @@ package com.pessetto.origamigui.console;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.util.Optional;
 
-import javax.imageio.ImageIO;
-
 import com.pessetto.origamigui.debug.DebugLogSingleton;
 import com.pessetto.origamigui.listeners.TrayIconListener;
 import com.pessetto.origamigui.settings.SettingsSingleton;
-import com.pessetto.origamigui.threads.SMTPThread;
 import com.pessetto.origamigui.tray.SystemTraySingleton;
 
 public class OrigamiGUI extends Application implements ActionListener, TrayIconListener{

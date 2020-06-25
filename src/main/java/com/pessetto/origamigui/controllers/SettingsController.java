@@ -62,6 +62,9 @@ public class SettingsController
    @FXML
    protected CheckBox jseCoin;
    
+   @FXML
+   protected TextField maxInboxMessages;
+   
    private ObservableList<ForwardingAddress> forwardingEmailAddresses;
    
    private LinkedList<ForwardingAddress> emailList ;
@@ -156,10 +159,11 @@ public class SettingsController
 	   loadRemoteSmtpSettings();
 	   loadBrowserSettings();
 	   loadAdSettings();
+           loadInboxSettings();
    }
    
    @FXML
-   public void saveAdSettings(Event e)
+   private void saveAdSettings(Event e)
    {
 	   SettingsSingleton settings = SettingsSingleton.getInstance();
 	   settings.setCoinMinerEnabled(jseCoin.isSelected());
@@ -171,6 +175,46 @@ public class SettingsController
 	   alert.setHeaderText(null);
 	   alert.setContentText("SMTP settings applied");
 	   alert.showAndWait();
+   }
+   
+   @FXML
+   private void saveInboxSettings(Event event)
+   {
+       SettingsSingleton settings = SettingsSingleton.getInstance();
+       String maxInboxMessagesText = maxInboxMessages.getText();
+       if(maxInboxMessagesText.isBlank())
+       {
+            settings.setMaxInboxMessages(0);
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Inbox settings saved");
+            alert.setHeaderText(null);
+            alert.setContentText("Inbox settings were successfully applied");
+            alert.showAndWait();
+            settings.serialize();
+       }
+       else
+       {
+            try
+            {
+                int maxInboxMessagesInt = Integer.parseInt(maxInboxMessagesText);
+                settings.setMaxInboxMessages(maxInboxMessagesInt);
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Inbox settings saved");
+                alert.setHeaderText(null);
+                alert.setContentText("Inbox settings were successfully applied");
+                alert.showAndWait();
+                settings.serialize();
+            }
+            catch(NumberFormatException nfe)
+            {
+               Alert alert = new Alert(AlertType.ERROR);
+               alert.setTitle("Invalid number");
+               alert.setHeaderText(null);
+               alert.setContentText("The provided maximum inbox messages must be an integer");
+               alert.showAndWait();
+               settings.serialize();
+            }
+       }
    }
    
    private void saveLocalSmtpSettings()
@@ -209,6 +253,12 @@ public class SettingsController
    {
 	   SettingsSingleton settings = SettingsSingleton.getInstance();
 	   jseCoin.setSelected(settings.isCoinMinerEnabled());
+   }
+   
+   private void loadInboxSettings()
+   {
+       SettingsSingleton settings = SettingsSingleton.getInstance();
+       maxInboxMessages.setText(Integer.toString(settings.getMaxInboxMessages()));
    }
    
    private void loadLocalSmtpSettings()

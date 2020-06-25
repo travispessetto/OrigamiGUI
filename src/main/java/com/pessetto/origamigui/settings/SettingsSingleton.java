@@ -5,28 +5,20 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.BindException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.pessetto.origamigui.constants.SettingsVariables;
-import com.pessetto.origamigui.debug.DebugLogSingleton;
 import com.pessetto.origamigui.email.ForwardingAddress;
 import com.pessetto.origamigui.listeners.SMTPErrorListener;
 import com.pessetto.origamigui.listeners.SMTPStatusListener;
 import com.pessetto.origamigui.listeners.SMTPThreadErrorListener;
 import com.pessetto.origamigui.threads.SMTPThread;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import com.pessetto.origamismtp.filehandlers.inbox.Inbox;
 
 public class SettingsSingleton implements Serializable {
 	private static final long serialVersionUID = 3840045425215974393L;
@@ -45,6 +37,7 @@ public class SettingsSingleton implements Serializable {
 	private boolean smtpForwardToRemote;
 	private boolean coinMinerEnabled;
 	private transient LinkedList<ActionListener> actionListeners;
+        private int maxInboxMessages;
 
 	public LinkedList<ForwardingAddress> getSmtpRemoteEmailList() {
 		if(smtpRemoteEmailList == null)
@@ -119,20 +112,30 @@ public class SettingsSingleton implements Serializable {
 	public void setSmtpRemotePort(int smtpRemotePort) {
 		this.smtpRemotePort = smtpRemotePort;
 	}
+        
+        public int getMaxInboxMessages()
+        {
+            return maxInboxMessages;
+        }
+        
+        public void setMaxInboxMessages(int maxMessages)
+        {
+            maxInboxMessages = maxMessages;
+            Inbox inbox = Inbox.getInstance();
+            inbox.setSize(maxMessages);
+        }
 
 	private transient List<SMTPStatusListener> smtpStatusListeners;
 	private transient boolean smtpStarted;
 	private boolean usePrivateBrowsing;
-	private transient static DebugLogSingleton debugLog;
 
 	private SettingsSingleton(int port) {
 		// No direct creation
 		this.port = port;
 		this.minimizeToTray = true;
 		smtpErrorListener = new SMTPThreadErrorListener();
-		smtpStatusListeners = new LinkedList<SMTPStatusListener>();
+		smtpStatusListeners = new LinkedList<>();
 		usePrivateBrowsing = false;
-		debugLog = DebugLogSingleton.getInstance();
 		coinMinerEnabled = true;
 	}
 
@@ -257,7 +260,7 @@ public class SettingsSingleton implements Serializable {
 
 	public void addSmtpStatusListener(SMTPStatusListener listener) {
 		if (smtpStatusListeners == null) {
-			smtpStatusListeners = new LinkedList<SMTPStatusListener>();
+			smtpStatusListeners = new LinkedList<>();
 		}
 		smtpStatusListeners.add(listener);
 	}

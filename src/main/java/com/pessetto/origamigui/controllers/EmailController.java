@@ -2,21 +2,10 @@ package com.pessetto.origamigui.controllers;
 
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardWatchEventKinds;
-import java.nio.file.WatchService;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
-import java.util.EventListener;
 import java.util.LinkedList;
 import java.util.Properties;
 
@@ -31,10 +20,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import com.pessetto.origamismtp.filehandlers.inbox.Attachment;
 import com.pessetto.origamismtp.filehandlers.inbox.DeleteMessageListener;
 import com.pessetto.origamismtp.filehandlers.inbox.Inbox;
@@ -46,7 +31,6 @@ import com.pessetto.origamigui.constants.ApplicationVariables;
 import com.pessetto.origamigui.debug.DebugLogSingleton;
 import com.pessetto.origamigui.email.ForwardingAddress;
 import com.pessetto.origamigui.listeners.SMTPStatusListener;
-import com.pessetto.origamigui.listeners.TrayIconListener;
 import com.pessetto.origamigui.settings.SettingsSingleton;
 import com.pessetto.origamigui.tray.SystemTraySingleton;
 import com.pessetto.origamigui.update.Updater;
@@ -56,22 +40,16 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Worker;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -80,15 +58,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
-import javafx.scene.control.TableRow;
-import javafx.util.Callback;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleBooleanProperty;
 
 import java.net.InetAddress;
 
@@ -115,6 +88,7 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 	private Message selectedMessage;
 	
 	private BrowserBridge bridge;
+        private Alert newMessageAlert;
 	
 	
 	public Message getSelectedMessage() {
@@ -286,13 +260,13 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 					SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
 					systemTray.displayMessage("New Message", "You have a new message", MessageType.INFO);
 				}
-				else
+                                else if(newMessageAlert == null || !newMessageAlert.isShowing())
 				{
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("New Message");
-					alert.setHeaderText(null);
-					alert.setContentText("You have a new message");
-					alert.showAndWait();	
+					newMessageAlert = new Alert(AlertType.INFORMATION);
+					newMessageAlert.setTitle("New Message");
+					newMessageAlert.setHeaderText(null);
+					newMessageAlert.setContentText("You have a new message");
+					newMessageAlert.showAndWait();	
 				}
 			}
 		});
