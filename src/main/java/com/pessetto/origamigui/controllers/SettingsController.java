@@ -1,6 +1,5 @@
 package com.pessetto.origamigui.controllers;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.LinkedList;
 import java.util.Optional;
@@ -64,6 +63,9 @@ public class SettingsController
    
    @FXML
    protected TextField maxInboxMessages;
+   
+   @FXML
+   protected CheckBox showNotificationMessages;
    
    private ObservableList<ForwardingAddress> forwardingEmailAddresses;
    
@@ -182,39 +184,36 @@ public class SettingsController
    {
        SettingsSingleton settings = SettingsSingleton.getInstance();
        String maxInboxMessagesText = maxInboxMessages.getText();
-       if(maxInboxMessagesText.isBlank())
-       {
-            settings.setMaxInboxMessages(0);
+
+        try
+        {
+            if(maxInboxMessagesText.isBlank())
+            {
+                 settings.setMaxInboxMessages(0);
+            }
+            else
+            {
+                int maxInboxMessagesInt = Integer.parseInt(maxInboxMessagesText);
+                settings.setMaxInboxMessages(maxInboxMessagesInt);      
+           }
+
+            settings.setShowNotificationMessages(showNotificationMessages.isSelected());
+
             Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("Inbox settings saved");
             alert.setHeaderText(null);
             alert.setContentText("Inbox settings were successfully applied");
             alert.showAndWait();
             settings.serialize();
-       }
-       else
-       {
-            try
-            {
-                int maxInboxMessagesInt = Integer.parseInt(maxInboxMessagesText);
-                settings.setMaxInboxMessages(maxInboxMessagesInt);
-                Alert alert = new Alert(AlertType.INFORMATION);
-                alert.setTitle("Inbox settings saved");
-                alert.setHeaderText(null);
-                alert.setContentText("Inbox settings were successfully applied");
-                alert.showAndWait();
-                settings.serialize();
-            }
-            catch(NumberFormatException nfe)
-            {
-               Alert alert = new Alert(AlertType.ERROR);
-               alert.setTitle("Invalid number");
-               alert.setHeaderText(null);
-               alert.setContentText("The provided maximum inbox messages must be an integer");
-               alert.showAndWait();
-               settings.serialize();
-            }
-       }
+        }
+        catch(NumberFormatException nfe)
+        {
+           Alert alert = new Alert(AlertType.ERROR);
+           alert.setTitle("Invalid number");
+           alert.setHeaderText(null);
+           alert.setContentText("The provided maximum inbox messages must be an integer");
+           alert.showAndWait();
+        }
    }
    
    private void saveLocalSmtpSettings()
@@ -259,6 +258,7 @@ public class SettingsController
    {
        SettingsSingleton settings = SettingsSingleton.getInstance();
        maxInboxMessages.setText(Integer.toString(settings.getMaxInboxMessages()));
+       showNotificationMessages.setSelected(settings.getShowNotificationMessages());
    }
    
    private void loadLocalSmtpSettings()

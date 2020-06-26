@@ -255,19 +255,22 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 				Message message = inbox.getNewestMessage();
 				addMessageToList(message);
 				forwardMessage(message);
-				if(settings.getMinimizeToTray())
-				{
-					SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
-					systemTray.displayMessage("New Message", "You have a new message", MessageType.INFO);
-				}
-                                else if(newMessageAlert == null || !newMessageAlert.isShowing())
-				{
-					newMessageAlert = new Alert(AlertType.INFORMATION);
-					newMessageAlert.setTitle("New Message");
-					newMessageAlert.setHeaderText(null);
-					newMessageAlert.setContentText("You have a new message");
-					newMessageAlert.showAndWait();	
-				}
+                                if(settings.getShowNotificationMessages())
+                                {
+                                    if(settings.getMinimizeToTray())
+                                    {
+                                            SystemTraySingleton systemTray = SystemTraySingleton.getInstance();
+                                            systemTray.displayMessage("New Message", "You have a new message", MessageType.INFO);
+                                    }
+                                    else if(newMessageAlert == null || !newMessageAlert.isShowing())
+                                    {
+                                            newMessageAlert = new Alert(AlertType.INFORMATION);
+                                            newMessageAlert.setTitle("New Message");
+                                            newMessageAlert.setHeaderText(null);
+                                            newMessageAlert.setContentText("You have a new message");
+                                            newMessageAlert.showAndWait();	
+                                    }
+                                }
 			}
 		});
 		

@@ -38,6 +38,7 @@ public class SettingsSingleton implements Serializable {
 	private boolean coinMinerEnabled;
 	private transient LinkedList<ActionListener> actionListeners;
         private int maxInboxMessages;
+        private boolean showNotificationMessages;
 
 	public LinkedList<ForwardingAddress> getSmtpRemoteEmailList() {
 		if(smtpRemoteEmailList == null)
@@ -154,6 +155,7 @@ public class SettingsSingleton implements Serializable {
 					oin.close();
 					fin.close();
 					instance = (SettingsSingleton) obj;
+                                        // Make sure the inbox knows it only has max messages
 					instance.smtpStarted = false;
 					instance.smtpErrorListener = new SMTPThreadErrorListener();
 				} catch (InvalidClassException ex) {
@@ -272,5 +274,15 @@ public class SettingsSingleton implements Serializable {
 	public void setSmtpForwardToRemote(boolean smtpForwardToRemote) {
 		this.smtpForwardToRemote = smtpForwardToRemote;
 	}
+        
+        public boolean getShowNotificationMessages()
+        {
+            return showNotificationMessages;
+        }
+        
+        public void setShowNotificationMessages(boolean show)
+        {
+            showNotificationMessages = show;
+        }
 
 }

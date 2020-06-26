@@ -6,6 +6,7 @@ import com.pessetto.origamismtp.OrigamiSMTP;
 import com.pessetto.origamigui.debug.DebugLogSingleton;
 import com.pessetto.origamigui.listeners.SMTPErrorListener;
 import com.pessetto.origamigui.listeners.SMTPStatusListener;
+import com.pessetto.origamigui.settings.SettingsSingleton;
 
 public class SMTPThread implements Runnable{
 
@@ -23,6 +24,8 @@ public class SMTPThread implements Runnable{
 		this.statusListeners = statusListeners;
 		smtpServer = new OrigamiSMTP(this.port);
 		debugLog = DebugLogSingleton.getInstance();
+                SettingsSingleton  settings = SettingsSingleton.getInstance();
+                settings.setMaxInboxMessages(settings.getMaxInboxMessages());
 	}
 	
 	
