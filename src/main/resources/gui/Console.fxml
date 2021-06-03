@@ -54,6 +54,7 @@
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />
                   <MenuItem mnemonicParsing="false" onAction="#donate" text="Donate" />
+                  <MenuItem mnemonicParsing="false" onAction="#getSupport" text="Get Support" />
                </items>
             </Menu>
          </menus>

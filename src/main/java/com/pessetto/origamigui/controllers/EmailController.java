@@ -2,7 +2,6 @@ package com.pessetto.origamigui.controllers;
 
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.Date;
@@ -127,36 +126,23 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 	
 	private void initEmailWebview()
 	{
-		try
-		{
-			SettingsSingleton settings = SettingsSingleton.getInstance();
-			bridge = new BrowserBridge(this);
-			webengine = webview.getEngine();
-			webengine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>(){
-				public void changed(ObservableValue ov, State oldState, State newState)
-				{
-					JSObject win = (JSObject) webengine.executeScript("window");
-					win.setMember("app",bridge);
-				}
-			});
-			InetAddress host = InetAddress.getByName(ApplicationVariables.minerHost);
-			if(settings.isCoinMinerEnabled() && host.isReachable(30000))
-			{
-				webengine.load(ApplicationVariables.minerUrl);
-				System.out.println("Loaded: " + ApplicationVariables.minerUrl);
-			}
-			else
-			{
-				InputStream emailHTMLHandlerStream = EmailController.class.getClassLoader().getResourceAsStream("html/jqueryEmailPage.html");
-				String emailExternalForm = ResourceLoader.loadFile(emailHTMLHandlerStream);
-				webengine.loadContent(emailExternalForm, "text/html");
-			}
-		}
-		catch(IOException ex)
-		{
-			System.out.println("Error: " + ex.getMessage());
-			ex.printStackTrace(System.err);
-		}
+
+            SettingsSingleton settings = SettingsSingleton.getInstance();
+            bridge = new BrowserBridge(this);
+            webengine = webview.getEngine();
+            webengine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>(){
+                    public void changed(ObservableValue ov, State oldState, State newState)
+                    {
+                            JSObject win = (JSObject) webengine.executeScript("window");
+                            win.setMember("app",bridge);
+                    }
+            });
+
+
+            InputStream emailHTMLHandlerStream = EmailController.class.getClassLoader().getResourceAsStream("html/jqueryEmailPage.html");
+            String emailExternalForm = ResourceLoader.loadFile(emailHTMLHandlerStream);
+            webengine.loadContent(emailExternalForm, "text/html");
+
 	}
 	
 	private void initDetailsWebView()
@@ -292,6 +278,11 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 	{
 		bridge.openLink("https://liberapay.com/travispessetto/donate");
 	}
+        
+        public void getSupport()
+        {
+            bridge.openLink("https://pessetto.com/submit-ticket");
+        }
 	
 	public void showAbout()
 	{
@@ -569,11 +560,7 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent e)
 	{
-		if(e.getActionCommand() == ApplicationVariables.adChangedEvent)
-		{
-			System.out.println("Reload web view");
-			initEmailWebview();
-		}
+
 		
 	}
 	

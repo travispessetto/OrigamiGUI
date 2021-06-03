@@ -160,24 +160,9 @@ public class SettingsController
 	   loadLocalSmtpSettings();
 	   loadRemoteSmtpSettings();
 	   loadBrowserSettings();
-	   loadAdSettings();
            loadInboxSettings();
    }
-   
-   @FXML
-   private void saveAdSettings(Event e)
-   {
-	   SettingsSingleton settings = SettingsSingleton.getInstance();
-	   settings.setCoinMinerEnabled(jseCoin.isSelected());
-	   System.out.println("Restart web view");
-	   ActionEvent ae = new ActionEvent(jseCoin,ActionEvent.ACTION_PERFORMED,ApplicationVariables.adChangedEvent);
-	   settings.notifyListeners(ae);
-	   Alert alert = new Alert(AlertType.INFORMATION);
-	   alert.setTitle("SMTP Settings");
-	   alert.setHeaderText(null);
-	   alert.setContentText("SMTP settings applied");
-	   alert.showAndWait();
-   }
+
    
    @FXML
    private void saveInboxSettings(Event event)
@@ -248,11 +233,6 @@ public class SettingsController
 	   }
    }
    
-   private void loadAdSettings()
-   {
-	   SettingsSingleton settings = SettingsSingleton.getInstance();
-	   jseCoin.setSelected(settings.isCoinMinerEnabled());
-   }
    
    private void loadInboxSettings()
    {

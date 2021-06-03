@@ -35,7 +35,6 @@ public class SettingsSingleton implements Serializable {
 	private int smtpRemotePort;
 	private LinkedList<ForwardingAddress> smtpRemoteEmailList;
 	private boolean smtpForwardToRemote;
-	private boolean coinMinerEnabled;
 	private transient LinkedList<ActionListener> actionListeners;
         private int maxInboxMessages;
         private boolean showNotificationMessages;
@@ -97,15 +96,6 @@ public class SettingsSingleton implements Serializable {
 		this.smtpRemoteAddress = smtpRemoteAddress;
 	}
 
-	public boolean isCoinMinerEnabled() {
-		return coinMinerEnabled;
-	}
-
-	public void setCoinMinerEnabled(boolean coinMinerEnabled) {
-		this.coinMinerEnabled = coinMinerEnabled;
-		this.serialize();
-	}
-
 	public int getSmtpRemotePort() {
 		return smtpRemotePort;
 	}
@@ -137,7 +127,6 @@ public class SettingsSingleton implements Serializable {
 		smtpErrorListener = new SMTPThreadErrorListener();
 		smtpStatusListeners = new LinkedList<>();
 		usePrivateBrowsing = false;
-		coinMinerEnabled = true;
 	}
 
 	public static SettingsSingleton getInstance() {
