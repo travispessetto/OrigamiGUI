@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Origami SMTP
+Exec=java
+Icon=logo
+Type=Application
+Categories=Utility;
