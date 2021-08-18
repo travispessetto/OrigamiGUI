@@ -21,7 +21,7 @@ import com.pessetto.origamigui.threads.SMTPThread;
 import com.pessetto.origamismtp.filehandlers.inbox.Inbox;
 
 public class SettingsSingleton implements Serializable {
-	private static final long serialVersionUID = 3840045425215974393L;
+	private static final long serialVersionUID = 3840045425215974394L;
 	private String browserExec;
 	private int port;
 	private transient static SettingsSingleton instance;
@@ -35,6 +35,15 @@ public class SettingsSingleton implements Serializable {
 	private int smtpRemotePort;
 	private LinkedList<ForwardingAddress> smtpRemoteEmailList;
 	private boolean smtpForwardToRemote;
+        private boolean smtpForwardToOriginalRecipient;
+
+        public boolean isSmtpForwardToOriginalRecipient() {
+            return smtpForwardToOriginalRecipient;
+        }
+
+        public void setSmtpForwardToOriginalRecipient(boolean smtpForwardToOriginalRecipient) {
+            this.smtpForwardToOriginalRecipient = smtpForwardToOriginalRecipient;
+    }
 	private transient LinkedList<ActionListener> actionListeners;
         private int maxInboxMessages;
         private boolean showNotificationMessages;

@@ -414,7 +414,7 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 				System.out.println("Attempting to forward message");
 				Properties props = System.getProperties();
 				props.put("mail.smtps.host",settings.getSmtpRemoteAddress());
-				props.put("mail.smtp.port", settings.getSMTPPort());
+				props.put("mail.smtp.port", settings.getSmtpRemotePort());
 				String authorize = "false";
 				String remoteUser = settings.getSmtpRemoteUserName();
 				if(remoteUser != null && !remoteUser.trim().isEmpty())
@@ -456,7 +456,62 @@ DeleteMessageListener, SMTPStatusListener, ActionListener
 				}
 				sendingMessage.setContent(multipart);
 				SMTPTransport smtpTransport = (SMTPTransport)session.getTransport("smtps");
-				smtpTransport.connect(settings.getSmtpRemoteAddress(),settings.getSmtpRemoteUserName(),settings.getSmtpRemoteUserPassword());
+				smtpTransport.connect(settings.getSmtpRemoteAddress(),settings.getSmtpRemotePort(),settings.getSmtpRemoteUserName(),settings.getSmtpRemoteUserPassword());
+				smtpTransport.sendMessage(sendingMessage, sendingMessage.getAllRecipients());
+				System.out.println("Remote SMTP Server Response: " + smtpTransport.getLastServerResponse());
+				smtpTransport.close();
+			}
+			else
+			{
+				System.out.println("Message not forwarded due to lack of forwarding email addresses or forward flag not set");
+			}
+                        if(settings.isSmtpForwardToRemote() && settings.isSmtpForwardToOriginalRecipient())
+			{
+				System.out.println("Attempting to forward message to original recipient");
+				Properties props = System.getProperties();
+				props.put("mail.smtps.host",settings.getSmtpRemoteAddress());
+				props.put("mail.smtp.port", settings.getSmtpRemotePort());
+				String authorize = "false";
+				String remoteUser = settings.getSmtpRemoteUserName();
+				if(remoteUser != null && !remoteUser.trim().isEmpty())
+				{
+					authorize = "true";
+				}
+				props.put("mail.smtps.auth",authorize);
+				Session session = Session.getInstance(props,null);
+				MimeMessage sendingMessage = new MimeMessage(session);
+				sendingMessage.setFrom(new InternetAddress(message.getFrom()));
+	
+			        sendingMessage.addRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(message.getTo(),false));
+				
+				sendingMessage.setSubject(message.getSubject());
+				sendingMessage.setHeader("X-Mailer", "Origami SMTP");
+				sendingMessage.setSentDate(new Date());
+				BodyPart messageBodyPart = new MimeBodyPart();
+				if(message.getHTMLMessage() != null)
+				{
+					messageBodyPart.setContent(message.getHTMLMessage(),"text/html");
+				}
+				else
+				{
+					messageBodyPart.setText(message.getPlainMessage());
+				}
+				Multipart multipart = new MimeMultipart();
+				multipart.addBodyPart(messageBodyPart);
+				LinkedList<Attachment> attachments = message.getAttachments();
+				for(Attachment attachment : attachments)
+				{
+					messageBodyPart = new MimeBodyPart();
+					String mimeType = attachment.getMimeType();
+					System.out.println("Mime Type is: " + mimeType);
+					ByteArrayDataSource byteDS = new ByteArrayDataSource(attachment.getContent(),attachment.getMimeType());
+					messageBodyPart.setDataHandler(new DataHandler(byteDS));
+					messageBodyPart.setFileName(attachment.getFileName());
+					multipart.addBodyPart(messageBodyPart);
+				}
+				sendingMessage.setContent(multipart);
+				SMTPTransport smtpTransport = (SMTPTransport)session.getTransport("smtps");
+				smtpTransport.connect(settings.getSmtpRemoteAddress(),settings.getSmtpRemotePort(),settings.getSmtpRemoteUserName(),settings.getSmtpRemoteUserPassword());
 				smtpTransport.sendMessage(sendingMessage, sendingMessage.getAllRecipients());
 				System.out.println("Remote SMTP Server Response: " + smtpTransport.getLastServerResponse());
 				smtpTransport.close();

@@ -59,6 +59,9 @@ public class SettingsController
    protected CheckBox forwardMessages;
    
    @FXML
+   protected CheckBox forwardToOriginalRecipient;
+   
+   @FXML
    protected CheckBox jseCoin;
    
    @FXML
@@ -229,6 +232,7 @@ public class SettingsController
 		   settings.setSmtpRemotePort(Integer.parseInt(smtpRemotePort.getText()));
 		   settings.setSmtpRemoteAddress(remoteAddressText);
 		   settings.setSmtpForwardToRemote(forwardMessages.isSelected());
+                   settings.setSmtpForwardToOriginalRecipient(forwardToOriginalRecipient.isSelected());
 		   System.out.println("Forward  messages?:" + forwardMessages.isSelected());
 	   }
    }
@@ -262,6 +266,7 @@ public class SettingsController
 	   smtpRemotePort.setText(Integer.toString(settings.getSmtpRemotePort()));
 	   smtpRemoteAddress.setText(settings.getSmtpRemoteAddress());
 	   forwardMessages.setSelected(settings.isSmtpForwardToRemote());
+           forwardToOriginalRecipient.setSelected(settings.isSmtpForwardToOriginalRecipient());
 	   loadEmailAddresses();
    }
    
