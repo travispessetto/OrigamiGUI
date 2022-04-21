@@ -8,9 +8,11 @@ module OrigamiGUI {
     requires javafx.web;
     requires javafx.fxml;
     requires javafx.swing;
-    requires javafx.base;
+    requires javafx.graphics;
+    requires javafx.media;
     requires jdk.jsobject;
     requires java.desktop;
+    
 
     opens com.pessetto.origamigui to javafx.fxml, java.desktop;
     opens com.pessetto.origamigui.web to javafx.web;
