@@ -12,7 +12,9 @@ module OrigamiGUI {
     requires javafx.media;
     requires jdk.jsobject;
     requires java.desktop;
-    
+    requires org.json;
+    requires com.pessetto.origamismtp;
+
 
     opens com.pessetto.origamigui to javafx.fxml, java.desktop;
     opens com.pessetto.origamigui.web to javafx.web;
