@@ -17,6 +17,12 @@ jobs:
         run:  sudo apt update && sudo apt install -y nsis nsis-pluginapi
       - name: Build with maven
         run: mvn --batch-mode --update-snapshots package
+      - name: Update Windows installer version
+        run: ./update-windows-installer-version.sh
+      - name:  Make executable (launch4j)
+        run: ./launch4j-linux/launch4j launch4j.cfg.xml
+      - name: Make debian package
+        run:  ./debian/create-deb.sh
       - name: Create NSIS Installer
         uses: joncloud/makensis-action@v3.7
         with:
