@@ -20,7 +20,7 @@ jobs:
       - name: Update Windows installer version
         run: ./update-windows-installer-version.sh
       - name: Install launch4j prereqs
-        run:  sudo apt install -y lib32ncurses5 lib32z1
+        run:  sudo apt install -y libncurses5 lib32z1
       - name:  Make executable (launch4j)
         run: sudo chmod +x ./launch4j-linux/launch4j
       - name: Make Java executable on Windows (launch4j)
