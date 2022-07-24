@@ -21,6 +21,7 @@ jobs:
         run: ./update-windows-installer-version.sh
       - name:  Make executable (launch4j)
         run: sudo chmod +x ./launch4j-linux/launch4j
+      - name: Make Java executable on Windows (launch4j)
         run: sudo ./launch4j-linux/launch4j launch4j.cfg.xml
       - name: Make debian package
         run:  ./debian/create-deb.sh
