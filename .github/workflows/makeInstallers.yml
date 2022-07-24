@@ -19,6 +19,8 @@ jobs:
         run: mvn --batch-mode --update-snapshots package
       - name: Update Windows installer version
         run: ./update-windows-installer-version.sh
+      - name: Install launch4j prereqs
+        run:  sudo apt intall -y lib32ncurses5 lib32z1
       - name:  Make executable (launch4j)
         run: sudo chmod +x ./launch4j-linux/launch4j
       - name: Make Java executable on Windows (launch4j)
